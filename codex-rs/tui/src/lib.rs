@@ -105,6 +105,7 @@ pub(crate) use codex_app_server_client::legacy_core;
 pub(crate) use worktree_startup::ManagedTuiWorktree;
 
 mod activation_key_guard;
+mod arabic_display;
 mod additional_dirs;
 mod analytics;
 mod app;

@@ -319,12 +319,12 @@ impl ChatComposer {
                     Agents,
                     [shortcut(
                         key_hint::plain(KeyCode::Left).into(),
-                        " for agents",
+                        " للوكلاء",
                     )],
                 );
             }
             if let Some(key) = self.footer.toggle_shortcuts_key {
-                hints.add(Shortcuts, [shortcut(key, " for shortcuts")]);
+                hints.add(Shortcuts, [shortcut(key, " للاختصارات")]);
             }
         }
         let show_warning = self.show_warning_notice(options);

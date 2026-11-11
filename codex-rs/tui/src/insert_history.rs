@@ -333,6 +333,13 @@ fn write_history_line<W: Write>(
             content: s.content.clone(),
         })
         .collect();
+    // codex-ar: show Arabic in visual order on terminals without bidi (skip lines with links,
+    // whose escape sequences are tied to logical positions).
+    let merged_spans = if line.hyperlinks.is_empty() {
+        rtl_spans(merged_spans, wrap_width)
+    } else {
+        merged_spans
+    };
     let merged_line = HyperlinkLine {
         source: None,
         line: Line::from(merged_spans),
@@ -340,6 +347,58 @@ fn write_history_line<W: Write>(
     };
     let decorated = decorate_spans(&merged_line);
     write_spans(writer, decorated.iter())
+}
+
+/// codex-ar: shape and reorder the right-to-left text of one history line, row by row
+/// (`wrap_width` cells per terminal row), keeping each grapheme's style.
+fn rtl_spans(spans: Vec<Span<'static>>, wrap_width: usize) -> Vec<Span<'static>> {
+    use unicode_segmentation::UnicodeSegmentation;
+    use unicode_width::UnicodeWidthStr;
+
+    let mut cells: Vec<(String, ratatui::style::Style)> = Vec::new();
+    for span in &spans {
+        for g in span.content.graphemes(true) {
+            cells.push((g.to_string(), span.style));
+        }
+    }
+    if !cells
+        .iter()
+        .any(|(g, _)| crate::arabic_display::needs_processing(g))
+    {
+        return spans;
+    }
+    // One grapheme per terminal cell is required to keep positions; otherwise leave the line.
+    if cells.iter().any(|(g, _)| UnicodeWidthStr::width(g.as_str()) != 1) {
+        return spans;
+    }
+    let row = wrap_width.max(1);
+    let mut out_cells = cells.clone();
+    let mut row_start = 0;
+    while row_start < cells.len() {
+        let row_end = (row_start + row).min(cells.len());
+        let refs: Vec<&str> = cells[row_start..row_end]
+            .iter()
+            .map(|(g, _)| g.as_str())
+            .collect();
+        for (a, b) in crate::arabic_display::row_runs(&refs) {
+            if let Some(r) = crate::arabic_display::reorder_run(&refs[a..b]) {
+                for (visual, &logical) in r.order.iter().enumerate() {
+                    let (g, style) = &cells[row_start + a + logical];
+                    let symbol = r.symbols[logical].clone().unwrap_or_else(|| g.clone());
+                    out_cells[row_start + a + visual] = (symbol, *style);
+                }
+            }
+        }
+        row_start = row_end;
+    }
+    let mut out: Vec<Span<'static>> = Vec::new();
+    for (g, style) in out_cells {
+        match out.last_mut() {
+            Some(last) if last.style == style => last.content.to_mut().push_str(&g),
+            _ => out.push(Span::styled(g, style)),
+        }
+    }
+    out
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

@@ -159,6 +159,8 @@ where
     pub last_known_cursor_pos: Position,
     /// Count of visible history rows rendered above the viewport in inline mode.
     visible_history_rows: u16,
+    /// codex-ar: skip the right-to-left pass for one frame whose buffer was already processed.
+    rtl_skip_next: bool,
     #[cfg(test)]
     screen_size_override: Option<Size>,
 }
@@ -240,6 +242,7 @@ where
             last_known_screen_size: screen_size,
             last_known_cursor_pos: cursor_pos,
             visible_history_rows: 0,
+            rtl_skip_next: false,
             #[cfg(test)]
             screen_size_override: None,
         }
@@ -369,6 +372,7 @@ where
         let style = self
             .last_cursor_style
             .unwrap_or(SetCursorStyle::DefaultUserShape);
+        self.rtl_skip_next = true;
         self.draw_with_size(self.last_known_screen_size, images, |frame| {
             *frame.buffer = text;
             if let Some(cursor) = cursor {
@@ -391,9 +395,14 @@ where
         if screen_size != self.last_known_screen_size {
             self.resize(screen_size)?;
         }
+        let skip_rtl = std::mem::take(&mut self.rtl_skip_next);
         let mut frame = self.get_frame();
 
         render_callback(&mut frame);
+        if !skip_rtl {
+            // codex-ar: terminals without bidi draw Arabic reversed; shape and reorder it here.
+            apply_rtl_display(frame.buffer, &mut frame.cursor_position);
+        }
 
         // We can't change the cursor position right away because we have to flush the frame to
         // stdout first. But we also can't keep the frame around, since it holds a &mut to
@@ -630,6 +639,63 @@ use ratatui::buffer::Cell;
 enum DrawCommand {
     Put { x: u16, y: u16, cell: Cell },
     ClearToEnd { x: u16, y: u16, bg: Color },
+}
+
+/// codex-ar: shape and reorder right-to-left text in every row of `buffer` (visual order for
+/// terminals without bidi support) and move the cursor to match.
+fn apply_rtl_display(buffer: &mut Buffer, cursor: &mut Option<Position>) {
+    let area = buffer.area;
+    let width = usize::from(area.width);
+    if width == 0 {
+        return;
+    }
+    for row in 0..usize::from(area.height) {
+        let start = row * width;
+        let end = start + width;
+        if end > buffer.content.len() {
+            break;
+        }
+        if !buffer.content[start..end]
+            .iter()
+            .any(|cell| crate::arabic_display::needs_processing(cell.symbol()))
+        {
+            continue;
+        }
+        let original: Vec<ratatui::buffer::Cell> = buffer.content[start..end].to_vec();
+        let symbols: Vec<String> = original.iter().map(|c| c.symbol().to_string()).collect();
+        let refs: Vec<&str> = symbols.iter().map(String::as_str).collect();
+        let y = area.y + row as u16;
+        for (a, b) in crate::arabic_display::row_runs(&refs) {
+            // Wide glyphs occupy two cells; leave such runs alone rather than split them.
+            if original[a..b].iter().any(|cell| cell.cell_width() > 1) {
+                continue;
+            }
+            let Some(r) = crate::arabic_display::reorder_run(&refs[a..b]) else {
+                continue;
+            };
+            for (visual, &logical) in r.order.iter().enumerate() {
+                let mut cell = original[a + logical].clone();
+                if let Some(symbol) = &r.symbols[logical] {
+                    cell.set_symbol(symbol);
+                }
+                buffer.content[start + a + visual] = cell;
+            }
+            if let Some(pos) = cursor.as_mut()
+                && pos.y == y
+                && pos.x >= area.x
+            {
+                let cx = usize::from(pos.x - area.x);
+                if (a..b).contains(&cx) {
+                    if let Some(visual) = r.order.iter().position(|&l| l == cx - a) {
+                        pos.x = area.x + (a + visual) as u16;
+                    }
+                } else if cx == b && r.rtl {
+                    // Typing at the end of right-to-left text: the insertion point is on the left.
+                    pos.x = area.x + a.saturating_sub(1) as u16;
+                }
+            }
+        }
+    }
 }
 
 fn diff_buffers(a: &Buffer, b: &Buffer) -> Vec<DrawCommand> {

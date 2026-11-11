@@ -43,11 +43,11 @@ impl UsageNoticeState {
             format!("{}%", 100 - window.used_percent)
         };
         let emphasis = if window.used_percent >= 95 {
-            "only "
+            "فقط "
         } else {
             ""
         };
-        let summary = format!("⚠ {label} limit: {emphasis}{remaining} left");
+        let summary = format!("⚠ حد {label}: متبقٍ {emphasis}{remaining}");
         let reset = window
             .resets_at
             .and_then(|timestamp| DateTime::from_timestamp(timestamp, /*nsecs*/ 0))

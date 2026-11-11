@@ -120,13 +120,13 @@ pub(crate) fn get_limits_duration(windows_minutes: i64) -> Option<String> {
     if is_approximate_window(windows_minutes, MINUTES_PER_5_HOURS) {
         Some("5h".to_string())
     } else if is_approximate_window(windows_minutes, MINUTES_PER_DAY) {
-        Some("daily".to_string())
+        Some("يومي".to_string())
     } else if is_approximate_window(windows_minutes, MINUTES_PER_WEEK) {
-        Some("weekly".to_string())
+        Some("أسبوعي".to_string())
     } else if is_approximate_window(windows_minutes, MINUTES_PER_MONTH) {
-        Some("monthly".to_string())
+        Some("شهري".to_string())
     } else if is_approximate_window(windows_minutes, MINUTES_PER_YEAR) {
-        Some("annual".to_string())
+        Some("سنوي".to_string())
     } else {
         None
     }
