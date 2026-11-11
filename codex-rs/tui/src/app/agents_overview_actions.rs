@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Server RPCs own lifecycle outcomes; cache cleanup follows the backend's removal scope.
 //! Keep the dashboard browsable during RPCs while deferring task notifications.
 //! Removing the current root leaves an unattached dashboard, even when it is empty.
@@ -229,7 +230,7 @@ impl App {
             ])),
             items: vec![
                 SelectionItem {
-                    name: "Cancel".to_string(),
+                    name: "إلغاء".to_string(),
                     dismiss_on_select: true,
                     ..Default::default()
                 },

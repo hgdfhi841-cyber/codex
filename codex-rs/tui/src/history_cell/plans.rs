@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Proposed-plan and plan-update history cells, including foreground contrast on the plan fill.
 
 use super::markdown_render_cache::MarkdownRenderCache;
@@ -149,7 +150,7 @@ impl ProposedPlanCell {
     ) -> Vec<HyperlinkLine> {
         self.rendered_lines.render(width, list_spacing, || {
             let mut lines = vec![
-                HyperlinkLine::new(vec!["• ".dim(), "Proposed Plan".bold()].into()),
+                HyperlinkLine::new(vec!["• ".dim(), "الخطة المقترحة".bold()].into()),
                 HyperlinkLine::new(Line::from(" ")),
             ];
 
@@ -240,7 +241,7 @@ pub(crate) struct PlanUpdateCell {
 
 impl HistoryCell for PlanUpdateCell {
     fn tool_call_labels(&self) -> Vec<String> {
-        vec!["Updated plan".into()]
+        vec!["تحديث الخطة".into()]
     }
 
     fn activity_ids(&self) -> Vec<String> {
@@ -274,8 +275,8 @@ impl HistoryCell for PlanUpdateCell {
         let mut lines = vec![clipped_line(
             Line::from(vec![
                 "• ".dim(),
-                "Updated Plan".bold(),
-                format!(" · {completed}/{total} complete").dim(),
+                "تحديث الخطة".bold(),
+                format!(" · اكتمل {completed}/{total}").dim(),
             ]),
             width,
         )];
@@ -303,7 +304,7 @@ impl HistoryCell for PlanUpdateCell {
         }
         if self.plan.is_empty() {
             lines.push(clipped_line(
-                Line::from("  └ (no steps provided)".dim()),
+                Line::from("  └ (لم تُذكر خطوات)".dim()),
                 width,
             ));
         }
@@ -342,7 +343,7 @@ impl HistoryCell for PlanUpdateCell {
         };
 
         let mut lines = vec![HyperlinkLine::new(
-            vec!["• ".dim(), "Updated Plan".bold()].into(),
+            vec!["• ".dim(), "تحديث الخطة".bold()].into(),
         )];
 
         let mut indented_lines = vec![];
@@ -357,7 +358,7 @@ impl HistoryCell for PlanUpdateCell {
 
         if self.plan.is_empty() {
             indented_lines.push(HyperlinkLine::new(Line::from(
-                "(no steps provided)".dim().italic(),
+                "(لم تُذكر خطوات)".dim().italic(),
             )));
         } else {
             for PlanItemArg { step, status } in self.plan.iter() {
@@ -378,7 +379,7 @@ impl HistoryCell for PlanUpdateCell {
     }
 
     fn raw_lines(&self) -> Vec<Line<'static>> {
-        let mut lines = vec![Line::from("Updated Plan")];
+        let mut lines = vec![Line::from("تحديث الخطة")];
         if let Some(explanation) = self
             .explanation
             .as_ref()
@@ -388,7 +389,7 @@ impl HistoryCell for PlanUpdateCell {
             lines.extend(raw_lines_from_source(explanation));
         }
         if self.plan.is_empty() {
-            lines.push(Line::from("(no steps provided)"));
+            lines.push(Line::from("(لم تُذكر خطوات)"));
         } else {
             for PlanItemArg { step, status } in &self.plan {
                 lines.push(Line::from(format!("{status:?}: {step}")));

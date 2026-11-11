@@ -1,6 +1,7 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use super::TerminalTitleItem;
 
-pub(crate) const ACTION_REQUIRED_PREVIEW_PREFIX: &str = "[ ! ] Action Required";
+pub(crate) const ACTION_REQUIRED_PREVIEW_PREFIX: &str = "[ ! ] مطلوب إجراء منك";
 
 pub(crate) fn build_action_required_title_text<I, F>(
     prefix: &str,

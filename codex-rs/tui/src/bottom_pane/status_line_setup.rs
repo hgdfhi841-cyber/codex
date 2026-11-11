@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Status line configuration view for customizing the TUI status bar.
 //!
 //! This module provides an interactive picker for selecting which items appear
@@ -308,8 +309,8 @@ impl StatusLineSetupView {
         let mut used_ids = HashSet::new();
         let mut items = vec![MultiSelectItem {
             id: STATUS_LINE_USE_THEME_COLORS_ITEM_ID.to_string(),
-            name: "Use theme colors".to_string(),
-            description: Some("Apply colors from the active /theme".to_string()),
+            name: "استخدام ألوان السمة".to_string(),
+            description: Some("تطبيق ألوان السمة الحالية من /theme".to_string()),
             enabled: use_theme_colors,
             orderable: false,
             section_break_after: true,
@@ -346,8 +347,8 @@ impl StatusLineSetupView {
 
         Self {
             picker: MultiSelectPicker::builder(
-                "Configure Status Line".to_string(),
-                Some("Select which items to display in the status line.".to_string()),
+                "إعداد شريط الحالة".to_string(),
+                Some("اختر العناصر التي تظهر في شريط الحالة.".to_string()),
                 app_event_tx,
             )
             .list_keymap(list_keymap)

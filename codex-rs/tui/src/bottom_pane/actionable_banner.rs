@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Shared title, description, and CTA content for banners in the TUI bottom pane.
 //!
 //! Workspace notices and backend banners share the existing selection list for CTA dispatch.
@@ -200,12 +201,12 @@ impl BottomPane {
                 item.dismiss_on_select = false;
             }
             let hint = match (dismissal, has_actions) {
-                (BannerDismissal::Persistent, true) => "Press a number to choose",
+                (BannerDismissal::Persistent, true) => "اضغط رقماً للاختيار",
                 (BannerDismissal::Persistent, false) => "",
                 (BannerDismissal::Dismissible, true) => {
-                    "Press a number to choose · esc to dismiss · type to continue"
+                    "اضغط رقماً للاختيار · esc للإغلاق · اكتب للمتابعة"
                 }
-                (BannerDismissal::Dismissible, false) => "esc to dismiss · type to continue",
+                (BannerDismissal::Dismissible, false) => "esc للإغلاق · اكتب للمتابعة",
             };
             let hint: Line<'static> = hint.dim().into();
             params.footer_hint = Some(hint.clone());

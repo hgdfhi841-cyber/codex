@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Experimental controls with popup-owned discovery and configured enablement.
 //! Failed saves retain intent for explicit retry; cancellation remains available.
 //! Retired stable features stay hidden even if an older server reports them as beta.
@@ -77,7 +78,7 @@ impl ExperimentalFeaturesView {
     ) -> Self {
         let mut view = Self {
             discovery_status: if catalog_rx.is_some() {
-                "Loading server experiments…"
+                "جارٍ تحميل تجارب الخادم…"
             } else {
                 ""
             }
@@ -101,10 +102,10 @@ impl ExperimentalFeaturesView {
     fn header(&self, width: u16) -> impl Renderable {
         let mut header = ColumnRenderable::new();
         header.push(
-            Paragraph::new(Line::from("Experimental features".bold())).wrap(Wrap { trim: false }),
+            Paragraph::new(Line::from("الميزات التجريبية".bold())).wrap(Wrap { trim: false }),
         );
         for text in [
-            "Checked features are configured on. Some experimental features take effect only in new tasks or after restarting the Codex server.",
+            "الميزات المحددة مفعّلة في الإعدادات. بعض الميزات التجريبية لا تعمل إلا في المهام الجديدة أو بعد إعادة تشغيل خادم Codex.",
             self.discovery_status.as_str(),
         ].into_iter().filter(|text| !text.is_empty()) {
             for line in textwrap::wrap(text, usize::from(width.max(1))) {
@@ -124,9 +125,9 @@ impl ExperimentalFeaturesView {
 
     fn current_hint(&self) -> Line<'static> {
         if self.write_rx.is_some() {
-            Line::from("Saving… Closing this popup will not cancel the write.")
+            Line::from("جارٍ الحفظ… إغلاق هذه النافذة لن يلغي الحفظ.")
         } else if !self.unconfirmed.is_empty() {
-            Line::from("Selections retained. Save to retry, or cancel to close.")
+            Line::from("بقيت اختياراتك. احفظ لإعادة المحاولة أو ألغِ للإغلاق.")
         } else {
             self.footer_hint.clone()
         }
@@ -216,7 +217,7 @@ impl ExperimentalFeaturesView {
             // A failed response can follow a committed write. Keep these keys dirty
             // so reverting to the old baseline still sends a corrective write.
             self.unconfirmed = updates.iter().map(|(key, _)| key.clone()).collect();
-            self.discovery_status = "Saving experimental features…".to_string();
+            self.discovery_status = "جارٍ حفظ الميزات التجريبية…".to_string();
             self.app_event_tx.send(AppEvent::SaveExperimentalFeatures {
                 thread_id: self.thread_id,
                 updates,
@@ -235,7 +236,7 @@ impl BottomPaneView for ExperimentalFeaturesView {
                 Ok(result) => result,
                 Err(oneshot::error::TryRecvError::Empty) => return false,
                 Err(oneshot::error::TryRecvError::Closed) => Err(
-                    "Saving was interrupted. Reopen /experimental to check configured values."
+                    "انقطع الحفظ. أعد فتح /experimental للتحقق من القيم."
                         .to_string(),
                 ),
             };
@@ -273,7 +274,7 @@ impl BottomPaneView for ExperimentalFeaturesView {
             Ok(result) => result,
             Err(oneshot::error::TryRecvError::Empty) => return false,
             Err(oneshot::error::TryRecvError::Closed) => {
-                Err("Discovery was interrupted".to_string())
+                Err("انقطع الاستكشاف".to_string())
             }
         };
         self.catalog_rx = None;
@@ -305,7 +306,7 @@ impl BottomPaneView for ExperimentalFeaturesView {
                     count += 1;
                 }
                 self.discovery_status = if count == 0 {
-                    "No server experiments available."
+                    "لا توجد تجارب خادم متاحة."
                 } else {
                     ""
                 }
@@ -314,7 +315,7 @@ impl BottomPaneView for ExperimentalFeaturesView {
             }
             Err(error) => {
                 tracing::warn!(%error, "experimental feature discovery failed");
-                self.discovery_status = "Server experiments unavailable. Reopen /experimental to retry; restart this Codex client if requests remain unanswered.".to_string();
+                self.discovery_status = "تجارب الخادم غير متاحة. أعد فتح /experimental للمحاولة مجدداً؛ وأعد تشغيل Codex إن بقيت الطلبات بلا رد.".to_string();
             }
         }
         true
@@ -416,7 +417,7 @@ impl Renderable for ExperimentalFeaturesView {
                 &rows,
                 &self.state,
                 MAX_POPUP_ROWS,
-                "  No experimental features available for now",
+                "  لا توجد ميزات تجريبية متاحة حالياً",
             );
         }
 

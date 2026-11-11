@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Key routing and composer-adjacent UI interaction for `ChatWidget`.
 
 use super::clipboard::PendingCopy;
@@ -549,7 +550,7 @@ impl ChatWidget {
             Box::new(move |name: String| {
                 let Some(name) = normalize_thread_name(&name) else {
                     tx.send(AppEvent::InsertHistoryCell(Box::new(
-                        history_cell::new_error_event("Thread name cannot be empty.".to_string()),
+                        history_cell::new_error_event("لا يمكن أن يكون اسم المحادثة فارغاً.".to_string()),
                     )));
                     return;
                 };

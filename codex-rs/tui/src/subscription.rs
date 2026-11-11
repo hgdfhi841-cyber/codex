@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Subscription labels for TUI surfaces, preserving status-specific plan detail.
 
 use codex_protocol::account::PlanType;
@@ -34,7 +35,7 @@ impl SubscriptionDisplay {
             (PlanType::Edu | PlanType::EduPlus | PlanType::EduPro, Self::Analytics) => "Education",
             (PlanType::Sci, _) => KnownPlan::Sci.display_name(),
             (PlanType::SciPlus, _) => KnownPlan::SciPlus.display_name(),
-            (PlanType::Unknown, Self::Status) => "Unknown",
+            (PlanType::Unknown, Self::Status) => "غير معروف",
             (PlanType::Unknown, Self::Analytics) => "Account",
         }
     }

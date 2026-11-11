@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crate::terminal_hyperlinks::HyperlinkLine;
 use crate::terminal_hyperlinks::HyperlinkRows;
 use crossterm::event::KeyCode;
@@ -96,11 +97,11 @@ impl PendingInputPreview {
         let mut lines = vec![];
 
         if !self.pending_steers.is_empty() {
-            let mut header = vec!["Messages to be submitted after next tool call".into()];
+            let mut header = vec!["رسائل تُرسل بعد استدعاء الأداة القادم".into()];
             if let Some(interrupt_binding) = self.interrupt_binding {
                 header.push(" (press ".dim());
                 header.extend(interrupt_binding.spans());
-                header.push(" to interrupt and send immediately)".dim());
+                header.push(" للإيقاف والإرسال فوراً)".dim());
             }
             Self::push_section_header(&mut lines, width, Line::from(header));
 
@@ -125,7 +126,7 @@ impl PendingInputPreview {
             Self::push_section_header(
                 &mut lines,
                 width,
-                "Messages to be submitted at end of turn".into(),
+                "رسائل تُرسل عند نهاية الدور".into(),
             );
 
             for steer in &self.rejected_steers {
@@ -146,7 +147,7 @@ impl PendingInputPreview {
             if !lines.is_empty() {
                 lines.push(HyperlinkLine::new(Line::from("")));
             }
-            Self::push_section_header(&mut lines, width, "Queued follow-up inputs".into());
+            Self::push_section_header(&mut lines, width, "مُدخلات متابعة منتظرة".into());
 
             for message in &self.queued_messages {
                 let wrapped = wrap_preview_lines(
@@ -172,7 +173,7 @@ impl PendingInputPreview {
         {
             let mut hint = Line::from("    ");
             hint.spans.extend(edit_binding.spans());
-            hint.spans.push(" edit last queued message".dim());
+            hint.spans.push(" تعديل آخر رسالة منتظرة".dim());
             lines.push(HyperlinkLine::new(hint));
         }
 

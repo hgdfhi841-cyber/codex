@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Render selectable lists with shared picker controls and full-width focus rows.
 //! Selection and scrolling use filtered row indices; actions map back to source items.
 //! Controls and overflow indicators keep their own rows outside the result viewport.
@@ -1734,7 +1735,7 @@ impl Renderable for ListSelectionView {
             if let Some(hint) = &self.header_view_all_hint {
                 spans.push(" ".into());
                 spans.extend(hint.spans());
-                spans.push(" view all".into());
+                spans.push(" عرض الكل".into());
             }
             Line::from(spans).dim().render(elision_area, buf);
         } else {
@@ -1791,7 +1792,7 @@ impl Renderable for ListSelectionView {
                     &rows,
                     &self.state,
                     render_area.height as usize,
-                    "no matches",
+                    "لا نتائج",
                     column_width,
                 ),
                 SelectionRowDisplay::SingleLine => render_rows_single_line_with_col_width_mode(
@@ -1800,7 +1801,7 @@ impl Renderable for ListSelectionView {
                     &rows,
                     &self.state,
                     render_area.height as usize,
-                    "no matches",
+                    "لا نتائج",
                     column_width,
                 ),
             };

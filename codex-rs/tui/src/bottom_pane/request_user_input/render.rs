@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::Stylize;
@@ -222,7 +223,7 @@ impl RequestUserInputOverlay {
             &layout.rows,
             &layout.state,
             layout.rows.len().max(1),
-            "No choices",
+            "لا خيارات",
         );
 
         cursor_y = cursor_y.saturating_add(rows_height);
@@ -304,7 +305,7 @@ impl RequestUserInputOverlay {
                     &option_rows,
                     &options_state,
                     option_rows.len().max(1),
-                    "No options",
+                    "لا خيارات",
                 );
             }
         }
@@ -332,7 +333,7 @@ impl RequestUserInputOverlay {
         let option_tip = if options_hidden {
             let selected = self.selected_option_index().unwrap_or(0).saturating_add(1);
             let total = self.options_len();
-            Some(Line::from(format!("option {selected}/{total}").dim()))
+            Some(Line::from(format!("الخيار {selected}/{total}").dim()))
         } else {
             None
         };

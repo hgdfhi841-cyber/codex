@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Shared popup-related constants for bottom pane widgets.
 
 use ratatui::style::Stylize;
@@ -18,9 +19,9 @@ pub(crate) fn standard_popup_hint_line() -> Line<'static> {
     Line::from(vec![
         "Press ".into(),
         key_hint::plain(KeyCode::Enter).into(),
-        " to confirm or ".into(),
+        " للتأكيد أو ".into(),
         key_hint::plain(KeyCode::Esc).into(),
-        " to go back".into(),
+        " للرجوع".into(),
     ])
 }
 

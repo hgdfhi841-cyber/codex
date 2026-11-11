@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Compact adjacent computer calls without discarding their chronological transcript details.
 //!
 //! CUA calls and intervening transcript-only reasoning share this cell. Visible history items
@@ -178,9 +179,9 @@ impl HistoryCell for ComputerActivityCell {
             })
             .unwrap_or_else(|| "•".dim());
         let label = if active.is_some() {
-            "Using computer"
+            "يستخدم الحاسوب"
         } else {
-            "Used computer"
+            "استخدم الحاسوب"
         };
         let unit = if count == 1 { "action" } else { "actions" };
         let mut header = vec![

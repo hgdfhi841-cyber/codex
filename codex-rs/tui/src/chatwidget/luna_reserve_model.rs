@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! The Reserve-only /model picker uses normal-model metadata while keeping Reserve routing.
 
 use super::*;
@@ -42,7 +43,7 @@ impl ChatWidget {
             }));
         })];
         let header = self.model_menu_header(
-            "Select Model",
+            "اختر النموذج",
             "Other models return when ordinary usage is available again.",
         );
         self.show_model_selection_view(

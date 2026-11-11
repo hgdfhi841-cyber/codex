@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Informational, warning, update, and policy notice history cells.
 
 use super::*;
@@ -7,7 +8,7 @@ use crate::terminal_hyperlinks::remap_source_wrapped_line;
 use crate::wrapping::adaptive_wrap_line_to_width;
 
 #[cfg_attr(not(test), allow(dead_code))]
-const RECAP_HEADING: &str = "Conversation recap";
+const RECAP_HEADING: &str = "ملخص المحادثة";
 
 #[cfg_attr(debug_assertions, allow(dead_code))]
 #[derive(Debug)]
@@ -32,30 +33,30 @@ impl HistoryCell for UpdateAvailableHistoryCell {
         use ratatui_macros::text;
         let update_instruction = if let Some(update_action) = self.update_action {
             line![
-                "Run ",
+                "شغّل ",
                 update_action.command_str().fg(accent_color()),
-                " to update."
+                " للتحديث."
             ]
         } else {
             line![
-                "See ",
+                "راجع ",
                 "https://github.com/openai/codex"
                     .fg(accent_color())
                     .underlined(),
-                " for installation options."
+                " لخيارات التثبيت."
             ]
         };
 
         let content = text![
             line![
                 "✨\u{200A}".bold().fg(accent_color()),
-                "Update available!".bold().fg(accent_color()),
+                "يتوفر تحديث!".bold().fg(accent_color()),
                 " ",
                 format!("{CODEX_CLI_VERSION} -> {}", self.latest_version).bold(),
             ],
             update_instruction,
             "",
-            "See full release notes:",
+            "راجع ملاحظات الإصدار كاملة:",
             "https://github.com/openai/codex/releases/latest"
                 .fg(accent_color())
                 .underlined(),
@@ -71,16 +72,16 @@ impl HistoryCell for UpdateAvailableHistoryCell {
 
     fn raw_lines(&self) -> Vec<Line<'static>> {
         let update_instruction = if let Some(update_action) = self.update_action {
-            format!("Run {} to update.", update_action.command_str())
+            format!("شغّل {} للتحديث.", update_action.command_str())
         } else {
-            "See https://github.com/openai/codex for installation options.".to_string()
+            "راجع https://github.com/openai/codex لخيارات التثبيت.".to_string()
         };
         vec![
-            Line::from("Update available!"),
+            Line::from("يتوفر تحديث!"),
             Line::from(format!("{CODEX_CLI_VERSION} -> {}", self.latest_version)),
             Line::from(update_instruction),
             Line::from(""),
-            Line::from("See full release notes:"),
+            Line::from("راجع ملاحظات الإصدار كاملة:"),
             Line::from("https://github.com/openai/codex/releases/latest"),
         ]
     }
@@ -123,10 +124,10 @@ pub(crate) fn new_server_version_warning(
     let mut lines = vec![Line::from(notice.message.set_style(style))];
     if notice.offer_update {
         lines.push(Line::from(
-            "Use /daemon to manage the local background server.".fg(accent_color()),
+            "استخدم /daemon لإدارة الخادم المحلي العامل في الخلفية.".fg(accent_color()),
         ));
         lines.push(Line::from(
-            "Updating may interrupt active or queued work.".set_style(style),
+            "التحديث قد يقطع عملاً جارياً أو منتظراً.".set_style(style),
         ));
     }
     WarningHistoryCell {
@@ -154,15 +155,15 @@ const SAFETY_ACCESS_BLOCK_LEARN_MORE_URL: &str = "https://help.openai.com/en/art
 
 pub(crate) fn new_safety_access_block_event() -> SafetyAccessBlockCell {
     SafetyAccessBlockCell {
-        title: "This content can't be shown",
-        explanation: Some("We take extra caution with requests involving biological research and applications that could pose safety risks.".into()),
-        body: "Eligible researchers can apply for Trusted Access.",
+        title: "لا يمكن عرض هذا المحتوى",
+        explanation: Some("نتعامل بحذر إضافي مع الطلبات المتعلقة بالأبحاث والتطبيقات البيولوجية التي قد تشكل مخاطر على السلامة.".into()),
+        body: "يمكن للباحثين المؤهلين التقدّم لبرنامج Trusted Access.",
         actions: &[
             (
                 "Trusted Access",
                 "https://chatgpt.com/r/b749fb02595e04c3007a54375f3f4374",
             ),
-            ("Learn more", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL),
+            ("اعرف المزيد", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL),
         ],
     }
 }
@@ -173,32 +174,32 @@ pub(crate) fn new_cyber_policy_error_event(
     use crate::daybreak::Notice;
     let (body, actions): (_, &'static [(&str, &str)]) = match notice {
         Notice::Apply => (
-            "If you’re doing authorized security work, apply for Daybreak to get broader access.",
+            "إن كنت تقوم بعمل أمني مصرّح به فتقدّم لـ Daybreak للحصول على وصول أوسع.",
             &[
-                ("Learn more", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL),
+                ("اعرف المزيد", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL),
                 (
-                    "Apply for Daybreak",
+                    "التقدّم لـ Daybreak",
                     "https://openai.com/form/enterprise-trusted-access-for-cyber/",
                 ),
             ],
         ),
         Notice::Disabled => (
-            "Daybreak is currently off. If you’re doing authorized security work, turn it on and try your request again.",
-            &[("Learn more", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL)],
+            "Daybreak متوقف حالياً. إن كنت تقوم بعمل أمني مصرّح به ففعّله وأعد طلبك.",
+            &[("اعرف المزيد", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL)],
         ),
         Notice::Astra => (
-            "Daybreak isn’t available for Astra. Some cybersecurity requests may still be limited.",
-            &[("Learn more", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL)],
+            "Daybreak غير متاح لـ Astra. قد تبقى بعض طلبات الأمن السيبراني مقيَّدة.",
+            &[("اعرف المزيد", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL)],
         ),
         Notice::Enabled => (
-            "Some cybersecurity requests are still limited, even when Daybreak is on.",
-            &[("Learn more", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL)],
+            "تبقى بعض طلبات الأمن السيبراني مقيَّدة حتى مع تفعيل Daybreak.",
+            &[("اعرف المزيد", SAFETY_ACCESS_BLOCK_LEARN_MORE_URL)],
         ),
     };
     SafetyAccessBlockCell {
-        title: "This content can’t be shown",
+        title: "لا يمكن عرض هذا المحتوى",
         explanation: (notice == Notice::Apply)
-            .then(|| "We take extra care with some cybersecurity requests.".into()),
+            .then(|| "نتعامل بحذر إضافي مع بعض طلبات الأمن السيبراني.".into()),
         body,
         actions,
     }
@@ -343,7 +344,7 @@ pub(crate) fn new_info_event(message: String, hint: Option<String>) -> PlainHist
 
 pub(crate) fn new_interruption_notice() -> PlainHistoryCell {
     PlainHistoryCell::new(vec![
-        Line::from("■ Conversation interrupted - use /feedback if something went wrong")
+        Line::from("■ أُوقفت المحادثة - استخدم /feedback إن حدث خطأ ما")
             .style(crate::style::secondary_text_style()),
     ])
 }
@@ -382,7 +383,7 @@ impl HistoryCell for ThreadRecapLoadingCell {
                 )
                 .unwrap_or_else(|| "•".dim()),
                 " ".into(),
-                "Generating conversation recap".bold(),
+                "جارٍ إنشاء ملخص المحادثة".bold(),
                 "…".dim(),
             ]
             .into(),
@@ -390,7 +391,7 @@ impl HistoryCell for ThreadRecapLoadingCell {
     }
 
     fn raw_lines(&self) -> Vec<Line<'static>> {
-        vec![Line::from("Generating conversation recap...")]
+        vec![Line::from("جارٍ إنشاء ملخص المحادثة...")]
     }
 
     fn transcript_animation_tick(&self) -> Option<u64> {
@@ -439,17 +440,17 @@ impl HistoryCell for ThreadRecapHistoryCell {
         if let Some(action) = &self.next_action {
             body.extend(prefix_lines(
                 raw_lines_from_source(action),
-                "Next: ".bold().fg(accent_color()),
+                "التالي: ".bold().fg(accent_color()),
                 "".into(),
             ));
         }
         let mut body = body.into_iter().map(Line::italic).collect::<Vec<_>>();
-        let prefix = Line::from(vec!["  ".into(), "↳ ".dim(), "Recap: ".bold()]).italic();
+        let prefix = Line::from(vec!["  ".into(), "↳ ".dim(), "الملخص: ".bold()]).italic();
         let mut options = if wrap_width <= prefix.width() {
             // Keep the text readable when the terminal cannot fit the hanging indent.
             body.insert(
                 /*index*/ 0,
-                Line::from(vec!["↳ ".dim(), "Recap:".bold()]).italic(),
+                Line::from(vec!["↳ ".dim(), "الملخص:".bold()]).italic(),
             );
             RtOptions::new(wrap_width)
         } else {
@@ -487,7 +488,7 @@ impl HistoryCell for ThreadRecapHistoryCell {
         let mut lines = vec![Line::from(RECAP_HEADING)];
         lines.extend(raw_lines_from_source(&self.recap));
         if let Some(action) = &self.next_action {
-            lines.extend(raw_lines_from_source(&format!("Next: {action}")));
+            lines.extend(raw_lines_from_source(&format!("التالي: {action}")));
         }
         lines
     }

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Slash-command dispatch and local-recall handoff for `ChatWidget`.
 //!
 //! `ChatComposer` parses slash input and stages recognized command text for local
@@ -33,12 +34,12 @@ struct PreparedSlashCommandArgs {
     source: SlashCommandDispatchSource,
 }
 
-const SIDE_STARTING_CONTEXT_LABEL: &str = "Side starting...";
+const SIDE_STARTING_CONTEXT_LABEL: &str = "جارٍ بدء المحادثة الجانبية...";
 const SIDE_SLASH_COMMAND_UNAVAILABLE_HINT: &str =
-    "Press Ctrl+C to return to the main thread first.";
-const GOAL_USAGE_HINT: &str = "Example: /goal improve benchmark coverage";
-const RAW_USAGE: &str = "Usage: /raw [on|off]";
-const USAGE_CHATGPT_LOGIN_REQUIRED: &str = "Sign in with ChatGPT to use /usage.";
+    "اضغط Ctrl+C للعودة إلى المحادثة الرئيسية أولاً.";
+const GOAL_USAGE_HINT: &str = "مثال: /goal improve benchmark coverage";
+const RAW_USAGE: &str = "الاستخدام: /raw [on|off]";
+const USAGE_CHATGPT_LOGIN_REQUIRED: &str = "سجّل الدخول بحساب ChatGPT لاستخدام /usage.";
 
 impl ChatWidget {
     /// Dispatch a bare slash command and record its staged local-history entry.
@@ -87,8 +88,8 @@ impl ChatWidget {
     fn apply_plan_slash_command(&mut self) -> bool {
         if !self.collaboration_modes_enabled() {
             self.add_info_message(
-                "Collaboration modes are disabled.".to_string(),
-                Some("Enable collaboration modes to use /plan.".to_string()),
+                "أوضاع التعاون معطّلة.".to_string(),
+                Some("فعّل أوضاع التعاون لاستخدام /plan.".to_string()),
             );
             return false;
         }
@@ -97,7 +98,7 @@ impl ChatWidget {
             true
         } else {
             self.add_info_message(
-                "Plan mode unavailable right now.".to_string(),
+                "وضع التخطيط غير متاح الآن.".to_string(),
                 /*hint*/ None,
             );
             false
@@ -130,7 +131,7 @@ impl ChatWidget {
         let Some(parent_thread_id) = self.thread_id else {
             let command = cmd.command();
             self.add_error_message(format!(
-                "'/{command}' is unavailable before the session starts."
+                "الأمر '/{command}' غير متاح قبل بدء الجلسة."
             ));
             return;
         };
@@ -186,7 +187,7 @@ impl ChatWidget {
         }
         if self.slash_command_blocked_by_active_task(cmd, source) {
             let message = format!(
-                "'/{}' is disabled while a task is in progress.",
+                "الأمر '/{}' معطّل أثناء تنفيذ مهمة.",
                 cmd.command()
             );
             self.add_to_history(history_cell::new_error_event(message));
@@ -211,7 +212,7 @@ impl ChatWidget {
                 }
                 if !self.daybreak_enabled {
                     if !self.daybreak_account_eligible() {
-                        self.add_error_message("Daybreak requires the OpenAI provider with either ChatGPT sign-in or an API key with Daybreak support enabled.".into());
+                        self.add_error_message("يتطلب Daybreak مزود OpenAI مع تسجيل دخول ChatGPT أو مفتاح API مفعّل له دعم Daybreak.".into());
                         return;
                     }
                     if !crate::daybreak::available(&self.model_catalog.models) {
@@ -222,14 +223,14 @@ impl ChatWidget {
                                 /*hint*/ None,
                             );
                         } else {
-                            self.add_error_message("Daybreak availability could not be determined from the connected host's model catalog.".into());
+                            self.add_error_message("تعذّر تحديد توفر Daybreak من قائمة نماذج الخادم المتصل.".into());
                         }
                         return;
                     }
                 }
                 let Some(thread_id) = self.thread_id else {
                     self.add_error_message(
-                        "Daybreak is unavailable until the thread starts.".into(),
+                        "Daybreak غير متاح حتى تبدأ المحادثة.".into(),
                     );
                     return;
                 };
@@ -246,26 +247,26 @@ impl ChatWidget {
             }
             SlashCommand::Archive => {
                 self.bottom_pane.show_selection_view(SelectionViewParams {
-                    title: Some("Archive this session?".to_string()),
+                    title: Some("أرشفة هذه الجلسة؟".to_string()),
                     subtitle: Some(
                         if self.bottom_pane.is_task_running() {
-                            "This will stop the current turn and archive the session."
+                            "سيوقف هذا الدور الحالي ويؤرشف الجلسة."
                         } else {
-                            "Are you sure? This will archive the current session"
+                            "هل أنت متأكد؟ سيؤرشف هذا الجلسة الحالية"
                         }
                         .to_string(),
                     ),
                     footer_hint: Some(standard_popup_hint_line()),
                     items: vec![
                         SelectionItem {
-                            name: "No, don't archive".to_string(),
-                            description: Some("Return to the current session".to_string()),
+                            name: "لا، لا تؤرشف".to_string(),
+                            description: Some("العودة إلى الجلسة الحالية".to_string()),
                             dismiss_on_select: true,
                             ..Default::default()
                         },
                         SelectionItem {
-                            name: "Yes, archive".to_string(),
-                            description: Some("Archive this session now".to_string()),
+                            name: "نعم، أرشف".to_string(),
+                            description: Some("أرشفة هذه الجلسة الآن".to_string()),
                             actions: vec![Box::new(|tx| {
                                 tx.send(AppEvent::ArchiveCurrentThread);
                             })],
@@ -279,22 +280,22 @@ impl ChatWidget {
             }
             SlashCommand::Delete => {
                 self.bottom_pane.show_selection_view(SelectionViewParams {
-                    title: Some("Delete this session?".to_string()),
+                    title: Some("حذف هذه الجلسة؟".to_string()),
                     subtitle: Some(
-                        "Also deletes subagents and saved side chats. Cannot be undone."
+                        "يحذف أيضاً الوكلاء الفرعيين والمحادثات الجانبية المحفوظة. لا يمكن التراجع."
                             .to_string(),
                     ),
                     footer_hint: Some(standard_popup_hint_line()),
                     items: vec![
                         SelectionItem {
-                            name: "No, keep this session".to_string(),
-                            description: Some("Return to the current session".to_string()),
+                            name: "لا، أبقِ هذه الجلسة".to_string(),
+                            description: Some("العودة إلى الجلسة الحالية".to_string()),
                             dismiss_on_select: true,
                             ..Default::default()
                         },
                         SelectionItem {
-                            name: "Yes, delete and return to command center".to_string(),
-                            description: Some("Permanently delete this session now".to_string()),
+                            name: "نعم، احذف وعد إلى مركز التحكم".to_string(),
+                            description: Some("حذف هذه الجلسة نهائياً الآن".to_string()),
                             actions: vec![Box::new(|tx| {
                                 tx.send(AppEvent::DeleteCurrentThread);
                             })],
@@ -321,7 +322,7 @@ impl ChatWidget {
             SlashCommand::App => {
                 let Some(thread_id) = self.thread_id else {
                     self.add_error_message(
-                        "Session is still starting; try /app again in a moment.".to_string(),
+                        "الجلسة ما زالت تبدأ؛ جرّب /app مجدداً بعد لحظات.".to_string(),
                     );
                     return;
                 };
@@ -354,7 +355,7 @@ impl ChatWidget {
             SlashCommand::Recap => {
                 let Some(thread_id) = self.thread_id else {
                     self.add_error_message(
-                        "Session is still starting; try /recap again in a moment.".to_string(),
+                        "الجلسة ما زالت تبدأ؛ جرّب /recap مجدداً بعد لحظات.".to_string(),
                     );
                     return;
                 };
@@ -513,10 +514,10 @@ impl ChatWidget {
                                 if is_git_repo {
                                     diff_text
                                 } else {
-                                    "`/diff` — _not inside a git repository_".to_string()
+                                    "`/diff` — _لست داخل مستودع git_".to_string()
                                 }
                             }
-                            Err(e) => format!("Failed to compute diff: {e}"),
+                            Err(e) => format!("تعذّر حساب الفروقات: {e}"),
                         },
                         None => "Failed to compute diff: workspace command runner unavailable"
                             .to_string(),
@@ -559,7 +560,7 @@ impl ChatWidget {
             }
             SlashCommand::Pwd => {
                 self.add_info_message(
-                    format!("Current working directory: {}", self.config.cwd.display()),
+                    format!("مجلد العمل الحالي: {}", self.config.cwd.display()),
                     /*hint*/ None,
                 );
             }
@@ -613,12 +614,12 @@ impl ChatWidget {
             SlashCommand::Rollout => {
                 if let Some(path) = self.rollout_path() {
                     self.add_info_message(
-                        format!("Current rollout path: {}", path.display()),
+                        format!("مسار ملف السجل الحالي: {}", path.display()),
                         /*hint*/ None,
                     );
                 } else {
                     self.add_info_message(
-                        "Rollout path is not available yet.".to_string(),
+                        "مسار ملف السجل غير متاح بعد.".to_string(),
                         /*hint*/ None,
                     );
                 }
@@ -683,7 +684,7 @@ impl ChatWidget {
         }
         if self.slash_command_blocked_by_active_task(cmd, SlashCommandDispatchSource::Live) {
             let message = format!(
-                "'/{}' is disabled while a task is in progress.",
+                "الأمر '/{}' معطّل أثناء تنفيذ مهمة.",
                 cmd.command()
             );
             self.add_to_history(history_cell::new_error_event(message));
@@ -836,7 +837,7 @@ impl ChatWidget {
             }
             SlashCommand::Cd => self.request_working_directory_change(trimmed),
             SlashCommand::Pwd => {
-                self.add_error_message("Usage: /pwd".to_string());
+                self.add_error_message("الاستخدام: /pwd".to_string());
             }
             SlashCommand::Usage => {
                 if self.ensure_usage_command_available() {
@@ -845,7 +846,7 @@ impl ChatWidget {
                             .app_event_tx
                             .send(AppEvent::OpenAnalytics { view: Some(view) }),
                         None => self.add_error_message(
-                            "Usage: /usage [daily|weekly|cumulative]".to_string(),
+                            "الاستخدام: /usage [daily|weekly|cumulative]".to_string(),
                         ),
                     }
                 }
@@ -860,7 +861,7 @@ impl ChatWidget {
                     thread_id: self.thread_id(),
                     control: crate::app_event::VoiceControl::Stop,
                 }),
-                _ => self.add_error_message("Usage: /voice [settings|mute|stop]".to_string()),
+                _ => self.add_error_message("الاستخدام: /voice [settings|mute|stop]".to_string()),
             },
             SlashCommand::Ide => {
                 self.handle_ide_command_args(trimmed);
@@ -879,11 +880,11 @@ impl ChatWidget {
                         });
                     } else {
                         self.add_error_message(
-                            "MCP sign-in requires an active session.".to_string(),
+                            "تسجيل الدخول إلى MCP يتطلب جلسة نشطة.".to_string(),
                         );
                     }
                 } else {
-                    self.add_error_message("Usage: /mcp [verbose | login <name>]".to_string());
+                    self.add_error_message("الاستخدام: /mcp [verbose | login <name>]".to_string());
                 }
             }
             SlashCommand::Keymap => match trimmed.to_ascii_lowercase().as_str() {
@@ -896,12 +897,12 @@ impl ChatWidget {
                         Ok(runtime_keymap) => self.open_keymap_debug(&runtime_keymap),
                         Err(err) => {
                             self.add_error_message(format!(
-                                "Invalid `tui.keymap` configuration: {err}"
+                                "إعداد `tui.keymap` غير صالح: {err}"
                             ));
                         }
                     }
                 }
-                _ => self.add_error_message("Usage: /keymap [debug]".to_string()),
+                _ => self.add_error_message("الاستخدام: /keymap [debug]".to_string()),
             },
             SlashCommand::Raw => match trimmed.to_ascii_lowercase().as_str() {
                 "on" => {
@@ -921,7 +922,7 @@ impl ChatWidget {
                 self.session_telemetry
                     .counter("codex.thread.rename", /*inc*/ 1, &[]);
                 let Some(name) = normalize_thread_name(&args) else {
-                    self.add_error_message("Thread name cannot be empty.".to_string());
+                    self.add_error_message("لا يمكن أن يكون اسم المحادثة فارغاً.".to_string());
                     return;
                 };
                 self.app_event_tx.set_thread_name(name);
@@ -975,7 +976,7 @@ impl ChatWidget {
                     self.reasoning_buffer.clear();
                     self.reasoning_header = None;
                     self.reasoning_summary_parts.clear();
-                    self.set_status_header(String::from("Working"));
+                    self.set_status_header(String::from("جارٍ العمل"));
                     self.submit_user_message_with_shell_escape_policy(
                         user_message,
                         ShellEscapePolicy::Disallow,
@@ -1019,7 +1020,7 @@ impl ChatWidget {
                         self.add_info_message(
                             GOAL_USAGE.to_string(),
                             Some(
-                                "The session must start before you can change a goal.".to_string(),
+                                "يجب أن تبدأ الجلسة قبل تغيير الهدف.".to_string(),
                             ),
                         );
                         if source == SlashCommandDispatchSource::Live {
@@ -1078,7 +1079,7 @@ impl ChatWidget {
                     } else {
                         self.add_info_message(
                             GOAL_USAGE.to_string(),
-                            Some("The session must start before you can set a goal.".to_string()),
+                            Some("يجب أن تبدأ الجلسة قبل تحديد هدف.".to_string()),
                         );
                     }
                     return;
@@ -1098,7 +1099,7 @@ impl ChatWidget {
                 let Some(parent_thread_id) = self.thread_id else {
                     let command = cmd.command();
                     self.add_error_message(format!(
-                        "'/{command}' is unavailable before the session starts."
+                        "الأمر '/{command}' غير متاح قبل بدء الجلسة."
                     ));
                     return;
                 };
@@ -1183,7 +1184,7 @@ impl ChatWidget {
         else {
             self.add_info_message(
                 format!(
-                    r#"Unrecognized command '/{name}'. Type "/" for a list of supported commands."#
+                    r#"أمر غير معروف '/{name}'. اكتب "/" لعرض قائمة الأوامر المدعومة."#
                 ),
                 /*hint*/ None,
             );
@@ -1412,7 +1413,7 @@ impl ChatWidget {
 
         let command = cmd.command();
         self.add_error_message(format!(
-            "'/{command}' is unavailable while code review is running."
+            "الأمر '/{command}' غير متاح أثناء مراجعة الكود."
         ));
         self.bottom_pane.drain_pending_submission_state();
         false

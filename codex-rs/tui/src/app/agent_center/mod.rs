@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Status filters and viewport state survive refreshes of the shared task projection.
 
 mod hints;
@@ -12,7 +13,7 @@ use super::*;
 pub(super) const TASK_FILTERS: &[(&str, Option<AgentsOverviewGroup>)] = &[
     ("All", None),
     ("Needs you", Some(AgentsOverviewGroup::NeedsYou)),
-    ("Working", Some(AgentsOverviewGroup::Working)),
+    ("جارٍ العمل", Some(AgentsOverviewGroup::Working)),
     ("Ready", Some(AgentsOverviewGroup::Ready)),
     ("Inactive", Some(AgentsOverviewGroup::Finished)),
 ];

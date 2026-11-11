@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Folder consent for startup and task navigation.
 //! Local daemon resumes recheck folders changed during consent. Remote checks
 //! retain their existing explicit-cwd scope until authoritative roots are available.
@@ -89,7 +90,7 @@ pub(crate) async fn check_directory_trust(
             && !config.active_project.is_untrusted()
         {
             color_eyre::eyre::bail!(
-                "Folder trust changed. Reopen the destination with its restricted settings."
+                "تغيّرت الثقة بالمجلد. أعد فتح الوجهة بإعداداتها المقيَّدة."
             );
         }
         let remote_trust_key =

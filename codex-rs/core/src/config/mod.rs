@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crate::config::edit::ConfigEdit;
 use crate::config::edit::ConfigEditsBuilder;
 use crate::context::world_state::validate_managed_developer_instructions;
@@ -279,6 +280,10 @@ pub(crate) const HARD_MAX_MULTI_AGENT_V2_TIMEOUT_MS: i64 =
     DEFAULT_MULTI_AGENT_V2_MAX_WAIT_TIMEOUT_MS;
 pub(crate) const DEFAULT_AGENT_MAX_DEPTH: i32 = 1;
 const LOCAL_DEV_BUILD_VERSION: &str = "0.0.0";
+
+/// codex-ar (unofficial Arabic fork): built-in instruction that makes the model
+/// talk to the user in Arabic without any AGENTS.md or config changes.
+const ARABIC_RESPONSE_DIRECTIVE: &str = "Always communicate with the user in Arabic (Modern Standard Arabic). Every explanation, plan, question, progress update, summary, and final answer must be written in Arabic. Keep code, shell commands, file paths, identifiers, and quoted program output in their original form. If the user explicitly asks for a different language, follow that request.";
 
 pub const CONFIG_TOML_FILE: &str = "config.toml";
 const CONFIG_PROFILE_V2_SUFFIX: &str = ".config.toml";
@@ -4307,7 +4312,16 @@ impl Config {
         let base_instructions_provenance = base_instructions
             .as_ref()
             .map(|_| BaseInstructionsProvenance::Custom);
-        let developer_instructions = developer_instructions.or(cfg.developer_instructions);
+        // codex-ar (unofficial Arabic fork): always tell the model to answer in
+        // Arabic, ahead of any developer instructions the user configured.
+        let developer_instructions = Some(
+            match developer_instructions.or(cfg.developer_instructions) {
+                Some(existing) if !existing.trim().is_empty() => {
+                    format!("{ARABIC_RESPONSE_DIRECTIVE}\n\n{existing}")
+                }
+                _ => ARABIC_RESPONSE_DIRECTIVE.to_string(),
+            },
+        );
         let include_permissions_instructions = cfg.include_permissions_instructions.unwrap_or(true);
         let include_apps_instructions = cfg.include_apps_instructions.unwrap_or(true);
         let include_collaboration_mode_instructions =

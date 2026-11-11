@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crate::AppServerTarget;
 use crate::RemoteAppServerEndpoint;
 use crate::update_versions::ServerVersionNoticeKind;
@@ -61,11 +62,11 @@ pub(crate) fn remote_connection_status_value(
 pub(crate) fn server_version_notice(client: &str, server: Option<&str>) -> Option<String> {
     let server = server?;
     let comparison = match crate::update_versions::server_version_notice_kind(client, server)? {
-        ServerVersionNoticeKind::Older => "older than",
-        ServerVersionNoticeKind::Different => "different from",
+        ServerVersionNoticeKind::Older => "أقدم من",
+        ServerVersionNoticeKind::Different => "مختلف عن",
     };
     Some(format!(
-        "A background Codex service is running v{server}, {comparison} your Codex CLI v{client}."
+        "تعمل في الخلفية خدمة Codex بالإصدار v{server}، وهو {comparison} إصدار Codex CLI لديك v{client}."
     ))
 }
 

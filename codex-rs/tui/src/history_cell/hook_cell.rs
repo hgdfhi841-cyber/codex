@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! History cell for hook execution.
 //!
 //! Hooks are intentionally quieter than normal tool calls. A hook that starts and finishes
@@ -152,9 +153,9 @@ impl HookCell {
             {
                 message.to_string()
             } else if multiple {
-                "Running hooks".to_string()
+                "جارٍ تشغيل الخطافات".to_string()
             } else {
-                "Running hook".to_string()
+                "جارٍ تشغيل الخطاف".to_string()
             },
         )
     }
@@ -295,11 +296,11 @@ impl HookCell {
                 lines.push(first_line);
             } else {
                 let header_text = match status {
-                    HookRunStatus::Completed => "Hook completed",
-                    HookRunStatus::Failed => "Hook failed",
-                    HookRunStatus::Blocked => "Blocked by hook",
-                    HookRunStatus::Stopped => "Hook stopped",
-                    HookRunStatus::Running => "Hook running",
+                    HookRunStatus::Completed => "اكتمل الخطاف",
+                    HookRunStatus::Failed => "فشل الخطاف",
+                    HookRunStatus::Blocked => "حظره خطاف",
+                    HookRunStatus::Stopped => "توقف الخطاف",
+                    HookRunStatus::Running => "الخطاف يعمل",
                 };
                 lines.push(
                     vec![

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Archived-session recovery with shared picker rows and scoped terminal ownership.
 
 use crate::bottom_pane::picker_option_list;
@@ -188,7 +189,7 @@ impl UnarchivePrompt {
             picker_option_list(
                 vec![
                     format!("Unarchive and {}", self.action.verb()),
-                    "Cancel".to_string(),
+                    "إلغاء".to_string(),
                 ],
                 selected_index,
             ),

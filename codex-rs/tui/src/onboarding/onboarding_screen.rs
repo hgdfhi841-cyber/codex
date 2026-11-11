@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Onboarding screen orchestration and top-level keyboard routing.
 //!
 //! The onboarding flow is a small state machine over visible steps
@@ -600,11 +601,11 @@ pub(crate) fn render_gateway_device_prompt(
     super::auth::render_device_code_prompt(
         area,
         buf,
-        "  Sign in to your gateway".into(),
+        "  سجّل الدخول إلى البوابة".into(),
         Some((&prompt.verification_url, &prompt.user_code)),
         [
-            "  1. Open this link in a browser",
-            "  2. Enter this one-time code when prompted",
+            "  1. افتح هذا الرابط في المتصفح",
+            "  2. أدخل هذا الرمز عند الطلب",
         ],
         keys::CANCEL[0],
     );
@@ -747,12 +748,12 @@ async fn run_onboarding_screen_inner(
                                 let message = match result {
                                     Ok(CopyStatus::Pending(id)) => {
                                         pending_copy = Some((id, login_id));
-                                        "Copying link…".to_string()
+                                        "جارٍ نسخ الرابط…".to_string()
                                     }
-                                    Ok(CopyStatus::Busy) => "Clipboard busy; try again".to_string(),
-                                    Ok(CopyStatus::Confirmed) => "Copied link to clipboard".to_string(),
-                                    Ok(CopyStatus::Unconfirmed) => "Copy requested; check your clipboard".to_string(),
-                                    Err(error) => format!("Could not copy link: {error}"),
+                                    Ok(CopyStatus::Busy) => "الحافظة مشغولة؛ حاول مجدداً".to_string(),
+                                    Ok(CopyStatus::Confirmed) => "تم نسخ الرابط إلى الحافظة".to_string(),
+                                    Ok(CopyStatus::Unconfirmed) => "طُلب النسخ؛ تحقق من الحافظة".to_string(),
+                                    Err(error) => format!("تعذّر نسخ الرابط: {error}"),
                                 };
                                 if let Some(Step::Auth(widget)) = onboarding_screen.current_steps_mut().into_iter().last() {
                                     *widget.error.write().unwrap_or_else(std::sync::PoisonError::into_inner) = Some(message);
@@ -787,10 +788,10 @@ async fn run_onboarding_screen_inner(
                                     })
                                 {
                                     let message = match result {
-                                        Ok(CopyStatus::Confirmed) => "Copied link to clipboard".to_string(),
-                                        Ok(CopyStatus::Unconfirmed) => "Copy requested; check your clipboard".to_string(),
-                                        Ok(CopyStatus::Busy | CopyStatus::Pending(_)) => "Clipboard busy; try again".to_string(),
-                                        Err(error) => format!("Could not copy link: {error}"),
+                                        Ok(CopyStatus::Confirmed) => "تم نسخ الرابط إلى الحافظة".to_string(),
+                                        Ok(CopyStatus::Unconfirmed) => "طُلب النسخ؛ تحقق من الحافظة".to_string(),
+                                        Ok(CopyStatus::Busy | CopyStatus::Pending(_)) => "الحافظة مشغولة؛ حاول مجدداً".to_string(),
+                                        Err(error) => format!("تعذّر نسخ الرابط: {error}"),
                                     };
                                     *widget.error.write().unwrap_or_else(std::sync::PoisonError::into_inner) = Some(message);
                                 }
@@ -983,7 +984,7 @@ async fn persist_selected_trust(
             if let Step::TrustDirectory(widget) = &mut onboarding_screen.steps[trust_step_index] {
                 widget.selection = None;
                 widget.error = Some(format!(
-                    "Failed to set trust for {}: {error}",
+                    "تعذّر ضبط الثقة لـ {}: {error}",
                     trust_target.display()
                 ));
             }

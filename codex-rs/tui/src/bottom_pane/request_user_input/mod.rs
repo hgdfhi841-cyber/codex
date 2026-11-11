@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Request-user-input overlay state machine.
 //!
 //! Core behaviors:
@@ -55,19 +56,19 @@ use codex_protocol::ThreadId;
 use codex_protocol::user_input::TextElement;
 use unicode_width::UnicodeWidthStr;
 
-const NOTES_PLACEHOLDER: &str = "Add notes";
-const ANSWER_PLACEHOLDER: &str = "Type your answer (optional)";
+const NOTES_PLACEHOLDER: &str = "أضف ملاحظات";
+const ANSWER_PLACEHOLDER: &str = "اكتب إجابتك (اختياري)";
 // Keep in sync with ChatComposer's minimum composer height.
 const MIN_COMPOSER_HEIGHT: u16 = 3;
-const SELECT_OPTION_PLACEHOLDER: &str = "Select an option to add notes";
+const SELECT_OPTION_PLACEHOLDER: &str = "اختر خياراً لإضافة ملاحظات";
 pub(super) const TIP_SEPARATOR: &str = " | ";
 pub(super) const DESIRED_SPACERS_BETWEEN_SECTIONS: u16 = 2;
-const OTHER_OPTION_LABEL: &str = "None of the above";
-const OTHER_OPTION_DESCRIPTION: &str = "Optionally, add details in notes (tab)";
-const UNANSWERED_CONFIRM_TITLE: &str = "Submit with unanswered questions?";
-const UNANSWERED_CONFIRM_GO_BACK: &str = "Go back";
-const UNANSWERED_CONFIRM_GO_BACK_DESC: &str = "Return to the first unanswered question";
-const UNANSWERED_CONFIRM_SUBMIT: &str = "Proceed";
+const OTHER_OPTION_LABEL: &str = "لا شيء مما سبق";
+const OTHER_OPTION_DESCRIPTION: &str = "يمكنك إضافة تفاصيل في الملاحظات (tab)";
+const UNANSWERED_CONFIRM_TITLE: &str = "الإرسال مع وجود أسئلة بلا إجابة؟";
+const UNANSWERED_CONFIRM_GO_BACK: &str = "رجوع";
+const UNANSWERED_CONFIRM_GO_BACK_DESC: &str = "العودة إلى أول سؤال بلا إجابة";
+const UNANSWERED_CONFIRM_SUBMIT: &str = "تابع";
 const UNANSWERED_CONFIRM_SUBMIT_DESC_SINGULAR: &str = "question";
 const UNANSWERED_CONFIRM_SUBMIT_DESC_PLURAL: &str = "questions";
 const AUTO_RESOLUTION_HIDDEN_GRACE: Duration = Duration::from_secs(/*secs*/ 60);
@@ -314,7 +315,7 @@ impl RequestUserInputOverlay {
     fn auto_resolution_countdown_text_at(&self, now: Instant) -> Option<String> {
         match self.auto_resolution_timing_at(now) {
             AutoResolutionTiming::VisibleCountdown { remaining } => Some(format!(
-                "auto-resolves in {}",
+                "يُحسم تلقائياً خلال {}",
                 format_auto_resolution_remaining(remaining)
             )),
             AutoResolutionTiming::Disabled
@@ -327,15 +328,15 @@ impl RequestUserInputOverlay {
         if self.question_count() > 0 {
             let idx = self.current_index() + 1;
             let total = self.question_count();
-            let base = format!("Question {idx}/{total}");
+            let base = format!("السؤال {idx}/{total}");
             let unanswered = self.unanswered_count();
             if unanswered > 0 {
-                format!("{base} ({unanswered} unanswered)")
+                format!("{base} ({unanswered} بلا إجابة)")
             } else {
                 base
             }
         } else {
-            "No questions".to_string()
+            "لا أسئلة".to_string()
         }
     }
 
@@ -587,7 +588,7 @@ impl RequestUserInputOverlay {
         let notes_visible = self.notes_ui_visible();
         if self.has_options() {
             if self.selected_option_index().is_some() && !notes_visible {
-                tips.push(shortcut("tab", "to add notes"));
+                tips.push(shortcut("tab", "لإضافة ملاحظات"));
             }
             if self.selected_option_index().is_some() && notes_visible {
                 tips.push(Line::from(
@@ -595,7 +596,7 @@ impl RequestUserInputOverlay {
                         crate::key_hint::key_label_spans("tab"),
                         vec![" or ".dim()],
                         crate::key_hint::key_label_spans("esc"),
-                        vec![" to clear notes".dim()],
+                        vec![" لمسح الملاحظات".dim()],
                     ]
                     .concat(),
                 ));
@@ -613,17 +614,17 @@ impl RequestUserInputOverlay {
         };
         if let Some(submit_key) = submit_key {
             let submit_tip = if question_count == 1 {
-                shortcut(&submit_key, "to submit answer")
+                shortcut(&submit_key, "لإرسال الإجابة")
             } else if is_last_question {
-                shortcut(&submit_key, "to submit all")
+                shortcut(&submit_key, "لإرسال الكل")
             } else {
-                shortcut(&submit_key, "to submit answer")
+                shortcut(&submit_key, "لإرسال الإجابة")
             };
             tips.push(submit_tip);
         }
         if question_count > 1 {
             if self.has_options() && !self.focus_is_notes() {
-                tips.push(shortcut("←/→", "to navigate questions"));
+                tips.push(shortcut("←/→", "للتنقل بين الأسئلة"));
             } else if !self.has_options() {
                 tips.push(shortcut(
                     &format!(
@@ -631,7 +632,7 @@ impl RequestUserInputOverlay {
                         crate::key_hint::ctrl(KeyCode::Char('p')).display_label(),
                         crate::key_hint::ctrl(KeyCode::Char('n')).display_label()
                     ),
-                    "change question",
+                    "تغيير السؤال",
                 ));
             }
         }
@@ -640,7 +641,7 @@ impl RequestUserInputOverlay {
                 && notes_visible
                 && interrupt_key == ShortcutHint::Single(crate::key_hint::plain(KeyCode::Esc)))
         {
-            tips.push(shortcut(&interrupt_key.display_label(), "to interrupt"));
+            tips.push(shortcut(&interrupt_key.display_label(), "للإيقاف"));
         }
         tips
     }

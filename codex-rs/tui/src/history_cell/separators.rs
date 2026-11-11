@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Subtle completion timestamps, elapsed durations, and runtime metrics for transcript history.
 
 use super::*;
@@ -113,7 +114,7 @@ impl FinalMessageSeparator {
             } else {
                 format!("{seconds}s")
             };
-            label_parts.push(format!("Worked for {elapsed}"));
+            label_parts.push(format!("مدة العمل {elapsed}"));
         }
         if let Some(completed_at) = self.completed_at {
             let date_format = if completed_at.date_naive() == today {

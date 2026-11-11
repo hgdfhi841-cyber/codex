@@ -4,3 +4,8 @@ Copyright 2025 OpenAI
 This project includes code derived from [Ratatui](https://github.com/ratatui/ratatui), licensed under the MIT license.
 Copyright (c) 2016-2022 Florian Dehau
 Copyright (c) 2023-2025 The Ratatui Developers
+
+This distribution ("codex-ar") is an unofficial Arabic localization of OpenAI Codex CLI.
+It is not produced, endorsed, or supported by OpenAI. Modified files carry a notice at the top.
+Changes (2026): user-interface strings translated to Arabic, a built-in instruction that makes
+the model answer in Arabic, and a Windows build workflow. See CODEX-AR.md.

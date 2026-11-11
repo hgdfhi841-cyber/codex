@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! The bottom pane is the interactive footer of the chat UI.
 //!
 //! The pane owns the [`ChatComposer`] (editable prompt input) and a stack of transient
@@ -1330,7 +1331,7 @@ impl BottomPane {
         self.request_redraw();
     }
 
-    /// Update the status indicator header (defaults to "Working") and details below it.
+    /// Update the status indicator header (defaults to "جارٍ العمل") and details below it.
     ///
     /// Passing `None` clears any existing details. Returns whether the active status indicator
     /// was updated and requested a redraw.
@@ -2142,7 +2143,7 @@ impl BottomPane {
         self.pause_status_timer_for_modal();
         self.set_composer_input_enabled(
             /*enabled*/ false,
-            Some("Answer the questions to continue.".to_string()),
+            Some("أجب عن الأسئلة للمتابعة.".to_string()),
         );
         self.push_view(Box::new(modal));
     }
@@ -2197,10 +2198,10 @@ impl BottomPane {
                     description: None,
                     instructions: match suggestion_type {
                         AppLinkSuggestionType::Install => {
-                            "Install this app in your browser, then return here.".to_string()
+                            "ثبّت هذا التطبيق من المتصفح ثم عد إلى هنا.".to_string()
                         }
                         AppLinkSuggestionType::Enable => {
-                            "Enable this app to use it for the current request.".to_string()
+                            "فعّل هذا التطبيق لاستخدامه في الطلب الحالي.".to_string()
                         }
                         AppLinkSuggestionType::Auth => unreachable!(
                             "auth uses URL mode elicitation, not tool suggestion forms"
@@ -2226,7 +2227,7 @@ impl BottomPane {
             self.pause_status_timer_for_modal();
             self.set_composer_input_enabled(
                 /*enabled*/ false,
-                Some("Respond to the tool suggestion to continue.".to_string()),
+                Some("أجب على اقتراح الأداة للمتابعة.".to_string()),
             );
             self.push_view(Box::new(view));
             return;
@@ -2243,7 +2244,7 @@ impl BottomPane {
         self.pause_status_timer_for_modal();
         self.set_composer_input_enabled(
             /*enabled*/ false,
-            Some("Respond to the MCP server request to continue.".to_string()),
+            Some("أجب على طلب خادم MCP للمتابعة.".to_string()),
         );
         self.push_view(Box::new(modal));
     }

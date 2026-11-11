@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Display file completions while preserving the full path used for insertion.
 //! Narrow rows retain the filename; fuzzy highlights refer to the displayed text.
 
@@ -175,7 +176,7 @@ impl WidgetRef for &FileSearchPopup {
         let empty_message = if self.waiting {
             "  loading..."
         } else {
-            "  no matches"
+            "  لا نتائج"
         };
 
         render_rows_single_line(

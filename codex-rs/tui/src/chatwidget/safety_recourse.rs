@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Turn-scoped safety recourse: match the terminal policy error and offer safer rewrites.
 
 mod metadata;
@@ -107,7 +108,7 @@ pub(super) fn render_failure(
             let notice = chat.cyber_policy_notice();
             if notice == crate::daybreak::Notice::Disabled {
                 items.push(SelectionItem {
-                    name: "Enable Daybreak".into(),
+                    name: "تفعيل Daybreak".into(),
                     actions: vec![Box::new(move |tx| {
                         tx.send(AppEvent::PersistDaybreakSelection {
                             thread_id,

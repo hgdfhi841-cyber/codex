@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crossterm::event::KeyCode;
 use crossterm::event::KeyEvent;
 use crossterm::event::KeyModifiers;
@@ -81,20 +82,20 @@ impl MemoriesSettingsView {
             items: vec![
                 MemoriesMenuItem::Setting {
                     setting: MemoriesSetting::Use,
-                    name: "Use memories",
-                    description: "Use memories starting with the next thread",
+                    name: "استخدام الذكريات",
+                    description: "استخدام الذكريات بدءاً من المحادثة القادمة",
                     enabled: use_memories,
                 },
                 MemoriesMenuItem::Setting {
                     setting: MemoriesSetting::Generate,
-                    name: "Generate memories",
-                    description: "Generate memories from this thread and future threads",
+                    name: "توليد الذكريات",
+                    description: "توليد ذكريات من هذه المحادثة والمحادثات القادمة",
                     enabled: generate_memories,
                 },
                 MemoriesMenuItem::Action {
                     action: MemoriesAction::Reset,
-                    name: "Reset all memories",
-                    description: "Clear local memory files and summaries without changing existing threads",
+                    name: "إعادة ضبط كل الذكريات",
+                    description: "مسح ملفات الذاكرة المحلية وملخصاتها دون تغيير المحادثات الموجودة",
                 },
             ],
             state: ScrollState::new(),
@@ -102,7 +103,7 @@ impl MemoriesSettingsView {
             complete: false,
             app_event_tx,
             docs_link: Line::from(vec![
-                "Learn more: ".dim(),
+                "اعرف المزيد: ".dim(),
                 MEMORIES_DOC_URL
                     .fg(crate::style::accent_color())
                     .underlined(),
@@ -122,7 +123,7 @@ impl MemoriesSettingsView {
         header.push(Paragraph::new(Line::from("Memories".bold())).wrap(Wrap { trim: false }));
         header.push(
             Paragraph::new(Line::from(
-                "Choose how Codex uses and creates memories. Changes are saved to config.toml"
+                "اختر كيف يستخدم Codex الذكريات وينشئها. تُحفظ التغييرات في config.toml"
                     .dim(),
             ))
             .wrap(Wrap { trim: false }),
@@ -133,11 +134,11 @@ impl MemoriesSettingsView {
     fn reset_confirmation_header(&self) -> ColumnRenderable<'_> {
         let mut header = ColumnRenderable::new();
         header.push(
-            Paragraph::new(Line::from("Reset all memories?".bold())).wrap(Wrap { trim: false }),
+            Paragraph::new(Line::from("إعادة ضبط كل الذكريات؟".bold())).wrap(Wrap { trim: false }),
         );
         header.push(
             Paragraph::new(Line::from(
-                "This clears local memory files and rollout summaries for the current Codex home."
+                "هذا يمسح ملفات الذاكرة المحلية وملخصات السجلات لمجلد Codex الحالي."
                     .dim(),
             ))
             .wrap(Wrap { trim: false }),
@@ -163,7 +164,7 @@ impl MemoriesSettingsView {
 
     fn build_rows(&self) -> Vec<GenericDisplayRow> {
         if let Some(state) = self.reset_confirmation.as_ref() {
-            return ["Reset all memories", "Go back"]
+            return ["إعادة ضبط كل الذكريات", "رجوع"]
                 .into_iter()
                 .enumerate()
                 .map(|(idx, name)| GenericDisplayRow {
@@ -175,8 +176,8 @@ impl MemoriesSettingsView {
                         format!("  {name}")
                     },
                     description: Some(match idx {
-                        0 => "Delete local memory files and rollout summaries".to_string(),
-                        1 => "Return to memory settings".to_string(),
+                        0 => "حذف ملفات الذاكرة المحلية وملخصات السجلات".to_string(),
+                        1 => "العودة إلى إعدادات الذاكرة".to_string(),
                         _ => unreachable!("reset confirmation only renders two rows"),
                     }),
                     ..Default::default()
@@ -406,7 +407,7 @@ impl Renderable for MemoriesSettingsView {
                 &rows,
                 self.active_state(),
                 MAX_POPUP_ROWS,
-                "  No memory settings available",
+                "  لا توجد إعدادات ذاكرة متاحة",
             );
         }
         if self.reset_confirmation.is_none() {

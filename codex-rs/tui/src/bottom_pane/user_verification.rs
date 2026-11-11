@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Presentation-only user-verification approval prompt.
 //!
 //! This view intentionally does not share the approval overlay state machine. User verification
@@ -93,9 +94,9 @@ impl UserVerificationView {
             footer_note: Some(
                 accept_cancel_hint_line(
                     list_keymap.primary_hint(ListAction::Accept),
-                    "to confirm",
+                    "للتأكيد",
                     list_keymap.primary_hint(ListAction::Cancel),
-                    "to cancel",
+                    "للإلغاء",
                 )
                 .dim(),
             ),
@@ -253,12 +254,12 @@ impl Renderable for UserVerificationView {
 fn user_verification_options(keymap: &ApprovalKeymap) -> Vec<UserVerificationOption> {
     vec![
         UserVerificationOption {
-            label: "Verify and approve".to_string(),
+            label: "تحقّق ووافق".to_string(),
             decision: UserVerificationDecision::Verify,
             shortcuts: keymap.approve.clone(),
         },
         UserVerificationOption {
-            label: "Cancel this request".to_string(),
+            label: "ألغِ هذا الطلب".to_string(),
             decision: UserVerificationDecision::Cancel,
             shortcuts: keymap.cancel.clone(),
         },
@@ -294,7 +295,7 @@ fn request_details(request: &UserVerificationRequest) -> Box<dyn Renderable> {
 
 fn waiting_view(request: &UserVerificationRequest, keymap: &ListKeymap) -> Box<dyn Renderable> {
     let mut view = ColumnRenderable::new();
-    view.push(Paragraph::new("Waiting for verification…".bold()).wrap(Wrap { trim: false }));
+    view.push(Paragraph::new("بانتظار التحقق…".bold()).wrap(Wrap { trim: false }));
     view.push(Line::from(""));
     view.push(request_details(request));
     view.push(Line::from(""));
@@ -303,7 +304,7 @@ fn waiting_view(request: &UserVerificationRequest, keymap: &ListKeymap) -> Box<d
             /*accept*/ None,
             "",
             keymap.primary_hint(ListAction::Cancel),
-            "to cancel this request",
+            "لإلغاء هذا الطلب",
         ))
         .wrap(Wrap { trim: false }),
     );
@@ -359,7 +360,7 @@ impl super::BottomPane {
         self.pause_status_timer_for_modal();
         self.set_composer_input_enabled(
             /*enabled*/ false,
-            Some("Complete user verification to continue.".to_string()),
+            Some("أكمل التحقق من المستخدم للمتابعة.".to_string()),
         );
         self.push_view(Box::new(view));
     }

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Approval, denial, and review-status transcript cells.
 
 use super::*;
@@ -57,17 +58,17 @@ pub fn new_approval_decision_cell(
                 let summary = if let Some(snippet) = non_empty_exec_snippet(&command) {
                     vec![
                         actor.subject().into(),
-                        "approved".bold(),
-                        " codex to run ".into(),
+                        "تمت الموافقة على".bold(),
+                        " تشغيل Codex للأمر ".into(),
                         Span::from(snippet).dim(),
-                        " this time".bold(),
+                        " هذه المرة".bold(),
                     ]
                 } else {
                     vec![
                         actor.subject().into(),
-                        "approved".bold(),
-                        " this request".into(),
-                        " this time".bold(),
+                        "تمت الموافقة على".bold(),
+                        " هذا الطلب".into(),
+                        " هذه المرة".bold(),
                     ]
                 };
                 ("✔ ".green(), summary)
@@ -76,10 +77,10 @@ pub fn new_approval_decision_cell(
                 "✔ ".green(),
                 vec![
                     actor.subject().into(),
-                    "approved".bold(),
-                    " codex network access to ".into(),
+                    "تمت الموافقة على".bold(),
+                    " وصول Codex عبر الشبكة إلى ".into(),
                     Span::from(target).dim(),
-                    " this time".bold(),
+                    " هذه المرة".bold(),
                 ],
             ),
         },
@@ -91,8 +92,8 @@ pub fn new_approval_decision_cell(
                 "✔ ".green(),
                 vec![
                     actor.subject().into(),
-                    "approved".bold(),
-                    " codex to always run commands that start with ".into(),
+                    "تمت الموافقة على".bold(),
+                    " تشغيل Codex دائماً للأوامر التي تبدأ بـ ".into(),
                     snippet,
                 ],
             )
@@ -102,17 +103,17 @@ pub fn new_approval_decision_cell(
                 let summary = if let Some(snippet) = non_empty_exec_snippet(&command) {
                     vec![
                         actor.subject().into(),
-                        "approved".bold(),
-                        " codex to run ".into(),
+                        "تمت الموافقة على".bold(),
+                        " تشغيل Codex للأمر ".into(),
                         Span::from(snippet).dim(),
-                        " every time this session".bold(),
+                        " طوال هذه الجلسة".bold(),
                     ]
                 } else {
                     vec![
                         actor.subject().into(),
-                        "approved".bold(),
-                        " this request".into(),
-                        " every time this session".bold(),
+                        "تمت الموافقة على".bold(),
+                        " هذا الطلب".into(),
+                        " طوال هذه الجلسة".bold(),
                     ]
                 };
                 ("✔ ".green(), summary)
@@ -121,10 +122,10 @@ pub fn new_approval_decision_cell(
                 "✔ ".green(),
                 vec![
                     actor.subject().into(),
-                    "approved".bold(),
-                    " codex network access to ".into(),
+                    "تمت الموافقة على".bold(),
+                    " وصول Codex عبر الشبكة إلى ".into(),
                     Span::from(target).dim(),
-                    " every time this session".bold(),
+                    " طوال هذه الجلسة".bold(),
                 ],
             ),
         },
@@ -140,8 +141,8 @@ pub fn new_approval_decision_cell(
                     "✔ ".green(),
                     vec![
                         actor.subject().into(),
-                        "persisted".bold(),
-                        " Codex network access to ".into(),
+                        "تم حفظ السماح بـ".bold(),
+                        " وصول Codex عبر الشبكة إلى ".into(),
                         Span::from(target).dim(),
                     ],
                 ),
@@ -149,10 +150,10 @@ pub fn new_approval_decision_cell(
                     "✗ ".red(),
                     vec![
                         actor.subject().into(),
-                        "denied".bold(),
-                        " codex network access to ".into(),
+                        "رُفض".bold(),
+                        " وصول Codex عبر الشبكة إلى ".into(),
                         Span::from(target).dim(),
-                        " and saved that rule".into(),
+                        " وحُفظت هذه القاعدة".into(),
                     ],
                 ),
             }
@@ -164,14 +165,14 @@ pub fn new_approval_decision_cell(
                     match actor {
                         ApprovalDecisionActor::User => vec![
                             actor.subject().into(),
-                            "did not approve".bold(),
-                            " codex to run ".into(),
+                            "لم تتم الموافقة على".bold(),
+                            " تشغيل Codex للأمر ".into(),
                             snippet,
                         ],
                         ApprovalDecisionActor::Guardian => vec![
-                            "Request ".into(),
-                            "denied".bold(),
-                            " for codex to run ".into(),
+                            "الطلب: ".into(),
+                            "رُفض".bold(),
+                            " تشغيل Codex للأمر ".into(),
                             snippet,
                         ],
                     }
@@ -179,11 +180,11 @@ pub fn new_approval_decision_cell(
                     match actor {
                         ApprovalDecisionActor::User => vec![
                             actor.subject().into(),
-                            "did not approve".bold(),
-                            " this request".into(),
+                            "لم تتم الموافقة على".bold(),
+                            " هذا الطلب".into(),
                         ],
                         ApprovalDecisionActor::Guardian => {
-                            vec!["Request ".into(), "denied".bold()]
+                            vec!["الطلب: ".into(), "رُفض".bold()]
                         }
                     }
                 };
@@ -193,8 +194,8 @@ pub fn new_approval_decision_cell(
                 "✗ ".red(),
                 vec![
                     actor.subject().into(),
-                    "did not approve".bold(),
-                    " codex network access to ".into(),
+                    "لم تتم الموافقة على".bold(),
+                    " وصول Codex عبر الشبكة إلى ".into(),
                     Span::from(target).dim(),
                 ],
             ),
@@ -203,16 +204,16 @@ pub fn new_approval_decision_cell(
             ApprovalDecisionSubject::Command(command) => {
                 let summary = if let Some(snippet) = non_empty_exec_snippet(&command) {
                     vec![
-                        "Review ".into(),
-                        "timed out".bold(),
-                        " before codex could run ".into(),
+                        "المراجعة: ".into(),
+                        "انتهت مهلتها".bold(),
+                        " قبل أن يشغّل Codex الأمر ".into(),
                         Span::from(snippet).dim(),
                     ]
                 } else {
                     vec![
-                        "Review ".into(),
-                        "timed out".bold(),
-                        " before this request could be approved".into(),
+                        "المراجعة: ".into(),
+                        "انتهت مهلتها".bold(),
+                        " قبل الموافقة على هذا الطلب".into(),
                     ]
                 };
                 ("✗ ".red(), summary)
@@ -220,9 +221,9 @@ pub fn new_approval_decision_cell(
             ApprovalDecisionSubject::NetworkAccess { target } => (
                 "✗ ".red(),
                 vec![
-                    "Review ".into(),
-                    "timed out".bold(),
-                    " before codex could access ".into(),
+                    "المراجعة: ".into(),
+                    "انتهت مهلتها".bold(),
+                    " قبل أن يصل Codex إلى ".into(),
                     Span::from(target).dim(),
                 ],
             ),
@@ -232,15 +233,15 @@ pub fn new_approval_decision_cell(
                 let summary = if let Some(snippet) = non_empty_exec_snippet(&command) {
                     vec![
                         actor.subject().into(),
-                        "canceled".bold(),
-                        " the request to run ".into(),
+                        "أُلغي".bold(),
+                        " طلب تشغيل ".into(),
                         Span::from(snippet).dim(),
                     ]
                 } else {
                     vec![
                         actor.subject().into(),
-                        "canceled".bold(),
-                        " this request".into(),
+                        "أُلغي".bold(),
+                        " هذا الطلب".into(),
                     ]
                 };
                 ("✗ ".red(), summary)
@@ -249,8 +250,8 @@ pub fn new_approval_decision_cell(
                 "✗ ".red(),
                 vec![
                     actor.subject().into(),
-                    "canceled".bold(),
-                    " the request for codex network access to ".into(),
+                    "أُلغي".bold(),
+                    " طلب وصول Codex عبر الشبكة إلى ".into(),
                     Span::from(target).dim(),
                 ],
             ),
@@ -273,25 +274,25 @@ pub enum ApprovalDecisionActor {
 impl ApprovalDecisionActor {
     fn subject(self) -> &'static str {
         match self {
-            Self::User => "You ",
-            Self::Guardian => "Auto-reviewer ",
+            Self::User => "أنت: ",
+            Self::Guardian => "المراجع الآلي: ",
         }
     }
 }
 
 pub fn new_guardian_denied_patch_request(files: Vec<String>) -> Box<dyn HistoryCell> {
     let mut summary = vec![
-        "Request ".into(),
-        "denied".bold(),
-        " for codex to apply ".into(),
+        "الطلب: ".into(),
+        "رُفض".bold(),
+        " تطبيق Codex ".into(),
     ];
     if files.len() == 1 {
-        summary.push("a patch touching ".into());
+        summary.push("تعديلاً يمسّ ".into());
         summary.push(Span::from(files[0].clone()).dim());
     } else {
-        summary.push("a patch touching ".into());
+        summary.push("تعديلاً يمسّ ".into());
         summary.push(Span::from(files.len().to_string()).dim());
-        summary.push(" files".into());
+        summary.push(" ملفات".into());
     }
 
     Box::new(PrefixedWrappedHistoryCell::new(
@@ -303,9 +304,9 @@ pub fn new_guardian_denied_patch_request(files: Vec<String>) -> Box<dyn HistoryC
 
 pub fn new_guardian_denied_action_request(summary: String) -> Box<dyn HistoryCell> {
     let line = Line::from(vec![
-        "Request ".into(),
-        "denied".bold(),
-        " for ".into(),
+        "الطلب: ".into(),
+        "رُفض".bold(),
+        " بخصوص: ".into(),
         Span::from(summary).dim(),
     ]);
     Box::new(PrefixedWrappedHistoryCell::new(line, "✗ ".red(), "  "))
@@ -313,17 +314,17 @@ pub fn new_guardian_denied_action_request(summary: String) -> Box<dyn HistoryCel
 
 pub fn new_guardian_timed_out_patch_request(files: Vec<String>) -> Box<dyn HistoryCell> {
     let mut summary = vec![
-        "Review ".into(),
-        "timed out".bold(),
-        " before codex could apply ".into(),
+        "المراجعة: ".into(),
+        "انتهت مهلتها".bold(),
+        " قبل أن يطبّق Codex ".into(),
     ];
     if files.len() == 1 {
-        summary.push("a patch touching ".into());
+        summary.push("تعديلاً يمسّ ".into());
         summary.push(Span::from(files[0].clone()).dim());
     } else {
-        summary.push("a patch touching ".into());
+        summary.push("تعديلاً يمسّ ".into());
         summary.push(Span::from(files.len().to_string()).dim());
-        summary.push(" files".into());
+        summary.push(" ملفات".into());
     }
 
     Box::new(PrefixedWrappedHistoryCell::new(
@@ -335,9 +336,9 @@ pub fn new_guardian_timed_out_patch_request(files: Vec<String>) -> Box<dyn Histo
 
 pub fn new_guardian_timed_out_action_request(summary: String) -> Box<dyn HistoryCell> {
     let line = Line::from(vec![
-        "Review ".into(),
-        "timed out".bold(),
-        " before ".into(),
+        "المراجعة: ".into(),
+        "انتهت مهلتها".bold(),
+        " قبل: ".into(),
         Span::from(summary).dim(),
     ]);
     Box::new(PrefixedWrappedHistoryCell::new(line, "✗ ".red(), "  "))

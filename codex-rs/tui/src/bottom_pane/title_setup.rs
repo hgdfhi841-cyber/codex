@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Terminal title configuration view for customizing the terminal window/tab title.
 //!
 //! This module provides an interactive picker for selecting which items appear
@@ -297,8 +298,8 @@ impl TerminalTitleSetupView {
 
         Self {
             picker: MultiSelectPicker::builder(
-                "Configure Terminal Title".to_string(),
-                Some("Select which items to display in the terminal title.".to_string()),
+                "إعداد عنوان الطرفية".to_string(),
+                Some("اختر العناصر التي تظهر في عنوان الطرفية.".to_string()),
                 app_event_tx,
             )
             .list_keymap(list_keymap)

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crate::history_cell::CompositeHistoryCell;
 use crate::history_cell::HistoryCell;
 use crate::history_cell::PlainHistoryCell;
@@ -451,7 +452,7 @@ impl StatusHistoryCell {
         let window_fmt = format_tokens_compact(context.window);
 
         Some(vec![
-            Span::from(format!("{percent}% left")),
+            Span::from(format!("متبقٍ {percent}%")),
             Span::from(" (").dim(),
             Span::from(used_fmt).dim(),
             Span::from(" used / ").dim(),
@@ -470,8 +471,8 @@ impl StatusHistoryCell {
             StatusRateLimitData::Available(rows_data) => {
                 if rows_data.is_empty() {
                     return vec![formatter.line(
-                        "Limits",
-                        vec![Span::from("not available for this account").dim()],
+                        "الحدود",
+                        vec![Span::from("غير متاحة لهذا الحساب").dim()],
                     )];
                 }
 
@@ -483,9 +484,9 @@ impl StatusHistoryCell {
                 lines.push(formatter.line(
                     "Warning",
                     vec![Span::from(if state.refreshing_rate_limits {
-                        "limits may be stale - run /status again shortly."
+                        "قد تكون الحدود قديمة - شغّل /status مجدداً بعد قليل."
                     } else {
-                        "limits may be stale - start new turn to refresh."
+                        "قد تكون الحدود قديمة - ابدأ دوراً جديداً للتحديث."
                     })
                     .dim()],
                 ));
@@ -493,17 +494,17 @@ impl StatusHistoryCell {
             }
             StatusRateLimitData::Unavailable => {
                 vec![formatter.line(
-                    "Limits",
-                    vec![Span::from("not available for this account").dim()],
+                    "الحدود",
+                    vec![Span::from("غير متاحة لهذا الحساب").dim()],
                 )]
             }
             StatusRateLimitData::Missing => {
                 vec![formatter.line(
-                    "Limits",
+                    "الحدود",
                     vec![Span::from(if state.refreshing_rate_limits {
-                        "refresh requested; run /status again shortly."
+                        "طُلب التحديث؛ شغّل /status مجدداً بعد قليل."
                     } else {
-                        "data not available yet"
+                        "البيانات غير متاحة بعد"
                     })
                     .dim()],
                 )]
@@ -546,7 +547,7 @@ impl StatusHistoryCell {
                     let base_line = Line::from(base_spans.clone());
 
                     if let Some(resets_at) = resets_at.as_ref() {
-                        let resets_span = Span::from(format!("(resets {resets_at})")).dim();
+                        let resets_span = Span::from(format!("(يتجدد {resets_at})")).dim();
                         let mut inline_spans = base_spans.clone();
                         inline_spans.push(Span::from(" ").dim());
                         inline_spans.push(resets_span.clone());
@@ -555,7 +556,7 @@ impl StatusHistoryCell {
                             lines.push(Line::from(inline_spans));
                         } else {
                             lines.push(base_line);
-                            let reset_text = format!("(resets {resets_at})");
+                            let reset_text = format!("(يتجدد {resets_at})");
                             let reset_width = formatter.value_width(available_inner_width).max(1);
                             let wrap_options =
                                 textwrap::Options::new(reset_width).break_words(false);
@@ -608,7 +609,7 @@ impl StatusHistoryCell {
         match &state.rate_limits {
             StatusRateLimitData::Available(rows) => {
                 if rows.is_empty() {
-                    push_label(labels, seen, "Limits");
+                    push_label(labels, seen, "الحدود");
                 } else {
                     for row in rows {
                         push_label(labels, seen, row.label.as_str());
@@ -621,8 +622,8 @@ impl StatusHistoryCell {
                 }
                 push_label(labels, seen, "Warning");
             }
-            StatusRateLimitData::Unavailable => push_label(labels, seen, "Limits"),
-            StatusRateLimitData::Missing => push_label(labels, seen, "Limits"),
+            StatusRateLimitData::Unavailable => push_label(labels, seen, "الحدود"),
+            StatusRateLimitData::Missing => push_label(labels, seen, "الحدود"),
         }
     }
 }
@@ -634,19 +635,19 @@ fn status_permission_summary(
 ) -> String {
     let summary = summarize_permission_profile(permission_profile, cwd, workspace_roots);
     if let Some(details) = summary.strip_prefix("read-only") {
-        if details.contains("(network access enabled)") {
-            return "read-only with network access".to_string();
+        if details.contains("(الوصول إلى الشبكة مفعّل)") {
+            return "قراءة فقط مع وصول إلى الشبكة".to_string();
         }
         return "read-only".to_string();
     }
     if let Some(details) = summary.strip_prefix("workspace-write") {
-        if details.contains("(network access enabled)") {
-            return "workspace with network access".to_string();
+        if details.contains("(الوصول إلى الشبكة مفعّل)") {
+            return "مساحة العمل مع وصول إلى الشبكة".to_string();
         }
         return "workspace".to_string();
     }
-    if summary == "custom permissions (network access enabled)" {
-        return "custom permissions with network access".to_string();
+    if summary == "صلاحيات مخصصة (الوصول إلى الشبكة مفعّل)" {
+        return "صلاحيات مخصصة مع وصول إلى الشبكة".to_string();
     }
     summary
 }
@@ -675,23 +676,23 @@ fn status_permissions_label(
     let active_id = active_permission_profile.map(|active| active.id.as_str());
     match active_id {
         Some(BUILT_IN_PERMISSION_PROFILE_READ_ONLY) => {
-            let label = if sandbox == "read-only with network access" {
-                "Read Only with network access"
+            let label = if sandbox == "قراءة فقط مع وصول إلى الشبكة" {
+                "قراءة فقط مع وصول إلى الشبكة"
             } else {
-                "Read Only"
+                "قراءة فقط"
             };
             return format!("{label} ({approval})");
         }
         Some(BUILT_IN_PERMISSION_PROFILE_WORKSPACE) => match sandbox {
             "workspace" => {
                 return format!(
-                    "Workspace{} ({approval})",
+                    "مساحة العمل{} ({approval})",
                     workspace_root_suffix.unwrap_or("")
                 );
             }
-            "workspace with network access" => {
+            "مساحة العمل مع وصول إلى الشبكة" => {
                 return format!(
-                    "Workspace with network access{} ({approval})",
+                    "مساحة العمل مع وصول إلى الشبكة{} ({approval})",
                     workspace_root_suffix.unwrap_or("")
                 );
             }
@@ -701,34 +702,34 @@ fn status_permissions_label(
             if permission_profile == &PermissionProfile::Disabled =>
         {
             return if approval_policy == AskForApproval::Never {
-                "Full Access".to_string()
+                "وصول كامل".to_string()
             } else {
-                format!("No Sandbox ({approval})")
+                format!("بلا عزل ({approval})")
             };
         }
         Some(id) => {
             let sandbox = decorate_workspace_sandbox_label(sandbox, workspace_root_suffix);
-            return format!("Profile {id} ({sandbox}, {approval})");
+            return format!("الملف {id} ({sandbox}, {approval})");
         }
         None => {}
     }
 
     if sandbox == "read-only" {
-        return format!("Read Only ({approval})");
+        return format!("قراءة فقط ({approval})");
     }
     if approval_policy == AskForApproval::OnRequest && sandbox == "workspace" {
         return format!(
-            "Workspace{} ({approval})",
+            "مساحة العمل{} ({approval})",
             workspace_root_suffix.unwrap_or("")
         );
     }
     if approval_policy == AskForApproval::Never
         && permission_profile == &PermissionProfile::Disabled
     {
-        return "Full Access".to_string();
+        return "وصول كامل".to_string();
     }
     let sandbox = decorate_workspace_sandbox_label(sandbox, workspace_root_suffix);
-    format!("Custom ({sandbox}, {approval})")
+    format!("مخصص ({sandbox}, {approval})")
 }
 
 fn decorate_workspace_sandbox_label(sandbox: &str, workspace_root_suffix: Option<&str>) -> String {
@@ -745,8 +746,8 @@ fn status_approval_label(
 ) -> String {
     if approval_policy == AskForApproval::OnRequest {
         return match approvals_reviewer {
-            ApprovalsReviewer::AutoReview => "Approve for me".to_string(),
-            ApprovalsReviewer::User => "Ask for approval".to_string(),
+            ApprovalsReviewer::AutoReview => "وافق عني".to_string(),
+            ApprovalsReviewer::User => "اطلب موافقتي".to_string(),
         };
     }
 
@@ -769,7 +770,7 @@ impl StatusHistoryCell {
                 (None, None) => "ChatGPT".to_string(),
             },
             StatusAccountDisplay::ApiKey => {
-                "API key configured (run codex login to use ChatGPT)".to_string()
+                "مفتاح API معدّ (شغّل codex login لاستخدام ChatGPT)".to_string()
             }
         });
 
@@ -778,7 +779,7 @@ impl StatusHistoryCell {
             _ => None,
         };
 
-        let mut labels: Vec<String> = vec!["Model", "Directory", "Permissions", "Agents.md"]
+        let mut labels: Vec<String> = vec!["النموذج", "المجلد", "الصلاحيات", "Agents.md"]
             .into_iter()
             .map(str::to_string)
             .collect();
@@ -797,29 +798,29 @@ impl StatusHistoryCell {
             .clone();
 
         if self.model_provider.is_some() {
-            push_label(&mut labels, &mut seen, "Model provider");
+            push_label(&mut labels, &mut seen, "مزود النموذج");
         }
         if account_value.is_some() {
-            push_label(&mut labels, &mut seen, "Account");
+            push_label(&mut labels, &mut seen, "الحساب");
         }
         if workspace.is_some() {
-            push_label(&mut labels, &mut seen, "ChatGPT workspace");
+            push_label(&mut labels, &mut seen, "مساحة عمل ChatGPT");
         }
         if thread_name.is_some() {
-            push_label(&mut labels, &mut seen, "Thread name");
+            push_label(&mut labels, &mut seen, "اسم المحادثة");
         }
         if self.session_id.is_some() {
-            push_label(&mut labels, &mut seen, "Session");
+            push_label(&mut labels, &mut seen, "الجلسة");
         }
         if self.session_id.is_some() && self.forked_from.is_some() {
-            push_label(&mut labels, &mut seen, "Forked from");
+            push_label(&mut labels, &mut seen, "متفرعة من");
         }
         if self.collaboration_mode.is_some() {
-            push_label(&mut labels, &mut seen, "Collaboration mode");
+            push_label(&mut labels, &mut seen, "وضع التعاون");
         }
-        push_label(&mut labels, &mut seen, "Token usage");
+        push_label(&mut labels, &mut seen, "استهلاك الرموز");
         if self.token_usage.context_window.is_some() {
-            push_label(&mut labels, &mut seen, "Context window");
+            push_label(&mut labels, &mut seen, "نافذة السياق");
         }
         self.collect_rate_limit_labels(&rate_limit_state, &mut seen, &mut labels);
         self.thread_usage.push_labels(&mut labels, &mut seen);
@@ -829,7 +830,7 @@ impl StatusHistoryCell {
 
         if let Some(remote_connection) = self.remote_connection.as_ref() {
             let value = if remote_connection.is_local_daemon {
-                Line::from("Local background server")
+                Line::from("الخادم المحلي في الخلفية")
             } else {
                 Line::from(vec![
                     Span::from(remote_connection.address.clone()),
@@ -841,7 +842,7 @@ impl StatusHistoryCell {
             let wrapped_remote = word_wrap_lines([value], RtOptions::new(value_width.max(1)));
             let mut wrapped_remote = wrapped_remote.into_iter();
             if let Some(first) = wrapped_remote.next() {
-                lines.push(formatter.line("Server", first.spans));
+                lines.push(formatter.line("الخادم", first.spans));
                 lines.extend(wrapped_remote.map(|line| formatter.continuation(line.spans)));
             }
             lines.push(Line::from(Vec::<Span<'static>>::new()));
@@ -856,44 +857,44 @@ impl StatusHistoryCell {
 
         let directory_value = format_directory_display(&self.directory, /*max_width*/ None);
 
-        lines.push(formatter.line("Model", model_spans));
+        lines.push(formatter.line("النموذج", model_spans));
         if let Some(model_provider) = self.model_provider.as_ref() {
-            lines.push(formatter.line("Model provider", vec![Span::from(model_provider.clone())]));
+            lines.push(formatter.line("مزود النموذج", vec![Span::from(model_provider.clone())]));
         }
-        lines.push(formatter.line("Directory", vec![Span::from(directory_value)]));
-        lines.push(formatter.line("Permissions", vec![Span::from(self.permissions.clone())]));
+        lines.push(formatter.line("المجلد", vec![Span::from(directory_value)]));
+        lines.push(formatter.line("الصلاحيات", vec![Span::from(self.permissions.clone())]));
         lines.push(formatter.line("Agents.md", vec![Span::from(agents_summary)]));
 
         if let Some(account_value) = account_value {
-            lines.push(formatter.line("Account", vec![Span::from(account_value)]));
+            lines.push(formatter.line("الحساب", vec![Span::from(account_value)]));
         }
         if let Some(workspace) = workspace {
-            lines.push(formatter.line("ChatGPT workspace", vec![Span::from(workspace.to_owned())]));
+            lines.push(formatter.line("مساحة عمل ChatGPT", vec![Span::from(workspace.to_owned())]));
         }
 
         if let Some(thread_name) = thread_name {
-            lines.push(formatter.line("Thread name", vec![Span::from(thread_name.to_string())]));
+            lines.push(formatter.line("اسم المحادثة", vec![Span::from(thread_name.to_string())]));
         }
         if let Some(collab_mode) = self.collaboration_mode.as_ref() {
-            lines.push(formatter.line("Collaboration mode", vec![Span::from(collab_mode.clone())]));
+            lines.push(formatter.line("وضع التعاون", vec![Span::from(collab_mode.clone())]));
         }
         if let Some(session) = self.session_id.as_ref() {
-            lines.push(formatter.line("Session", vec![Span::from(session.clone())]));
+            lines.push(formatter.line("الجلسة", vec![Span::from(session.clone())]));
         }
         if self.session_id.is_some()
             && let Some(forked_from) = self.forked_from.as_ref()
         {
-            lines.push(formatter.line("Forked from", vec![Span::from(forked_from.clone())]));
+            lines.push(formatter.line("متفرعة من", vec![Span::from(forked_from.clone())]));
         }
 
         lines.push(Line::from(Vec::<Span<'static>>::new()));
         // Hide token usage only for ChatGPT subscribers
         if !matches!(self.account, Some(StatusAccountDisplay::ChatGpt { .. })) {
-            lines.push(formatter.line("Token usage", self.token_usage_spans()));
+            lines.push(formatter.line("استهلاك الرموز", self.token_usage_spans()));
         }
 
         if let Some(spans) = self.context_window_spans() {
-            lines.push(formatter.line("Context window", spans));
+            lines.push(formatter.line("نافذة السياق", spans));
         }
 
         lines.extend(self.rate_limit_lines(&rate_limit_state, available_width, &formatter));
@@ -923,11 +924,11 @@ impl StatusHistoryCell {
             rendered.extend(word_wrap_lines(
                 [
                     Line::from(vec![
-                        "Visit ".fg(accent_color()),
+                        "زُر ".fg(accent_color()),
                         CHATGPT_USAGE_URL.fg(accent_color()).underlined(),
-                        " for up-to-date".fg(accent_color()),
+                        " لأحدث".fg(accent_color()),
                     ]),
-                    "information on rate limits and credits"
+                    "المعلومات عن حدود الاستخدام والرصيد"
                         .fg(accent_color())
                         .into(),
                 ],

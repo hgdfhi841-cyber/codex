@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use ratatui::style::Stylize;
 use ratatui::text::Line;
 use ratatui::text::Span;
@@ -49,7 +50,7 @@ fn combined_description(
     description_layout: SelectionDescriptionLayout,
 ) -> Option<String> {
     match (&row.description, &row.disabled_reason) {
-        (Some(desc), Some(reason)) => Some(format!("{desc} (disabled: {reason})")),
+        (Some(desc), Some(reason)) => Some(format!("{desc} (معطّل: {reason})")),
         (Some(desc), None) => Some(desc.clone()),
         (None, Some(reason))
             if matches!(
@@ -60,7 +61,7 @@ fn combined_description(
         {
             Some(reason.clone())
         }
-        (None, Some(reason)) => Some(format!("disabled: {reason}")),
+        (None, Some(reason)) => Some(format!("معطّل: {reason}")),
         (None, None) => None,
     }
 }

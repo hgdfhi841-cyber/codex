@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use std::collections::HashMap;
 use std::collections::HashSet;
 
@@ -33,7 +34,7 @@ impl ChatWidget {
         let items = vec![
             SelectionItem {
                 name: "List skills".to_string(),
-                description: Some("Tip: press $ to open this list directly".to_string()),
+                description: Some("تلميح: اضغط $ لفتح هذه القائمة مباشرة".to_string()),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::OpenSkillsList);
                 })],
@@ -41,7 +42,7 @@ impl ChatWidget {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Enable/Disable Skills".to_string(),
+                name: "تفعيل/تعطيل المهارات".to_string(),
                 description: Some("Enable or disable skills".to_string()),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::OpenManageSkillsPopup);

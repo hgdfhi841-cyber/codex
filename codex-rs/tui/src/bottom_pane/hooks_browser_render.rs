@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Responsive hook browsing presentation, including URL-preserving wrapped details.
 //! Trust and toggle policies stay in the view; truncation ellipses stay outside links.
 
@@ -141,7 +142,7 @@ impl Renderable for HooksBrowserView {
             HooksBrowserPage::Events => render_line_rows(body, buf, rows, self.state),
             HooksBrowserPage::Handlers(event) => {
                 if rows.is_empty() {
-                    Paragraph::new("  No hooks installed for this event.")
+                    Paragraph::new("  لا توجد خطافات مثبتة لهذا الحدث.")
                         .dim()
                         .render(body, buf);
                 } else {

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use std::collections::HashSet;
 use std::collections::VecDeque;
 use std::path::PathBuf;
@@ -62,8 +63,8 @@ use crate::terminal_program_status::ProgramStatusKind;
 use crate::text_formatting::format_json_compact;
 use crate::text_formatting::truncate_text;
 
-const ANSWER_PLACEHOLDER: &str = "Type your answer";
-const OPTIONAL_ANSWER_PLACEHOLDER: &str = "Type your answer (optional)";
+const ANSWER_PLACEHOLDER: &str = "اكتب إجابتك";
+const OPTIONAL_ANSWER_PLACEHOLDER: &str = "اكتب إجابتك (اختياري)";
 const FOOTER_SEPARATOR: &str = " | ";
 const MIN_COMPOSER_HEIGHT: u16 = 3;
 const MIN_OVERLAY_HEIGHT: u16 = 8;
@@ -253,55 +254,55 @@ impl McpServerElicitationFormRequest {
             (McpServerElicitationResponseMode::FormContent, Vec::new())
         } else if is_message_only_schema {
             let allow_description = if is_tool_approval_action {
-                "Run the tool and continue"
+                "شغّل الأداة وتابع"
             } else {
-                "Allow this request and continue"
+                "اسمح بهذا الطلب وتابع"
             };
             let mut options = vec![McpServerElicitationOption {
-                label: "Allow".to_string(),
+                label: "اسمح".to_string(),
                 description: Some(allow_description.to_string()),
                 value: Value::String(APPROVAL_ACCEPT_ONCE_VALUE.to_string()),
             }];
             if approval_supports_persist_mode(meta, APPROVAL_PERSIST_SESSION_VALUE) {
                 let description = if is_tool_approval_action {
-                    "Run the tool and remember this choice for this session"
+                    "شغّل الأداة وتذكّر هذا الاختيار في هذه الجلسة"
                 } else {
-                    "Allow this request and remember this choice for this session"
+                    "اسمح بهذا الطلب وتذكّر هذا الاختيار في هذه الجلسة"
                 };
                 options.push(McpServerElicitationOption {
-                    label: "Allow for this session".to_string(),
+                    label: "اسمح في هذه الجلسة".to_string(),
                     description: Some(description.to_string()),
                     value: Value::String(APPROVAL_ACCEPT_SESSION_VALUE.to_string()),
                 });
             }
             if approval_supports_persist_mode(meta, APPROVAL_PERSIST_ALWAYS_VALUE) {
                 let description = if is_tool_approval_action {
-                    "Run the tool and remember this choice for future tool calls"
+                    "شغّل الأداة وتذكّر هذا الاختيار في الاستدعاءات القادمة"
                 } else {
-                    "Allow this request and remember this choice for future requests"
+                    "اسمح بهذا الطلب وتذكّر هذا الاختيار في الطلبات القادمة"
                 };
                 options.push(McpServerElicitationOption {
-                    label: "Always allow".to_string(),
+                    label: "اسمح دائماً".to_string(),
                     description: Some(description.to_string()),
                     value: Value::String(APPROVAL_ACCEPT_ALWAYS_VALUE.to_string()),
                 });
             }
             if is_tool_approval_action {
                 options.push(McpServerElicitationOption {
-                    label: "Cancel".to_string(),
-                    description: Some("Cancel this tool call".to_string()),
+                    label: "إلغاء".to_string(),
+                    description: Some("ألغِ استدعاء الأداة هذا".to_string()),
                     value: Value::String(APPROVAL_CANCEL_VALUE.to_string()),
                 });
             } else {
                 options.extend([
                     McpServerElicitationOption {
-                        label: "Deny".to_string(),
-                        description: Some("Decline this request and continue".to_string()),
+                        label: "ارفض".to_string(),
+                        description: Some("ارفض هذا الطلب وتابع".to_string()),
                         value: Value::String(APPROVAL_DECLINE_VALUE.to_string()),
                     },
                     McpServerElicitationOption {
-                        label: "Cancel".to_string(),
-                        description: Some("Cancel this request".to_string()),
+                        label: "إلغاء".to_string(),
+                        description: Some("ألغِ هذا الطلب".to_string()),
                         value: Value::String(APPROVAL_CANCEL_VALUE.to_string()),
                     },
                 ]);
@@ -990,16 +991,16 @@ impl McpServerElicitationOverlay {
         };
         if let Some(submit_hint) = submit_hint.map(ShortcutHint::display_label) {
             if self.field_count() == 1 {
-                tips.push(shortcut(&submit_hint, "to submit"));
+                tips.push(shortcut(&submit_hint, "للإرسال"));
             } else if is_last_field {
-                tips.push(shortcut(&submit_hint, "to submit all"));
+                tips.push(shortcut(&submit_hint, "لإرسال الكل"));
             } else {
-                tips.push(shortcut(&submit_hint, "to submit answer"));
+                tips.push(shortcut(&submit_hint, "لإرسال الإجابة"));
             }
         }
         if self.field_count() > 1 {
             if self.current_field_is_select() {
-                tips.push(shortcut("←/→", "to navigate fields"));
+                tips.push(shortcut("←/→", "للتنقل بين الحقول"));
             } else {
                 tips.push(shortcut(
                     &format!(
@@ -1007,11 +1008,11 @@ impl McpServerElicitationOverlay {
                         crate::key_hint::ctrl(KeyCode::Char('p')).display_label(),
                         crate::key_hint::ctrl(KeyCode::Char('n')).display_label()
                     ),
-                    "change field",
+                    "تغيير الحقل",
                 ));
             }
         }
-        tips.push(shortcut("esc", "to cancel"));
+        tips.push(shortcut("esc", "للإلغاء"));
         tips
     }
 
@@ -1171,7 +1172,7 @@ impl McpServerElicitationOverlay {
     fn submit_answers(&mut self) {
         self.save_current_draft();
         if let Some(idx) = self.first_required_unanswered_index() {
-            self.validation_error = Some("Answer required fields before submitting.".to_string());
+            self.validation_error = Some("أجب عن الحقول المطلوبة قبل الإرسال.".to_string());
             self.jump_to_field(idx);
             return;
         }
@@ -1328,7 +1329,7 @@ impl McpServerElicitationOverlay {
                 state.selected_idx = Some(0);
             }
             state.ensure_visible(rows.len(), area.height as usize);
-            render_rows(area, buf, &rows, &state, rows.len().max(1), "No options");
+            render_rows(area, buf, &rows, &state, rows.len().max(1), "لا خيارات");
             return;
         }
         if self.current_field_is_secret() {
@@ -1348,7 +1349,7 @@ impl McpServerElicitationOverlay {
         let option_tip = if options_hidden {
             let selected = self.selected_option_index().unwrap_or(0).saturating_add(1);
             let total = self.options_len();
-            Some(Line::from(format!("option {selected}/{total}").dim()))
+            Some(Line::from(format!("الخيار {selected}/{total}").dim()))
         } else {
             None
         };
@@ -1458,14 +1459,14 @@ impl Renderable for McpServerElicitationOverlay {
         let progress_line = if self.field_count() > 0 {
             let idx = self.current_index() + 1;
             let total = self.field_count();
-            let base = format!("Field {idx}/{total}");
+            let base = format!("الحقل {idx}/{total}");
             if unanswered > 0 {
-                Line::from(format!("{base} ({unanswered} required unanswered)").dim())
+                Line::from(format!("{base} ({unanswered} مطلوبة بلا إجابة)").dim())
             } else {
                 Line::from(base.dim())
             }
         } else {
-            Line::from("No fields".dim())
+            Line::from("لا حقول".dim())
         };
         Paragraph::new(progress_line).render(progress_area, buf);
         self.render_prompt(prompt_area, buf);

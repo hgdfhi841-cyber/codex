@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Collects a feedback note with audience-specific disclosure and independent log consent.
 //! The editor and submission controls remain visible when the disclosure must scroll.
 //! Ctrl+S saves on local connections. Enter sends when uploads are enabled and the paste burst has ended.
@@ -360,7 +361,7 @@ impl Renderable for FeedbackNoteView {
                 ));
                 super::footer::footer_hint_items_line(&actions)
             };
-            let mut hints = action_line("save ZIP", "send to OpenAI");
+            let mut hints = action_line("حفظ ZIP", "إرسال إلى OpenAI");
             if hints.width() > usize::from(area.width) {
                 hints = action_line("save", "send");
             }
@@ -407,10 +408,10 @@ impl FeedbackNoteView {
             IntroContent::DisclosureOnly => Vec::new(),
         };
         match self.upload_audience {
-            None => lines.push("Feedback uploads are disabled.".dim().into()),
+            None => lines.push("رفع الملاحظات معطّل.".dim().into()),
             Some(FeedbackAudience::OpenAiEmployee) => {
                 lines.push(
-                    "Feedback sent to OpenAI may be used to improve our models and products"
+                    "قد تُستخدم الملاحظات المرسلة إلى OpenAI لتحسين نماذجها ومنتجاتها"
                         .bold()
                         .into(),
                 );
@@ -421,16 +422,16 @@ impl FeedbackNoteView {
                 ]));
             }
             Some(FeedbackAudience::External) => lines.push(Line::from(vec![
-                "Feedback sent to OpenAI can be used to improve ChatGPT. ".dim(),
-                "Learn more".fg(crate::style::accent_color()).underlined(),
+                "يمكن استخدام الملاحظات المرسلة إلى OpenAI لتحسين ChatGPT. ".dim(),
+                "اعرف المزيد".fg(crate::style::accent_color()).underlined(),
                 ".".dim(),
             ])),
         }
         if self.can_save {
             let disclosure = if self.upload_audience.is_some() {
-                "You can also save feedback to a ZIP file, which is not sent to OpenAI."
+                "يمكنك أيضاً حفظ الملاحظات في ملف ZIP لا يُرسل إلى OpenAI."
             } else {
-                "You can save feedback to a ZIP file, which is not sent to OpenAI."
+                "يمكنك حفظ الملاحظات في ملف ZIP لا يُرسل إلى OpenAI."
             };
             lines.push(disclosure.dim().into());
         }
@@ -450,24 +451,24 @@ fn gutter() -> Span<'static> {
 fn feedback_title_and_placeholder(category: FeedbackCategory) -> (String, String) {
     match category {
         FeedbackCategory::BadResult => (
-            "Tell us more (bad result)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "أخبرنا أكثر (نتيجة سيئة)".to_string(),
+            "(اختياري) اكتب وصفاً قصيراً يساعدنا أكثر".to_string(),
         ),
         FeedbackCategory::GoodResult => (
-            "Tell us more (good result)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "أخبرنا أكثر (نتيجة جيدة)".to_string(),
+            "(اختياري) اكتب وصفاً قصيراً يساعدنا أكثر".to_string(),
         ),
         FeedbackCategory::Bug => (
-            "Tell us more (bug)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "أخبرنا أكثر (خلل)".to_string(),
+            "(اختياري) اكتب وصفاً قصيراً يساعدنا أكثر".to_string(),
         ),
         FeedbackCategory::SafetyCheck => (
-            "Tell us more (safety check)".to_string(),
-            "(optional) Share what was refused and why it should have been allowed".to_string(),
+            "أخبرنا أكثر (فحص أمان)".to_string(),
+            "(اختياري) اذكر ما رُفض ولماذا كان ينبغي السماح به".to_string(),
         ),
         FeedbackCategory::Other => (
-            "Tell us more (other)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "أخبرنا أكثر (غير ذلك)".to_string(),
+            "(اختياري) اكتب وصفاً قصيراً يساعدنا أكثر".to_string(),
         ),
     }
 }

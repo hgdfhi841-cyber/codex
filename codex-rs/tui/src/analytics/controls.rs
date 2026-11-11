@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Visible report controls and update times. Mouse targets and keyboard shortcuts invoke the same semantic actions.
 //! Their reserved rows depend only on terminal width, so loading never shifts the report body.
 
@@ -180,7 +181,7 @@ impl AnalyticsView {
                     " ".dim(),
                     self.token_model
                         .clone()
-                        .unwrap_or_else(|| "All models".into())
+                        .unwrap_or_else(|| "كل النماذج".into())
                         .into(),
                 ]),
             ));

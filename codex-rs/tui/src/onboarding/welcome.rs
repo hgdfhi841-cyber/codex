@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Shared welcome header for the existing sign-in and Bedrock onboarding pickers.
 //! The logo occupies a fixed stage so its motion never shifts the choices below it.
 
@@ -125,9 +126,9 @@ impl WidgetRef for &WelcomeWidget {
         let mut lines: Vec<Line> = vec![Line::default(); usize::from(logo_rows)];
         lines.push(Line::from(vec![
             "  ".into(),
-            "Welcome to ".into(),
+            "مرحباً بك في ".into(),
             "Codex".bold(),
-            ", OpenAI's command-line coding agent".into(),
+            "، وكيل البرمجة من OpenAI في سطر الأوامر".into(),
         ]));
 
         Paragraph::new(lines)

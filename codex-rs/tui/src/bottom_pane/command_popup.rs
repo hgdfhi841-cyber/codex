@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::widgets::WidgetRef;
@@ -247,7 +248,7 @@ impl CommandPopup {
                     description: Some(description),
                     is_disabled: unavailable,
                     disabled_reason: unavailable
-                        .then(|| "not available in a side conversation".to_string()),
+                        .then(|| "غير متاح في محادثة جانبية".to_string()),
                     ..Default::default()
                 }
             })
@@ -322,7 +323,7 @@ impl WidgetRef for CommandPopup {
             &rows,
             &self.state,
             MAX_POPUP_ROWS,
-            "no matches",
+            "لا نتائج",
             COMMAND_COLUMN_WIDTH,
         );
     }

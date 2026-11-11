@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Dynamic tool activity with retained arguments and output across live and loaded transcripts.
 
 use super::HistoryCell;
@@ -82,7 +83,7 @@ impl DynamicToolCallCell {
         data.interrupted = true;
         data.output
             .get_or_insert_with(Vec::new)
-            .push("Interrupted before this tool returned a result.".to_owned());
+            .push("أُوقف قبل أن تُرجع هذه الأداة نتيجة.".to_owned());
     }
 }
 
@@ -138,12 +139,12 @@ impl DynamicToolCallData {
 
     fn header(&self) -> Line<'static> {
         let (marker, verb) = if self.interrupted {
-            ("•".red().bold(), "Interrupted")
+            ("•".red().bold(), "أُوقف")
         } else {
             match self.status {
-                DynamicToolCallStatus::InProgress => ("•".dim(), "Calling"),
-                DynamicToolCallStatus::Completed => ("•".green(), "Called"),
-                DynamicToolCallStatus::Failed => ("•".red().bold(), "Failed"),
+                DynamicToolCallStatus::InProgress => ("•".dim(), "جارٍ الاستدعاء"),
+                DynamicToolCallStatus::Completed => ("•".green(), "استدعى"),
+                DynamicToolCallStatus::Failed => ("•".red().bold(), "فشل"),
             }
         };
         let mut line = Line::from(vec![
@@ -161,13 +162,13 @@ impl DynamicToolCallData {
 
     fn output_lines(&self) -> Vec<Line<'static>> {
         match &self.output {
-            Some(output) if output.is_empty() => vec![Line::from("(no output)".dim())],
+            Some(output) if output.is_empty() => vec![Line::from("(لا مخرجات)".dim())],
             Some(output) => output
                 .iter()
                 .flat_map(|text| raw_lines_from_source(text))
                 .collect(),
             None if self.is_active() => Vec::new(),
-            None => vec![Line::from("(output unavailable)".dim())],
+            None => vec![Line::from("(المخرجات غير متاحة)".dim())],
         }
     }
 }
@@ -248,7 +249,7 @@ impl HistoryCell for DynamicToolCallCell {
         let mut lines = vec![data.header().into()];
         let args = serde_json::to_string_pretty(&data.arguments)
             .unwrap_or_else(|_| data.arguments.to_string());
-        let details = raw_lines_from_source(&format!("Arguments: {args}"))
+        let details = raw_lines_from_source(&format!("المعطيات: {args}"))
             .into_iter()
             .chain(data.output_lines())
             .collect();

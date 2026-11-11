@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Desktop notification coalescing for `ChatWidget`.
 
 use super::*;
@@ -38,14 +39,14 @@ impl Notification {
         match self {
             Notification::AgentTurnComplete { response } => {
                 Notification::agent_turn_preview(response)
-                    .unwrap_or_else(|| "Agent turn complete".to_string())
+                    .unwrap_or_else(|| "اكتمل دور الوكيل".to_string())
             }
             Notification::ExecApprovalRequested { subject } => {
-                format!("Approval requested: {subject}")
+                format!("مطلوبة موافقة: {subject}")
             }
             Notification::EditApprovalRequested { cwd, changes } => {
                 format!(
-                    "Codex wants to edit {}",
+                    "يريد Codex تعديل {}",
                     if changes.len() == 1 {
                         #[allow(clippy::unwrap_used)]
                         display_path_for(changes.first().unwrap(), cwd)
@@ -55,13 +56,13 @@ impl Notification {
                 )
             }
             Notification::ElicitationRequested { server_name } => {
-                format!("Approval requested by {server_name}")
+                format!("موافقة مطلوبة من {server_name}")
             }
             Notification::PlanModePrompt { title } => {
-                format!("Plan mode prompt: {title}")
+                format!("طلب وضع التخطيط: {title}")
             }
             Notification::AsyncQuestion { title } => {
-                format!("Question: {title}")
+                format!("سؤال: {title}")
             }
         }
     }

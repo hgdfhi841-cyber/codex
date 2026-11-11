@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 #[cfg(test)]
 use crate::app_command::AppCommand as Op;
 use codex_app_server_protocol::McpServerElicitationAction;
@@ -161,7 +162,7 @@ impl AppLinkViewParams {
             app_id,
             title,
             description: None,
-            instructions: "Sign in to this app in your browser, then return here.".to_string(),
+            instructions: "سجّل الدخول إلى هذا التطبيق من المتصفح ثم عد إلى هنا.".to_string(),
             url: url.to_string(),
             is_installed: true,
             is_enabled: true,
@@ -185,9 +186,9 @@ impl AppLinkViewParams {
     ) -> Self {
         Self {
             app_id: elicitation_id.to_string(),
-            title: "Action required".to_string(),
-            description: Some(format!("Server: {server_name}")),
-            instructions: "Complete the requested action in your browser, then return here."
+            title: "مطلوب إجراء منك".to_string(),
+            description: Some(format!("الخادم: {server_name}")),
+            instructions: "أكمل الإجراء المطلوب في المتصفح ثم عد إلى هنا."
                 .to_string(),
             url: url.to_string(),
             is_installed: true,
@@ -292,14 +293,14 @@ impl AppLinkView {
     fn action_labels(&self) -> Vec<&'static str> {
         if self.is_auth_suggestion() {
             return match self.screen {
-                AppLinkScreen::Link => vec!["Open sign-in URL", "Back"],
-                AppLinkScreen::InstallConfirmation => vec!["I already signed in", "Back"],
+                AppLinkScreen::Link => vec!["فتح رابط تسجيل الدخول", "رجوع"],
+                AppLinkScreen::InstallConfirmation => vec!["سجّلت الدخول بالفعل", "رجوع"],
             };
         }
         if self.is_external_action_suggestion() {
             return match self.screen {
-                AppLinkScreen::Link => vec!["Open link", "Back"],
-                AppLinkScreen::InstallConfirmation => vec!["I finished", "Back"],
+                AppLinkScreen::Link => vec!["فتح الرابط", "رجوع"],
+                AppLinkScreen::InstallConfirmation => vec!["I finished", "رجوع"],
             };
         }
 
@@ -307,19 +308,19 @@ impl AppLinkView {
             AppLinkScreen::Link => {
                 if self.is_installed {
                     vec![
-                        "Manage on ChatGPT",
+                        "الإدارة من ChatGPT",
                         if self.is_enabled {
-                            "Disable app"
+                            "تعطيل التطبيق"
                         } else {
-                            "Enable app"
+                            "تفعيل التطبيق"
                         },
-                        "Back",
+                        "رجوع",
                     ]
                 } else {
-                    vec!["Install on ChatGPT", "Back"]
+                    vec!["التثبيت من ChatGPT", "رجوع"]
                 }
             }
-            AppLinkScreen::InstallConfirmation => vec!["I already Installed it", "Back"],
+            AppLinkScreen::InstallConfirmation => vec!["ثبّتُّه بالفعل", "رجوع"],
         }
     }
 
@@ -508,7 +509,7 @@ impl AppLinkView {
         }
         let is_browser_action_suggestion = self.is_browser_action_suggestion();
         if self.is_installed && !is_browser_action_suggestion {
-            for line in wrap("Use $ to insert this app into the prompt.", usable_width) {
+            for line in wrap("استخدم $ لإدراج هذا التطبيق في الطلب.", usable_width) {
                 lines.push(Line::from(line.into_owned()));
             }
             lines.push(Line::from(""));
@@ -529,14 +530,14 @@ impl AppLinkView {
             }
             if !is_browser_action_suggestion {
                 for line in wrap(
-                    "Newly installed apps can take a few minutes to appear in /apps.",
+                    "قد يستغرق ظهور التطبيقات المثبتة حديثاً في /apps بضع دقائق.",
                     usable_width,
                 ) {
                     lines.push(Line::from(line.into_owned()));
                 }
                 if !self.is_installed {
                     for line in wrap(
-                        "After installed, use $ to insert this app into the prompt.",
+                        "بعد التثبيت، استخدم $ لإدراج هذا التطبيق في الطلب.",
                         usable_width,
                     ) {
                         lines.push(Line::from(line.into_owned()));
@@ -563,14 +564,14 @@ impl AppLinkView {
         lines.push(Line::from(
             if is_auth_suggestion {
                 if is_codex_apps_auth {
-                    "Finish App Sign In"
+                    "أكمل تسجيل الدخول إلى التطبيق"
                 } else {
-                    "Finish Authentication"
+                    "أكمل المصادقة"
                 }
             } else if is_external_action_suggestion {
-                "Finish in Browser"
+                "أكمل في المتصفح"
             } else {
-                "Finish App Setup"
+                "أكمل إعداد التطبيق"
             }
             .bold(),
         ));
@@ -579,39 +580,39 @@ impl AppLinkView {
         if is_auth_suggestion {
             for line in wrap(
                 if is_codex_apps_auth {
-                    "Sign in to the app on ChatGPT in the browser window that just opened."
+                    "سجّل الدخول إلى التطبيق على ChatGPT في نافذة المتصفح التي فُتحت للتو."
                 } else {
-                    "Complete authentication in the browser window that just opened."
+                    "أكمل المصادقة في نافذة المتصفح التي فُتحت للتو."
                 },
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
             for line in wrap(
-                "Then return here and select \"I already signed in\".",
+                "ثم عد إلى هنا واختر \"سجّلت الدخول بالفعل\".",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
         } else if is_external_action_suggestion {
             for line in wrap(
-                "Complete the requested action in the browser window that just opened.",
+                "أكمل الإجراء المطلوب في نافذة المتصفح التي فُتحت للتو.",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
-            for line in wrap("Then return here and select \"I finished\".", usable_width) {
+            for line in wrap("ثم عد إلى هنا واختر \"انتهيت\".", usable_width) {
                 lines.push(Line::from(line.into_owned()));
             }
         } else {
             for line in wrap(
-                "Complete app setup on ChatGPT in the browser window that just opened.",
+                "أكمل إعداد التطبيق على ChatGPT في نافذة المتصفح التي فُتحت للتو.",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
             for line in wrap(
-                "Sign in there if needed, then return here and select \"I already Installed it\".",
+                "سجّل الدخول هناك إن لزم، ثم عد إلى هنا واختر \"ثبّتُّه بالفعل\".",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
@@ -621,11 +622,11 @@ impl AppLinkView {
         lines.push(Line::from(""));
         lines.push(Line::from(vec![
             if is_auth_suggestion {
-                "Sign-in URL:"
+                "رابط تسجيل الدخول:"
             } else if is_external_action_suggestion {
-                "Link:"
+                "الرابط:"
             } else {
-                "Setup URL:"
+                "رابط الإعداد:"
             }
             .dim(),
         ]));
@@ -884,7 +885,7 @@ impl crate::render::renderable::Renderable for AppLinkView {
                 &action_rows,
                 &action_state,
                 action_rows.len().max(1),
-                "No actions",
+                "لا إجراءات",
             );
         }
 

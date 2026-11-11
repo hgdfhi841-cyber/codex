@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! `ChatWidget` integration points for the `/keymap` picker flow.
 //!
 //! The picker model, capture view, and edit semantics live in [`crate::keymap_setup`]. This module
@@ -41,7 +42,7 @@ impl ChatWidget {
                 self.bottom_pane.show_selection_view(params);
             }
             Err(err) => {
-                self.add_error_message(format!("Invalid `tui.keymap` configuration: {err}"));
+                self.add_error_message(format!("إعداد `tui.keymap` غير صالح: {err}"));
             }
         }
     }

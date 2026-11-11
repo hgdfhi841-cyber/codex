@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Explicit recovery from local-daemon incompatibility. Restart is managed-only,
 //! requires a fresh confirmation, and is followed by one compatibility check, never a loop.
 
@@ -199,7 +200,7 @@ fn recovery_view(
                     ..Default::default()
                 },
                 SelectionItem {
-                    name: "Cancel".to_string(),
+                    name: "إلغاء".to_string(),
                     dismiss_on_select: true,
                     ..Default::default()
                 },

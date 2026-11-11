@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Fit warning counts and the configured warnings shortcut into the existing passive hint row.
 //! Interactive hints retain priority. Warnings occupy the trailing edge of the hints row.
 //! Only the count and warning label receive an amber accent; surrounding hints stay muted.
@@ -90,7 +91,7 @@ impl ChatComposer {
         ])
         .style(secondary);
         full.extend(key_hint::key_label_spans(&shortcut));
-        full.push_span(" to view");
+        full.push_span(" للعرض");
         let mut compact = Line::from(vec![
             "⚠ ".into(),
             Span::styled(count.to_string(), accent),

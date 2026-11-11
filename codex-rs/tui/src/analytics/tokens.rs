@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Enterprise text token history, independent of credit and allowance accounting.
 
 use super::models::*;
@@ -42,7 +43,7 @@ pub(super) fn filtered_history(
                                 .dimensions
                                 .get("model")
                                 .cloned()
-                                .unwrap_or_else(|| "Unknown".into())
+                                .unwrap_or_else(|| "غير معروف".into())
                         },
                         [
                             group.uncached_text_input_tokens,

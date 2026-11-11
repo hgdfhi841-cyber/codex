@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Show one complete diagnostic with bounded scrolling and the viewer's own footer.
 
 use super::*;
@@ -35,17 +36,17 @@ impl Renderable for WarningsView {
         let entry = self.entries.get(self.current);
         let title = match entry {
             Some(entry) => format!(
-                "Warnings · {} of {} · {}",
+                "التحذيرات · {} من {} · {}",
                 self.current + 1,
                 self.entries.len(),
                 entry.source
             ),
-            None => "Warnings".to_string(),
+            None => "التحذيرات".to_string(),
         };
         Line::from(title.bold()).render(header, buf);
-        let details = entry.map_or("No warnings", |entry| entry.details.as_str());
+        let details = entry.map_or("لا تحذيرات", |entry| entry.details.as_str());
         let restart_hint = (self.daemon_restart_hint_at == Some(self.current)).then_some(
-            "\nThese warnings may reflect settings from when the background server started. If you’ve already fixed them, use /daemon to restart it.",
+            "\nقد تعكس هذه التحذيرات إعدادات وقت بدء خادم الخلفية. إن كنت أصلحتها فاستخدم /daemon لإعادة تشغيله.",
         );
         if body.width > 0
             && body.height > 0
@@ -93,14 +94,14 @@ impl Renderable for WarningsView {
             .join("/");
         let mut items = Vec::new();
         for (hint, label) in [
-            (Some("k".to_string()), "keep & next"),
+            (Some("k".to_string()), "إبقاء والتالي"),
             (
                 Some(
                     hint(KeymapContext::List, "cancel")
                         .unwrap_or_else(|| key_hint::ctrl(KeyCode::Char('c')).into())
                         .display_label(),
                 ),
-                "dismiss & close",
+                "تجاهل وإغلاق",
             ),
             (
                 hint(KeymapContext::Global, "copy")

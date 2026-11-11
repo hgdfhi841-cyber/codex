@@ -1,47 +1,47 @@
 # Tips support Markdown: **emphasis**, `code`, and [label](https://example.com) links.
 # Tips may use {key:context.action} to insert the configured primary key or chord.
 # A tip is skipped if any referenced action is unbound or unavailable.
-Start a fresh idea with **/new**; the previous session stays in history.
-Use **/feedback** to send logs to the maintainers when something looks off.
-Switch models or reasoning effort quickly with **/model**.
-Use **/permissions** to control when Codex asks for confirmation.
-Run **/review** to get a code review of your current changes.
-Use **/skills** to list available skills or ask Codex to use one.
-Use **/status** to see the current model, approvals, and token usage.
-Use **/statusline** to configure which items appear in the status line.
-Use **/fork** to branch the current chat into a new thread.
-Use **/side** to start a side conversation in a temporary fork without polluting the main thread.
-Use **/init** to create an `AGENTS.md` with project-specific guidance.
-Use **/mcp** to list configured MCP tools.
-Use **/rename** to rename your threads for easier thread resuming.
-Use the OpenAI docs MCP for API questions; enable it with `codex mcp add openaiDeveloperDocs --url https://developers.openai.com/mcp`.
-Visit the [Codex community forum](https://community.openai.com/c/codex/37).
-You can run any shell command from Codex using `!` (e.g. `!ls`)
-Type `/` to open the command popup; `Tab` autocompletes slash commands.
-When the composer is empty, press `Esc` to step back and edit your last message; `Enter` confirms.
-Press {key:composer.queue} to queue a message when a task is running; otherwise it sends immediately (except `!`).
-Use **/keymap** to configure keyboard shortcuts.
-Paste an image with `Ctrl+V` to attach it to your next message.
-You can resume a previous conversation by running `codex resume`
-Use **/copy** or press {key:global.copy} to copy the latest agent response as Markdown.
-Use **/vim** to toggle Vim editing in the composer.
-Moving from Claude Code? Use **/import** to bring over your setup, project, and recent chats.
-Use **/hooks** to view and manage lifecycle hooks.
-Use **/archive** to archive the current session.
-When worktree support is available, use **/worktree** to start or continue a conversation in a separate Git worktree.
-Coming back to a conversation? Use **/recap** to summarize it.
-When voice is available, use **/voice** to start or stop a voice conversation, or **/voice settings** to choose a voice.
-When goals are enabled, use **/goal** to set or inspect the objective for a long-running task.
-Use **/agents** to open the agent command center.
-Use **/subagents** to switch between this session’s subagents.
-Use **/export** to save your conversation as Markdown.
-When signed in with ChatGPT, use **/usage** to check your account usage and access available usage limit resets.
-Use **/title** to choose what appears in your terminal’s title.
-Use **/theme** to choose a syntax highlighting theme.
-When plugins are enabled, use **/plugins** to browse plugins.
-Press {key:global.open_transcript} to open the full transcript.
-Press {key:global.find_transcript} to search this conversation.
-Press {key:global.open_external_editor} to edit your current draft in an external editor.
-Press {key:composer.history_search_previous} to search previously entered prompts.
-For models with adjustable reasoning, press {key:chat.increase_reasoning_effort} to increase reasoning effort or {key:chat.decrease_reasoning_effort} to decrease it.
-Use {key:chat.open_presets}, then 0–9 to run a preset; Enter browses, s saves, and d deletes.
+ابدأ فكرة جديدة بالأمر **/new**؛ تبقى الجلسة السابقة في السجل.
+استخدم **/feedback** لإرسال السجلات إلى المطورين عند حدوث خلل.
+بدّل النموذج أو مستوى التفكير بسرعة بالأمر **/model**.
+استخدم **/permissions** للتحكم في متى يطلب Codex موافقتك.
+شغّل **/review** للحصول على مراجعة لتغييراتك الحالية في الكود.
+استخدم **/skills** لعرض المهارات المتاحة أو اطلب من Codex استخدام إحداها.
+استخدم **/status** لرؤية النموذج الحالي والموافقات واستهلاك الرموز.
+استخدم **/statusline** لاختيار العناصر الظاهرة في شريط الحالة.
+استخدم **/fork** لتفريع المحادثة الحالية إلى محادثة جديدة.
+استخدم **/side** لبدء محادثة جانبية مؤقتة دون التشويش على المحادثة الرئيسية.
+استخدم **/init** لإنشاء ملف `AGENTS.md` يحوي إرشادات خاصة بالمشروع.
+استخدم **/mcp** لعرض أدوات MCP المعدّة.
+استخدم **/rename** لتسمية محادثاتك حتى يسهل استئنافها.
+استخدم خادم MCP لتوثيق OpenAI في أسئلة الـ API؛ فعّله بالأمر `codex mcp add openaiDeveloperDocs --url https://developers.openai.com/mcp`.
+زُر [منتدى مجتمع Codex](https://community.openai.com/c/codex/37).
+يمكنك تشغيل أي أمر طرفية من داخل Codex باستخدام `!` (مثل `!ls`)
+اكتب `/` لفتح قائمة الأوامر؛ والمفتاح `Tab` يكمل الأوامر تلقائياً.
+عندما يكون حقل الكتابة فارغاً اضغط `Esc` للرجوع وتعديل آخر رسالة؛ و`Enter` للتأكيد.
+اضغط {key:composer.queue} لوضع رسالة في الانتظار أثناء تنفيذ مهمة؛ وفي غير ذلك تُرسل فوراً (ما عدا `!`).
+استخدم **/keymap** لضبط اختصارات لوحة المفاتيح.
+الصق صورة بالمفتاحين `Ctrl+V` لإرفاقها برسالتك القادمة.
+يمكنك استئناف محادثة سابقة بتشغيل `codex resume`
+استخدم **/copy** أو اضغط {key:global.copy} لنسخ آخر رد للوكيل بصيغة Markdown.
+استخدم **/vim** لتبديل تحرير Vim في حقل الكتابة.
+قادم من Claude Code؟ استخدم **/import** لنقل إعداداتك ومشروعك ومحادثاتك الأخيرة.
+استخدم **/hooks** لعرض وإدارة الخطافات.
+استخدم **/archive** لأرشفة الجلسة الحالية.
+عند توفر دعم أشجار العمل، استخدم **/worktree** لبدء أو متابعة محادثة في شجرة عمل Git مستقلة.
+عدت إلى محادثة قديمة؟ استخدم **/recap** لتلخيصها.
+عند توفر الصوت، استخدم **/voice** لبدء أو إيقاف محادثة صوتية، أو **/voice settings** لاختيار صوت.
+عند تفعيل الأهداف، استخدم **/goal** لتحديد أو فحص هدف مهمة طويلة.
+استخدم **/agents** لفتح مركز التحكم بالوكلاء.
+استخدم **/subagents** للتنقل بين الوكلاء الفرعيين لهذه الجلسة.
+استخدم **/export** لحفظ محادثتك بصيغة Markdown.
+عند تسجيل الدخول بحساب ChatGPT، استخدم **/usage** لمعرفة استهلاك حسابك واستخدام إعادات ضبط الحد المتاحة.
+استخدم **/title** لاختيار ما يظهر في عنوان الطرفية.
+استخدم **/theme** لاختيار سمة تلوين الكود.
+عند تفعيل الإضافات، استخدم **/plugins** لتصفح الإضافات.
+اضغط {key:global.open_transcript} لفتح سجل المحادثة الكامل.
+اضغط {key:global.find_transcript} للبحث في هذه المحادثة.
+اضغط {key:global.open_external_editor} لتعديل مسودتك الحالية في محرر خارجي.
+اضغط {key:composer.history_search_previous} للبحث في الطلبات التي أدخلتها سابقاً.
+في النماذج ذات التفكير القابل للضبط، اضغط {key:chat.increase_reasoning_effort} لزيادة مستوى التفكير أو {key:chat.decrease_reasoning_effort} لتقليله.
+استخدم {key:chat.open_presets} ثم 0–9 لتشغيل طلب محفوظ؛ Enter للتصفح و s للحفظ و d للحذف.

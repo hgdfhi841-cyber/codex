@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Amazon Bedrock credential setup and the startup GovCloud guidance screen.
 
 use super::auth::AuthModeWidget;
@@ -475,7 +476,7 @@ impl BedrockState {
                 footer.push(Line::from(vec![
                     "  Press ".dim(),
                     keys::CANCEL[0].into(),
-                    " to go back".dim(),
+                    " للرجوع".dim(),
                 ]));
             }
         }

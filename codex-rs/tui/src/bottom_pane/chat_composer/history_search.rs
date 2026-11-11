@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Composer-side Ctrl+R reverse history search state and rendering helpers.
 //!
 //! The persistent and local history stores live in `chat_composer_history`, but the composer owns
@@ -410,7 +411,7 @@ impl ChatComposer {
                 line.push_span(Self::history_search_action_key_span(KeyCode::Esc));
                 line.push_span(" cancel".dim());
             }
-            HistorySearchStatus::NoMatch => line.push_span("  no match".red()),
+            HistorySearchStatus::NoMatch => line.push_span("  لا تطابق".red()),
         }
         Some(line)
     }

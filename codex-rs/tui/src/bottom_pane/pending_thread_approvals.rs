@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::Stylize;
@@ -45,7 +46,7 @@ impl PendingThreadApprovals {
         let mut lines = Vec::new();
         for thread in self.threads.iter().take(3) {
             let wrapped = adaptive_wrap_lines(
-                std::iter::once(Line::from(format!("Approval needed in {thread}"))),
+                std::iter::once(Line::from(format!("مطلوبة موافقة في {thread}"))),
                 RtOptions::new(width as usize)
                     .initial_indent(Line::from(vec!["  ".into(), "!".red().bold(), " ".into()]))
                     .subsequent_indent(Line::from("    ")),
@@ -61,7 +62,7 @@ impl PendingThreadApprovals {
             Line::from(vec![
                 "    ".into(),
                 "/subagents".cyan().bold(),
-                " to review requests".dim(),
+                " لمراجعة الطلبات".dim(),
             ])
             .dim(),
         );

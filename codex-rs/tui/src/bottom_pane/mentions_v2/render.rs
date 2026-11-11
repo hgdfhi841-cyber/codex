@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Render unified mentions with the shared picker frame and the live result catalog.
 //!
 //! Reserve the same result viewport across filters and searches. Preserve the
@@ -74,8 +75,8 @@ pub(super) fn render_popup(
         ..rect
     };
     for (offset, line) in [
-        Line::from("Mentions".bold()),
-        Line::from("Files, directories, plugins, skills and tasks".dim()),
+        Line::from("الإشارات".bold()),
+        Line::from("ملفات ومجلدات وإضافات ومهارات ومهام".dim()),
     ]
     .into_iter()
     .take(usize::from(header.height))
@@ -101,7 +102,7 @@ pub(super) fn render_popup(
         .unwrap_or_default();
     render_filled_tab_bar(&modes.map(SearchMode::label), active, inset(tabs), buf);
     let query = if query.is_empty() {
-        "Type to search mentions"
+        "اكتب للبحث في الإشارات"
     } else {
         query
     };

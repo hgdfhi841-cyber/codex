@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Authentication step UI and state transitions used by onboarding.
 //!
 //! This module owns the auth-step state machine (ChatGPT login/device-code/API
@@ -123,7 +124,7 @@ impl SignInOption {
     }
 }
 
-const API_KEY_DISABLED_MESSAGE: &str = "API key login is disabled.";
+const API_KEY_DISABLED_MESSAGE: &str = "تسجيل الدخول بمفتاح API معطّل.";
 pub(super) fn onboarding_request_id() -> codex_app_server_protocol::RequestId {
     codex_app_server_protocol::RequestId::String(Uuid::new_v4().to_string())
 }
@@ -550,19 +551,19 @@ impl AuthModeWidget {
 
     fn render_pick_mode(&self, area: Rect, buf: &mut Buffer) {
         let mut lines: Vec<Line> = if self.highlighted_mode.is_alternative() {
-            vec!["  Sign in another way".into(), "".into()]
+            vec!["  سجّل الدخول بطريقة أخرى".into(), "".into()]
         } else if self.bedrock_setup_enabled || self.gcp_setup_enabled || self.gateway_setup_enabled
         {
-            vec!["  Choose how you want to use Codex.".into(), "".into()]
+            vec!["  اختر كيف تريد استخدام Codex.".into(), "".into()]
         } else {
             vec![
                 Line::from(vec![
                     "  ".into(),
-                    "Sign in with ChatGPT to use Codex as part of your paid plan".into(),
+                    "سجّل الدخول بحساب ChatGPT لاستخدام Codex ضمن اشتراكك المدفوع".into(),
                 ]),
                 Line::from(vec![
                     "  ".into(),
-                    "or connect an API key for usage-based billing".into(),
+                    "أو اربط مفتاح API للدفع حسب الاستخدام".into(),
                 ]),
                 "".into(),
             ]
@@ -601,11 +602,11 @@ impl AuthModeWidget {
         };
 
         let chatgpt_description = if !self.is_chatgpt_login_allowed() {
-            "ChatGPT login is disabled"
+            "تسجيل الدخول بحساب ChatGPT معطّل"
         } else {
-            "Usage included with Plus, Pro, Business, and Enterprise plans"
+            "الاستخدام مشمول في اشتراكات Plus و Pro و Business و Enterprise"
         };
-        let device_code_description = "Sign in from another device with a one-time code";
+        let device_code_description = "سجّل الدخول من جهاز آخر برمز يُستخدم مرة واحدة";
 
         for (idx, option) in self.displayed_sign_in_options().into_iter().enumerate() {
             match option {
@@ -613,14 +614,14 @@ impl AuthModeWidget {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Sign in another way",
+                        "سجّل الدخول بطريقة أخرى",
                         if self.bedrock_setup_enabled
                             || self.gcp_setup_enabled
                             || self.gateway_setup_enabled
                         {
-                            "Use an API key or another provider"
+                            "استخدم مفتاح API أو مزوداً آخر"
                         } else {
-                            "Use an OpenAI API key"
+                            "استخدم مفتاح OpenAI API"
                         },
                     ));
                 }
@@ -628,7 +629,7 @@ impl AuthModeWidget {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Sign in with ChatGPT",
+                        "تسجيل الدخول بحساب ChatGPT",
                         chatgpt_description,
                     ));
                 }
@@ -636,7 +637,7 @@ impl AuthModeWidget {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Sign in with Device Code",
+                        "تسجيل الدخول برمز الجهاز",
                         device_code_description,
                     ));
                 }
@@ -644,24 +645,24 @@ impl AuthModeWidget {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Use an OpenAI API key",
-                        "Pay for what you use",
+                        "استخدم مفتاح OpenAI API",
+                        "ادفع مقابل ما تستخدمه",
                     ));
                 }
                 SignInOption::Bedrock => {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Use Amazon Bedrock",
-                        "Connect using your AWS credentials",
+                        "استخدم Amazon Bedrock",
+                        "اتصل ببيانات اعتماد AWS",
                     ));
                 }
                 SignInOption::Gcp => {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Use Google Cloud Vertex AI",
-                        "Connect using your Google Cloud credentials",
+                        "استخدم Google Cloud Vertex AI",
+                        "اتصل ببيانات اعتماد Google Cloud",
                     ));
                 }
                 SignInOption::Gateway => {
@@ -669,7 +670,7 @@ impl AuthModeWidget {
                         idx,
                         option,
                         USE_CUSTOM_PROVIDER,
-                        "Choose a saved configuration or create a new one",
+                        "اختر إعداداً محفوظاً أو أنشئ واحداً جديداً",
                     ));
                 }
             }
@@ -679,22 +680,22 @@ impl AuthModeWidget {
         let options_end = lines.len();
         if !self.is_api_login_allowed() {
             lines.push(
-                "  API key login is disabled by this workspace. Sign in with ChatGPT to continue."
+                "  تسجيل الدخول بمفتاح API معطّل في مساحة العمل هذه. سجّل الدخول بحساب ChatGPT للمتابعة."
                     .dim()
                     .into(),
             );
             lines.push("".into());
         }
         lines.push(Line::from(vec![
-            "  Press ".dim(),
+            "  اضغط ".dim(),
             self.confirm_binding().into(),
-            " to continue".dim(),
+            " للمتابعة".dim(),
         ]));
         if self.highlighted_mode.is_alternative() {
             lines.push(Line::from(vec![
-                "  Press ".dim(),
+                "  اضغط ".dim(),
                 self.cancel_binding().into(),
-                " to go back".dim(),
+                " للرجوع".dim(),
             ]));
         }
         if let Some(err) = self.error_message() {
@@ -727,19 +728,19 @@ impl AuthModeWidget {
             self.request_frame
                 .schedule_frame_in(std::time::Duration::from_millis(100));
             spans.extend(shimmer_text(
-                "Finish signing in via your browser",
+                "أكمل تسجيل الدخول من المتصفح",
                 MotionMode::Animated,
             ));
         } else {
-            spans.push("Finish signing in via your browser".into());
+            spans.push("أكمل تسجيل الدخول من المتصفح".into());
         }
         let mut lines = vec![spans.into(), "".into()];
 
         let auth_url = if !state.auth_url.is_empty() {
             lines.push(Line::from(vec![
-                "  If the link doesn't open automatically, press ".into(),
+                "  إن لم يُفتح الرابط تلقائياً، اضغط ".into(),
                 keys::COPY_LINK[0].into(),
-                " to copy it:".into(),
+                " لنسخه:".into(),
             ]));
             if let Some(message) = self.error_message() {
                 lines.push(format!("  {message}").dim().into());
@@ -751,10 +752,10 @@ impl AuthModeWidget {
             ]));
             lines.push("".into());
             lines.push(Line::from(vec![
-                "  On a remote or headless machine? Press ".into(),
+                "  تعمل على جهاز بعيد أو بلا واجهة؟ اضغط ".into(),
                 self.cancel_binding().into(),
-                " and choose ".into(),
-                "Sign in with Device Code".cyan(),
+                " واختر ".into(),
+                "تسجيل الدخول برمز الجهاز".cyan(),
                 ".".into(),
             ]));
             lines.push("".into());
@@ -764,9 +765,9 @@ impl AuthModeWidget {
         };
 
         lines.push(Line::from(vec![
-            "  Press ".dim(),
+            "  اضغط ".dim(),
             self.cancel_binding().into(),
-            " to cancel".dim(),
+            " للإلغاء".dim(),
         ]));
         Paragraph::new(lines)
             .wrap(Wrap { trim: false })
@@ -781,43 +782,43 @@ impl AuthModeWidget {
 
     fn render_chatgpt_success_message(&self, area: Rect, buf: &mut Buffer) {
         let mut docs_line =
-            HyperlinkLine::new(Line::from("  Learn about permissions and approvals in the ").dim());
+            HyperlinkLine::new(Line::from("  تعرّف على الصلاحيات والموافقات في ").dim());
         docs_line.push_span(
-            "Codex docs".underlined(),
+            "توثيق Codex".underlined(),
             Some("https://developers.openai.com/codex/security"),
         );
         let mut preferences_line =
-            HyperlinkLine::new(Line::from("  Your plan's rate limits and ").dim());
+            HyperlinkLine::new(Line::from("  حدود الاستخدام في اشتراكك و").dim());
         preferences_line.push_span(
-            "training data preferences".underlined(),
+            "تفضيلات بيانات التدريب".underlined(),
             Some("https://chatgpt.com/#settings"),
         );
         preferences_line.push_span(" apply".into(), /*destination*/ None);
 
         let lines = vec![
             HyperlinkLine::new(
-                "✓ Signed in with your ChatGPT account"
+                "✓ تم تسجيل الدخول بحساب ChatGPT"
                     .fg(Color::Green)
                     .into(),
             ),
             "".into(),
-            "  You're in control".into(),
+            "  التحكم بيدك".into(),
             docs_line,
             "".into(),
-            "  Codex can make mistakes".into(),
+            "  قد يخطئ Codex".into(),
             HyperlinkLine::new(
-                "  Review the code it writes and commands it runs"
+                "  راجع الكود الذي يكتبه والأوامر التي يشغّلها"
                     .dim()
                     .into(),
             ),
             "".into(),
-            "  Included with your ChatGPT plan".into(),
+            "  مشمول في اشتراك ChatGPT".into(),
             preferences_line,
             "".into(),
             HyperlinkLine::new(Line::from(vec![
-                "  Press ".fg(Color::Cyan),
+                "  اضغط ".fg(Color::Cyan),
                 self.confirm_binding().into(),
-                " to continue".fg(Color::Cyan),
+                " للمتابعة".fg(Color::Cyan),
             ])),
         ];
 
@@ -829,7 +830,7 @@ impl AuthModeWidget {
 
     fn render_chatgpt_success(&self, area: Rect, buf: &mut Buffer) {
         let lines = vec![
-            "✓ Signed in with your ChatGPT account"
+            "✓ تم تسجيل الدخول بحساب ChatGPT"
                 .fg(Color::Green)
                 .into(),
         ];
@@ -841,9 +842,9 @@ impl AuthModeWidget {
 
     fn render_api_key_configured(&self, area: Rect, buf: &mut Buffer) {
         let lines = vec![
-            "✓ API key configured".fg(Color::Green).into(),
+            "✓ تم إعداد مفتاح API".fg(Color::Green).into(),
             "".into(),
-            "  Codex will use usage-based billing with your API key.".into(),
+            "  سيستخدم Codex الدفع حسب الاستخدام عبر مفتاح API.".into(),
         ];
 
         Paragraph::new(lines)
@@ -862,16 +863,16 @@ impl AuthModeWidget {
         let mut intro_lines: Vec<Line> = vec![
             Line::from(vec![
                 "> ".into(),
-                "Use your own OpenAI API key for usage-based billing".bold(),
+                "استخدم مفتاح OpenAI API الخاص بك للدفع حسب الاستخدام".bold(),
             ]),
             "".into(),
-            "  Paste or type your API key below.".into(),
+            "  الصق أو اكتب مفتاح API بالأسفل.".into(),
             "".into(),
         ];
         if state.prepopulated_from_env {
-            intro_lines.push("  Detected OPENAI_API_KEY environment variable.".into());
+            intro_lines.push("  تم اكتشاف متغير البيئة OPENAI_API_KEY.".into());
             intro_lines.push(
-                "  Paste a different key if you prefer to use another account."
+                "  الصق مفتاحاً آخر إن أردت استخدام حساب مختلف."
                     .dim()
                     .into(),
             );
@@ -882,7 +883,7 @@ impl AuthModeWidget {
             .render(intro_area, buf);
 
         let content_line: Line = if state.value.is_empty() {
-            vec!["Paste or type your API key".dim()].into()
+            vec!["الصق أو اكتب مفتاح API".dim()].into()
         } else {
             Line::from(state.value.clone())
         };
@@ -890,7 +891,7 @@ impl AuthModeWidget {
             .wrap(Wrap { trim: false })
             .block(
                 Block::default()
-                    .title("API key")
+                    .title("مفتاح API")
                     .borders(Borders::ALL)
                     .border_type(BorderType::Rounded)
                     .border_style(Style::default().fg(Color::Cyan)),
@@ -899,14 +900,14 @@ impl AuthModeWidget {
 
         let mut footer_lines: Vec<Line> = vec![
             Line::from(vec![
-                "  Press ".dim(),
+                "  اضغط ".dim(),
                 self.confirm_binding().into(),
-                " to save".dim(),
+                " للحفظ".dim(),
             ]),
             Line::from(vec![
-                "  Press ".dim(),
+                "  اضغط ".dim(),
                 self.cancel_binding().into(),
-                " to go back".dim(),
+                " للرجوع".dim(),
             ]),
         ];
         if let Some(error) = self.error_message() {
@@ -934,7 +935,7 @@ impl AuthModeWidget {
                 {
                     let trimmed = state.value.trim().to_string();
                     if trimmed.is_empty() {
-                        self.set_error(Some("API key cannot be empty".to_string()));
+                        self.set_error(Some("لا يمكن أن يكون مفتاح API فارغاً".to_string()));
                         should_request_frame = true;
                     } else {
                         should_save = Some(trimmed);
@@ -1070,7 +1071,7 @@ impl AuthModeWidget {
                     });
                 }
                 Err(err) => {
-                    *error.write().unwrap() = Some(format!("Failed to save API key: {err}"));
+                    *error.write().unwrap() = Some(format!("تعذّر حفظ مفتاح API: {err}"));
                     *sign_in_state.write().unwrap() = SignInState::ApiKeyEntry(ApiKeyInputState {
                         value: api_key,
                         prepopulated_from_env: false,
@@ -1264,15 +1265,15 @@ impl WidgetRef for AuthModeWidget {
             }
             SignInState::GatewayOAuth { url, .. } => {
                 let title = if url.is_some() {
-                    "Finish signing in to your gateway in the browser."
+                    "أكمل تسجيل الدخول إلى البوابة من المتصفح."
                 } else {
-                    "Starting gateway sign-in…"
+                    "جارٍ بدء تسجيل الدخول إلى البوابة…"
                 };
                 let mut lines = vec![Line::from(title.bold())];
                 if let Some(url) = url {
                     lines.push(Line::from(url.clone().cyan().underlined()));
                 }
-                lines.push(Line::from("Press Ctrl+C to quit.".dim()));
+                lines.push(Line::from("اضغط Ctrl+C للخروج.".dim()));
                 Paragraph::new(lines)
                     .wrap(Wrap { trim: false })
                     .render(area, buf);
@@ -1283,23 +1284,23 @@ impl WidgetRef for AuthModeWidget {
             SignInState::GatewayOAuthFailed { message, .. } => {
                 Paragraph::new(vec![
                     Line::from(message.clone().red()),
-                    Line::from("Press Enter to retry or Ctrl+C to quit.".dim()),
+                    Line::from("اضغط Enter لإعادة المحاولة أو Ctrl+C للخروج.".dim()),
                 ])
                 .wrap(Wrap { trim: false })
                 .render(area, buf);
             }
             SignInState::GatewaySelected(_) | SignInState::GatewayConfigured => {
-                Paragraph::new("✓ Custom provider configured".green())
+                Paragraph::new("✓ تم إعداد المزود المخصص".green())
                     .wrap(Wrap { trim: false })
                     .render(area, buf);
             }
             SignInState::GcpConfigured => {
-                Paragraph::new("✓ Google Cloud Vertex AI configured".green())
+                Paragraph::new("✓ تم إعداد Google Cloud Vertex AI".green())
                     .wrap(Wrap { trim: false })
                     .render(area, buf);
             }
             SignInState::BedrockConfigured => {
-                Paragraph::new("✓ Amazon Bedrock configured".green())
+                Paragraph::new("✓ تم إعداد Amazon Bedrock".green())
                     .wrap(Wrap { trim: false })
                     .render(area, buf);
             }

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Session configuration and thread-header orchestration for `ChatWidget`.
 //! Confirmed model-picker changes can offer the flourish only on their original task; the app
 //! checks the previous model when it applies the final selection.
@@ -265,7 +266,7 @@ impl ChatWidget {
         }
         // Emit notices after replacing or removing the placeholder header.
         if self.daybreak_enabled && previous_thread_id != self.thread_id {
-            self.add_info_message("Daybreak is on for new turns.".into(), /*hint*/ None);
+            self.add_info_message("Daybreak مفعّل للأدوار الجديدة.".into(), /*hint*/ None);
         }
         self.transcript.saw_copy_source_this_turn = false;
         self.refresh_skills_for_current_cwd(/*force_reload*/ true);
@@ -327,7 +328,7 @@ impl ChatWidget {
         {
             vec![
                 "• ".dim(),
-                "Thread forked from ".into(),
+                "المحادثة متفرعة من ".into(),
                 name.fg(accent_color()),
                 " (".into(),
                 forked_from_id_text.fg(accent_color()),
@@ -337,7 +338,7 @@ impl ChatWidget {
         } else {
             vec![
                 "• ".dim(),
-                "Thread forked from ".into(),
+                "المحادثة متفرعة من ".into(),
                 forked_from_id_text.fg(accent_color()),
             ]
             .into()
@@ -404,7 +405,7 @@ impl ChatWidget {
     pub(crate) fn emit_prompt_edit_thread_event(&mut self) {
         let line: Line<'static> = vec![
             "• ".dim(),
-            "Conversation reverted to this point. File changes are unchanged.".into(),
+            "أُعيدت المحادثة إلى هذه النقطة. تغييرات الملفات لم تتغير.".into(),
         ]
         .into();
         self.app_event_tx.send(AppEvent::InsertHistoryCell(Box::new(

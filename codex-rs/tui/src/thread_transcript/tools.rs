@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Share tool history conversion between live handlers and persisted transcript pages.
 //!
 //! These values contain presentation data only. Creating historical cells never starts a task,
@@ -47,7 +48,7 @@ pub(crate) fn historical_tool_fallback(
             let status_label = match status {
                 CommandExecutionStatus::InProgress => "In progress at last update",
                 CommandExecutionStatus::Completed => "Completed",
-                CommandExecutionStatus::Failed => "Failed",
+                CommandExecutionStatus::Failed => "فشل",
                 CommandExecutionStatus::Declined => "Declined",
             };
             let mut status_line = if *source == CommandExecutionSource::UnifiedExecInteraction {
@@ -102,8 +103,8 @@ pub(crate) fn historical_tool_fallback(
         } if *status != CollabAgentToolCallStatus::Completed => {
             let status = match status {
                 CollabAgentToolCallStatus::InProgress => "In progress at last update",
-                CollabAgentToolCallStatus::Failed => "Failed",
-                CollabAgentToolCallStatus::Interrupted => "Interrupted",
+                CollabAgentToolCallStatus::Failed => "فشل",
+                CollabAgentToolCallStatus::Interrupted => "أُوقف",
                 CollabAgentToolCallStatus::Completed => "Completed",
             };
             vec![format!("agent tool: {tool:?} · {status}").dim().into()]

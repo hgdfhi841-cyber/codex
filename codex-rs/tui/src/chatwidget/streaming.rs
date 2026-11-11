@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Streaming transcript updates for `ChatWidget`.
 //!
 //! This module owns assistant, plan, and reasoning deltas, including stream-tail
@@ -63,7 +64,7 @@ impl ChatWidget {
             || self.status_state.current_status.is_guardian_review()
         {
             self.status_state.terminal_title_status_kind = TerminalTitleStatusKind::Working;
-            self.set_status_header(String::from("Working"));
+            self.set_status_header(String::from("جارٍ العمل"));
         }
     }
 

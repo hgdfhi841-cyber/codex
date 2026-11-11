@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Bounded, best-effort previews for the v2 `/subagents` status output.
 
 use super::ThreadBufferedEvent;
@@ -181,7 +182,7 @@ fn activity_summary(item: &ThreadItemPayload) -> Option<String> {
             let action = match kind {
                 SubAgentActivityKind::Started => "Started",
                 SubAgentActivityKind::Interacted => "Contacted",
-                SubAgentActivityKind::Interrupted => "Interrupted",
+                SubAgentActivityKind::Interrupted => "أُوقف",
                 SubAgentActivityKind::Completed => "Completed",
             };
             return bounded_summary(&format!("{action} {agent_path}"));

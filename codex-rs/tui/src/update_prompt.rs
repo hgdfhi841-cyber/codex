@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Shared picker presentation for the installed CLI's update choices.
 //! Update discovery and execution remain disabled in debug builds.
 
@@ -211,7 +212,7 @@ impl WidgetRef for &UpdatePromptScreen {
         column.push(
             /*flex*/ 0,
             Paragraph::new(Line::from(vec![
-                "Update available".bold(),
+                "يتوفر تحديث".bold(),
                 " · ".dim(),
                 format!(
                     "{current} → {latest}",
@@ -226,7 +227,7 @@ impl WidgetRef for &UpdatePromptScreen {
         column.push(
             /*flex*/ 1,
             Paragraph::new(Line::from(vec![
-                "Release notes: ".dim(),
+                "ملاحظات الإصدار: ".dim(),
                 RELEASE_NOTES_URL.dim().underlined(),
             ]))
             .wrap(Wrap { trim: false })
@@ -241,9 +242,9 @@ impl WidgetRef for &UpdatePromptScreen {
             /*flex*/ 1,
             picker_option_list(
                 vec![
-                    format!("Update now (runs `{update_command}`)"),
-                    "Skip".to_string(),
-                    "Skip until next version".to_string(),
+                    format!("حدّث الآن (يشغّل `{update_command}`)"),
+                    "تخطَّ".to_string(),
+                    "تخطَّ حتى الإصدار القادم".to_string(),
                 ],
                 selected_index,
             ),

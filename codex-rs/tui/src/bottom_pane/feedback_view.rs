@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use codex_feedback::CODEX_APP_DIRECTORY_CACHE_ATTACHMENT_FILENAME;
 use codex_feedback::CODEX_APPS_TOOLS_CACHE_ATTACHMENT_FILENAME;
 use codex_feedback::DOCTOR_REPORT_ATTACHMENT_FILENAME;
@@ -54,17 +55,17 @@ pub(crate) fn feedback_success_cell(
     feedback_audience: FeedbackAudience,
 ) -> history_cell::WebHyperlinkHistoryCell {
     let prefix = if include_logs {
-        "• Feedback uploaded."
+        "• تم رفع الملاحظات."
     } else {
-        "• Feedback recorded (no logs)."
+        "• سُجّلت الملاحظات (دون سجلات)."
     };
     let issue_url = issue_url_for_category(category, thread_id, feedback_audience);
     let mut lines = vec![Line::from(match issue_url.as_ref() {
         Some(_) if feedback_audience == FeedbackAudience::OpenAiEmployee => {
-            format!("{prefix} You can share this in #codex-feedback:")
+            format!("{prefix} يمكنك مشاركة هذا في #codex-feedback:")
         }
-        Some(_) => format!("{prefix} Please open an issue using the following URL:"),
-        None => format!("{prefix} Thanks for the feedback!"),
+        Some(_) => format!("{prefix} الرجاء فتح بلاغ عبر الرابط التالي:"),
+        None => format!("{prefix} شكراً على ملاحظاتك!"),
     })];
     match issue_url {
         Some(url) if feedback_audience == FeedbackAudience::OpenAiEmployee => {
@@ -147,36 +148,36 @@ pub(crate) fn feedback_selection_params(
     app_event_tx: AppEventSender,
 ) -> super::SelectionViewParams {
     super::SelectionViewParams {
-        title: Some("How was this?".to_string()),
+        title: Some("كيف كانت التجربة؟".to_string()),
         items: vec![
             make_feedback_item(
                 app_event_tx.clone(),
                 "bug",
-                "Crash, error message, hang, or broken UI/behavior",
+                "انهيار أو رسالة خطأ أو تجمّد أو خلل في الواجهة/السلوك",
                 FeedbackCategory::Bug,
             ),
             make_feedback_item(
                 app_event_tx.clone(),
-                "bad result",
-                "Output was off-target, incorrect, incomplete, or unhelpful",
+                "نتيجة سيئة",
+                "الناتج بعيد عن المطلوب أو خاطئ أو ناقص أو غير مفيد",
                 FeedbackCategory::BadResult,
             ),
             make_feedback_item(
                 app_event_tx.clone(),
-                "good result",
-                "Helpful, correct, high‑quality, or delightful result worth celebrating",
+                "نتيجة جيدة",
+                "نتيجة مفيدة وصحيحة وعالية الجودة تستحق الإشادة",
                 FeedbackCategory::GoodResult,
             ),
             make_feedback_item(
                 app_event_tx.clone(),
-                "safety check",
-                "Benign usage blocked due to safety checks or refusals",
+                "فحص أمان",
+                "استخدام سليم حُظر بسبب فحوص الأمان أو الرفض",
                 FeedbackCategory::SafetyCheck,
             ),
             make_feedback_item(
                 app_event_tx,
                 "other",
-                "Slowness, feature suggestion, UX feedback, or anything else",
+                "بطء أو اقتراح ميزة أو ملاحظة على التجربة أو أي شيء آخر",
                 FeedbackCategory::Other,
             ),
         ],
@@ -237,10 +238,10 @@ pub(crate) fn feedback_consent_params(
     let disclosure = if can_save {
         "Saving a ZIP does not submit feedback to OpenAI.\nFiles may contain prompts, commands, and tool output:"
     } else {
-        "Files may contain prompts, commands, and tool output:"
+        "قد تحتوي الملفات على الطلبات والأوامر ومخرجات الأدوات:"
     };
     let mut header_lines: Vec<Box<dyn crate::render::renderable::Renderable>> = vec![
-        Line::from("Include logs and session history?".bold()).into(),
+        Line::from("تضمين السجلات وتاريخ الجلسة؟".bold()).into(),
         Line::from("").into(),
         Paragraph::new(disclosure)
             .dim()
@@ -292,7 +293,7 @@ pub(crate) fn feedback_consent_params(
     }
     if should_show_feedback_connectivity_details(category, feedback_diagnostics) {
         header_lines.push(Line::from("").into());
-        header_lines.push(Line::from("Connectivity diagnostics".bold()).into());
+        header_lines.push(Line::from("تشخيص الاتصال".bold()).into());
         for diagnostic in feedback_diagnostics.diagnostics() {
             header_lines
                 .push(Line::from(vec!["  - ".into(), diagnostic.headline.clone().into()]).into());
@@ -306,15 +307,15 @@ pub(crate) fn feedback_consent_params(
         footer_hint: Some(standard_popup_hint_line()),
         items: vec![
             super::SelectionItem {
-                name: "Yes".to_string(),
-                description: Some("Include session logs and diagnostics in the report".to_string()),
+                name: "نعم".to_string(),
+                description: Some("تضمين سجلات الجلسة والتشخيص في البلاغ".to_string()),
                 actions: vec![yes_action],
                 dismiss_on_select: true,
                 ..Default::default()
             },
             super::SelectionItem {
                 name: "No".to_string(),
-                description: Some("Keep only your note and report metadata".to_string()),
+                description: Some("الاكتفاء بملاحظتك وبيانات البلاغ".to_string()),
                 actions: vec![no_action],
                 dismiss_on_select: true,
                 ..Default::default()

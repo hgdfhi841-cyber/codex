@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Emits Codex lifecycle state through terminal status protocols.
 //!
 //! OSC 7501 reports lifecycle state and blocking reasons to terminal sessions.
@@ -109,7 +110,7 @@ impl ProgramStatus {
     fn iterm_label(self) -> &'static str {
         match self {
             Self::Idle | Self::Done | Self::Error => "Idle",
-            Self::Working => "Working",
+            Self::Working => "جارٍ العمل",
             Self::Blocked(_) => "Waiting",
         }
     }

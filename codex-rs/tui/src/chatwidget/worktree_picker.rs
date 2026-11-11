@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Worktree choices for local session commands.
 //!
 //! Shared picker presentation preserves request identity and action safety checks.
@@ -366,7 +367,7 @@ impl ChatWidget {
             subtitle: Some(root.display().to_string()),
             items: vec![
                 SelectionItem {
-                    name: "Cancel".to_string(),
+                    name: "إلغاء".to_string(),
                     actions: vec![],
                     dismiss_on_select: true,
                     ..Default::default()

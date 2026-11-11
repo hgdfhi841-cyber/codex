@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Renders unified diffs with line numbers, gutter signs, and optional syntax
 //! highlighting.
 //!
@@ -464,9 +465,9 @@ fn render_changes_block(
     let mut header_spans: Vec<RtSpan<'static>> = vec!["• ".dim()];
     if let [row] = &rows[..] {
         let verb = match row.change {
-            FileChange::Add { .. } => "Added",
-            FileChange::Delete { .. } => "Deleted",
-            _ => "Edited",
+            FileChange::Add { .. } => "أُضيف",
+            FileChange::Delete { .. } => "حُذف",
+            _ => "عُدّل",
         };
         header_spans.push(verb.bold());
         header_spans.push(" ".into());
@@ -474,7 +475,7 @@ fn render_changes_block(
         header_spans.push(" ".into());
         header_spans.extend(render_line_count_summary(row.added, row.removed));
     } else {
-        header_spans.push("Edited".bold());
+        header_spans.push("عُدّل".bold());
         header_spans.push(format!(" {file_count} {noun} ").into());
         header_spans.extend(render_line_count_summary(total_added, total_removed));
     }

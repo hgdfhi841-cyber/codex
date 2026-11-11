@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Restore historical tool and notice cells without changing live application state.
 //!
 //! Formatting stays in the same history cells used by live events. Only completed
@@ -107,7 +108,7 @@ pub(super) fn cells(item: ThreadItemPayload, cwd: &AbsolutePathBuf) -> Transcrip
         }
         ThreadItemPayload::ContextCompaction { .. } => {
             cells.push(Arc::new(history_cell::new_info_event(
-                "Context compacted".to_string(),
+                "تم ضغط السياق".to_string(),
                 /*hint*/ None,
             )));
         }

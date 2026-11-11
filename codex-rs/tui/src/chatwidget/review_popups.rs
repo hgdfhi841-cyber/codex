@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Review presets, searchable Git choices, and instructions in the shared picker.
 //!
 //! Child cancellation restores the preset menu; accepting a target dismisses both.
@@ -16,7 +17,7 @@ impl ChatWidget {
         let mut items: Vec<SelectionItem> = Vec::new();
 
         items.push(SelectionItem {
-            name: "Review against a base branch".to_string(),
+            name: "مراجعة مقارنةً بفرع أساسي".to_string(),
             description: Some("(PR Style)".into()),
             actions: vec![Box::new({
                 let cwd = self.config.cwd.to_path_buf();
@@ -30,7 +31,7 @@ impl ChatWidget {
         });
 
         items.push(SelectionItem {
-            name: "Review uncommitted changes".to_string(),
+            name: "مراجعة التغييرات غير المودَعة".to_string(),
             actions: vec![Box::new(move |tx: &AppEventSender| {
                 tx.review(ReviewTarget::UncommittedChanges);
             })],
@@ -39,7 +40,7 @@ impl ChatWidget {
         });
 
         items.push(SelectionItem {
-            name: "Review a commit".to_string(),
+            name: "مراجعة إيداع (commit)".to_string(),
             actions: vec![Box::new({
                 let cwd = self.config.cwd.to_path_buf();
                 move |tx| {
@@ -52,7 +53,7 @@ impl ChatWidget {
         });
 
         items.push(SelectionItem {
-            name: "Custom review instructions".to_string(),
+            name: "تعليمات مراجعة مخصصة".to_string(),
             actions: vec![Box::new(move |tx| {
                 tx.send(AppEvent::OpenReviewCustomPrompt);
             })],
@@ -62,7 +63,7 @@ impl ChatWidget {
         });
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
-            title: Some("Select a review preset".into()),
+            title: Some("اختر نمط المراجعة".into()),
             items,
             ..SelectionViewParams::picker()
         });
@@ -92,11 +93,11 @@ impl ChatWidget {
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
             picker_surface: PickerSurface::Panel,
-            title: Some("Select a base branch".to_string()),
-            subtitle: Some(format!("Current branch: {current_branch}")),
+            title: Some("اختر الفرع الأساسي".to_string()),
+            subtitle: Some(format!("الفرع الحالي: {current_branch}")),
             items,
             is_searchable: true,
-            search_placeholder: Some("Type to search branches".to_string()),
+            search_placeholder: Some("اكتب للبحث في الفروع".to_string()),
             ..Default::default()
         });
     }
@@ -129,10 +130,10 @@ impl ChatWidget {
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
             picker_surface: PickerSurface::Panel,
-            title: Some("Select a commit to review".into()),
+            title: Some("اختر إيداعاً لمراجعته".into()),
             items,
             is_searchable: true,
-            search_placeholder: Some("Type to search commits".to_string()),
+            search_placeholder: Some("اكتب للبحث في الإيداعات".to_string()),
             ..Default::default()
         });
     }
@@ -140,8 +141,8 @@ impl ChatWidget {
     pub(crate) fn show_review_custom_prompt(&mut self) {
         let tx = self.app_event_tx.clone();
         let view = CustomPromptView::new(
-            "Custom review instructions".to_string(),
-            "Type instructions and press Enter".to_string(),
+            "تعليمات مراجعة مخصصة".to_string(),
+            "اكتب التعليمات واضغط Enter".to_string(),
             /*initial_text*/ String::new(),
             /*context_label*/ None,
             Box::new(move |prompt: String| {

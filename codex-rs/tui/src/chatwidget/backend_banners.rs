@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Account banners and response-driven model transitions for the selected task.
 //!
 //! Only explicitly dismissible, previously shown occurrences can be dismissed. Model changes hide
@@ -422,7 +423,7 @@ impl ChatWidget {
             if banner.banner_type == LUNA_RESERVE_BANNER
                 && self.current_model() != LUNA_RESERVE_MODEL
             {
-                content.title = "Usage limit reached".to_string();
+                content.title = "بلغت حد الاستخدام".to_string();
                 content.description =
                     "Your included usage is exhausted. Choose an option below to continue."
                         .to_string();
@@ -464,7 +465,7 @@ impl ChatWidget {
                     let list_keymap = self.bottom_pane.list_keymap();
                     params.footer_hint = Some(accept_cancel_hint_line(
                         list_keymap.primary_hint(ListAction::Accept),
-                        "to confirm",
+                        "للتأكيد",
                         list_keymap.primary_hint(ListAction::Cancel),
                         "to continue working",
                     ));

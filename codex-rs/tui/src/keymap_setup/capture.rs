@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Captures single keys, literal chords, and leader suffixes inside `/keymap`.
 //!
 //! Content is measured at the inset width, including wrapped action identifiers.
@@ -107,7 +108,7 @@ impl KeymapCaptureView {
         if let Some(error) = &self.error_message {
             lines.push(Line::from(""));
             let options = textwrap::Options::new(wrap_width)
-                .initial_indent("Error: ")
+                .initial_indent("خطأ: ")
                 .subsequent_indent("       ");
             lines.extend(
                 textwrap::wrap(error, options)

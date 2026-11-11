@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Rate-limit warning, prompt, and notice surfaces, plus quota-aware account refresh cadence.
 
 use super::*;
@@ -65,7 +66,7 @@ impl RateLimitWarningState {
                     limit_label_for_window(secondary_window_minutes, /*is_secondary*/ true);
                 let remaining_percent = 100.0 - threshold;
                 warnings.push(format!(
-                    "Heads up, you have less than {remaining_percent:.0}% of your {limit_label} limit left. Run /status for a breakdown."
+                    "تنبيه: بقي لك أقل من {remaining_percent:.0}% من حد {limit_label}. شغّل /status للتفاصيل."
                 ));
             }
         }
@@ -91,7 +92,7 @@ impl RateLimitWarningState {
                     limit_label_for_window(primary_window_minutes, /*is_secondary*/ false);
                 let remaining_percent = 100.0 - threshold;
                 warnings.push(format!(
-                    "Heads up, you have less than {remaining_percent:.0}% of your {limit_label} limit left. Run /status for a breakdown."
+                    "تنبيه: بقي لك أقل من {remaining_percent:.0}% من حد {limit_label}. شغّل /status للتفاصيل."
                 ));
             }
         }
@@ -497,10 +498,10 @@ impl ChatWidget {
             let unit = if seconds == 1 { "second" } else { "seconds" };
             let params = SelectionViewParams {
                 view_id: Some(RATE_LIMIT_SWITCH_PROMPT_VIEW_ID),
-                title: Some("You’re no longer close to your usage limit.".into()),
+                title: Some("لم تعد قريباً من حد الاستخدام.".into()),
                 subtitle: Some(format!("Dismissing in {seconds} {unit}…")),
                 items: vec![SelectionItem {
-                    name: "Dismiss".into(),
+                    name: "تجاهل".into(),
                     dismiss_on_select: true,
                     ..Default::default()
                 }],
@@ -549,14 +550,14 @@ impl ChatWidget {
             tx.send(AppEvent::PersistRateLimitSwitchPromptHidden);
         })];
         let description = if preset.description.is_empty() {
-            Some("Uses fewer credits for upcoming turns".to_string())
+            Some("يستهلك رصيداً أقل في الأدوار القادمة".to_string())
         } else {
             Some(preset.description)
         };
 
         let items = vec![
             SelectionItem {
-                name: format!("Switch to {switch_model}"),
+                name: format!("التبديل إلى {switch_model}"),
                 description,
                 selected_description: None,
                 is_current: false,
@@ -565,7 +566,7 @@ impl ChatWidget {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Keep current model".to_string(),
+                name: "إبقاء النموذج الحالي".to_string(),
                 description: None,
                 selected_description: None,
                 is_current: false,
@@ -574,9 +575,9 @@ impl ChatWidget {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Keep current model (never show again)".to_string(),
+                name: "إبقاء النموذج الحالي (لا تُظهر هذا مجدداً)".to_string(),
                 description: Some(
-                    "Hide future rate limit reminders about switching models".to_string(),
+                    "إخفاء تذكيرات حدود الاستخدام القادمة بشأن تبديل النماذج".to_string(),
                 ),
                 selected_description: None,
                 is_current: false,
@@ -588,8 +589,8 @@ impl ChatWidget {
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
             view_id: Some(RATE_LIMIT_SWITCH_PROMPT_VIEW_ID),
-            title: Some("Approaching rate limits".to_string()),
-            subtitle: Some(format!("Switch to {switch_model} for lower credit usage?")),
+            title: Some("تقترب من حدود الاستخدام".to_string()),
+            subtitle: Some(format!("التبديل إلى {switch_model} لاستهلاك رصيد أقل؟")),
             footer_hint: Some(standard_popup_hint_line()),
             items,
             ..SelectionViewParams::picker()
@@ -606,12 +607,12 @@ impl ChatWidget {
 
         let (title, prompt) = match credit_type {
             AddCreditsNudgeCreditType::Credits => (
-                "You've reached your workspace credit limit",
-                "Your workspace is out of credits. Ask your workspace owner to add more. Notify owner?",
+                "بلغت حد رصيد مساحة العمل",
+                "نفد رصيد مساحة العمل. اطلب من مالكها إضافة المزيد. هل أُبلغ المالك؟",
             ),
             AddCreditsNudgeCreditType::UsageLimit => (
-                "Usage limit reached",
-                "Request a limit increase from your owner to continue using codex. Request increase?",
+                "بلغت حد الاستخدام",
+                "اطلب من المالك زيادة الحد لمتابعة استخدام codex. هل أطلب الزيادة؟",
             ),
         };
         let send_actions: Vec<SelectionAction> = vec![Box::new(move |tx| {
@@ -619,14 +620,14 @@ impl ChatWidget {
         })];
         let items = vec![
             SelectionItem {
-                name: "Yes".to_string(),
+                name: "نعم".to_string(),
                 display_shortcut: Some(key_hint::plain(KeyCode::Char('y')).into()),
                 actions: send_actions,
                 dismiss_on_select: true,
                 ..Default::default()
             },
             SelectionItem {
-                name: "No (default)".to_string(),
+                name: "لا (الافتراضي)".to_string(),
                 display_shortcut: Some(key_hint::plain(KeyCode::Char('n')).into()),
                 dismiss_on_select: true,
                 ..Default::default()
@@ -674,24 +675,24 @@ impl ChatWidget {
         self.add_credits_nudge_email_in_flight = None;
         let message = match (credit_type, result) {
             (AddCreditsNudgeCreditType::Credits, Ok(AddCreditsNudgeEmailStatus::Sent)) => {
-                "Workspace owner notified."
+                "تم إبلاغ مالك مساحة العمل."
             }
             (
                 AddCreditsNudgeCreditType::Credits,
                 Ok(AddCreditsNudgeEmailStatus::CooldownActive),
-            ) => "Workspace owner was already notified recently.",
+            ) => "سبق إبلاغ مالك مساحة العمل مؤخراً.",
             (AddCreditsNudgeCreditType::Credits, Err(_)) => {
-                "Could not notify your workspace owner. Please try again."
+                "تعذّر إبلاغ مالك مساحة العمل. حاول مجدداً."
             }
             (AddCreditsNudgeCreditType::UsageLimit, Ok(AddCreditsNudgeEmailStatus::Sent)) => {
-                "Limit increase requested."
+                "تم طلب زيادة الحد."
             }
             (
                 AddCreditsNudgeCreditType::UsageLimit,
                 Ok(AddCreditsNudgeEmailStatus::CooldownActive),
-            ) => "A limit increase was already requested recently.",
+            ) => "سبق طلب زيادة الحد مؤخراً.",
             (AddCreditsNudgeCreditType::UsageLimit, Err(_)) => {
-                "Could not request a limit increase. Please try again."
+                "تعذّر طلب زيادة الحد. حاول مجدداً."
             }
         };
         self.add_to_history(history_cell::new_info_event(

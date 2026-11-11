@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Local daemon maintenance confirms restarts and updates before acting.
 //! Restarts use normal TUI reconnection; updates run after restoring the terminal.
 
@@ -143,7 +144,7 @@ impl App {
             ])),
             items: vec![
                 SelectionItem {
-                    name: "Cancel".to_string(),
+                    name: "إلغاء".to_string(),
                     dismiss_on_select: true,
                     ..Default::default()
                 },
@@ -185,7 +186,7 @@ impl App {
             header: Box::new(DaemonMenuHeader(header)),
             items: vec![
                 SelectionItem {
-                    name: "Cancel".to_string(),
+                    name: "إلغاء".to_string(),
                     dismiss_on_select: true,
                     ..Default::default()
                 },

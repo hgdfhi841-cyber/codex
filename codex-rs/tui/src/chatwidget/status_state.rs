@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Status indicator and terminal-title state for `ChatWidget`.
 
 use crate::status_indicator_widget::STATUS_DETAILS_DEFAULT_MAX_LINES;
@@ -13,7 +14,7 @@ pub(super) struct StatusIndicatorState {
 impl StatusIndicatorState {
     pub(super) fn working() -> Self {
         Self {
-            header: String::from("Working"),
+            header: String::from("جارٍ العمل"),
             details: None,
             details_max_lines: STATUS_DETAILS_DEFAULT_MAX_LINES,
         }

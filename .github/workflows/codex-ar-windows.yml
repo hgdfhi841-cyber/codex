@@ -1,0 +1,126 @@
+name: codex-ar-windows
+
+# Builds the unofficial Arabic-localized Codex CLI for Windows x64 and publishes
+# it as a zip on the Releases page. Mirrors the upstream rust-release-windows
+# Cargo build, but runs on a GitHub-hosted runner.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex-ar
+
+permissions:
+  contents: write
+
+concurrency:
+  group: codex-ar-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Arabic Codex (Windows x64)
+    runs-on: windows-latest
+    timeout-minutes: 350
+    defaults:
+      run:
+        working-directory: codex-rs
+    env:
+      TARGET: x86_64-pc-windows-msvc
+      # Hosted runners are small: trade a little runtime speed for a build
+      # that fits in their memory, disk, and time limits.
+      CARGO_PROFILE_RELEASE_LTO: "off"
+      CARGO_PROFILE_RELEASE_DEBUG: "false"
+      CARGO_PROFILE_RELEASE_CODEGEN_UNITS: "16"
+      CARGO_INCREMENTAL: "0"
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-ci
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Configure rusty_v8 artifact overrides and verify checksums
+        uses: ./.github/actions/setup-rusty-v8
+        with:
+          target: x86_64-pc-windows-msvc
+
+      - name: Configure MSVC environment
+        uses: ./.github/actions/setup-msvc-env
+        with:
+          target: x86_64-pc-windows-msvc
+
+      - name: Cargo build (Windows binaries)
+        shell: bash
+        run: |
+          set -euo pipefail
+          export LIBSQLITE3_FLAGS=SQLITE_DISABLE_INTRINSIC
+          STABLE_GIT_COMMIT="$(git rev-parse HEAD)"
+          export STABLE_GIT_COMMIT
+          cargo build --target "$TARGET" --release \
+            --bin codex \
+            --bin codex-code-mode-host \
+            --bin codex-exec-server \
+            --bin codex-windows-sandbox-setup \
+            --bin codex-command-runner
+
+      - name: Assemble Codex package
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_dir="${CARGO_TARGET_DIR}/${TARGET}/release"
+          out="${RUNNER_TEMP}/codex-ar"
+          rm -rf "$out"
+          mkdir -p "$out"
+          python3 "${GITHUB_WORKSPACE}/scripts/build_codex_package.py" \
+            --target "$TARGET" \
+            --code-mode-host-bin "${release_dir}/codex-code-mode-host.exe" \
+            --exec-server-bin "${release_dir}/codex-exec-server.exe" \
+            --codex-command-runner-bin "${release_dir}/codex-command-runner.exe" \
+            --codex-windows-sandbox-setup-bin "${release_dir}/codex-windows-sandbox-setup.exe" \
+            --cargo-profile release \
+            --force \
+            --variant codex \
+            --entrypoint-bin "${release_dir}/codex.exe" \
+            --package-dir "${out}/codex-package"
+          cp "${GITHUB_WORKSPACE}/codex-ar/README-AR.txt" "$out/"
+          cp "${GITHUB_WORKSPACE}/codex-ar/codex-ar.cmd" "$out/"
+          cp "${GITHUB_WORKSPACE}/codex-ar/install.cmd" "$out/"
+          cp "${GITHUB_WORKSPACE}/LICENSE" "${GITHUB_WORKSPACE}/NOTICE" "$out/"
+
+      - name: Smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          "${RUNNER_TEMP}/codex-ar/codex-package/bin/codex.exe" --version
+
+      - name: Zip package
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "$env:RUNNER_TEMP\codex-ar" -DestinationPath "$env:RUNNER_TEMP\codex-ar-windows-x64.zip" -Force
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: codex-ar-windows-x64
+          path: ${{ runner.temp }}/codex-ar-windows-x64.zip
+          if-no-files-found: error
+
+      - name: Publish release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="codex-ar-$(date -u +%Y%m%d-%H%M)"
+          gh release create "$tag" "${RUNNER_TEMP}/codex-ar-windows-x64.zip" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Codex Arabic (unofficial) ${tag}" \
+            --notes "Unofficial Arabic-localized build of the open-source Codex CLI for Windows x64. Not an OpenAI release. Download codex-ar-windows-x64.zip, extract it, and read README-AR.txt."

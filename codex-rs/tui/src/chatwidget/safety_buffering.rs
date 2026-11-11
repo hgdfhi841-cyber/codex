@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Safety-buffering status and retry confirmation UI for active turns.
 //! Both views share an ID so response streaming, completion, or buffering updates dismiss either one.
 
@@ -176,7 +177,7 @@ impl ChatWidget {
         };
         self.bottom_pane.ensure_status_indicator();
         self.set_status(
-            "Working".to_string(),
+            "جارٍ العمل".to_string(),
             Some(status_details),
             StatusDetailsCapitalization::Preserve,
             /*details_max_lines*/ 6,
@@ -218,7 +219,7 @@ impl ChatWidget {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Learn more".to_string(),
+                name: "اعرف المزيد".to_string(),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::OpenUrlInBrowser {
                         url: SAFETY_BUFFERING_LEARN_MORE_URL.to_string(),

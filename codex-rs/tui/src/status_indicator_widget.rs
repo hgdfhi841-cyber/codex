@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! A live task status row rendered above the composer while the agent is busy.
 //!
 //! The row renders a separately owned clock, the optional interrupt hint, and short inline
@@ -54,7 +55,7 @@ pub(crate) enum StatusDetailsCapitalization {
 /// Displays a single-line in-progress status with optional wrapped details.
 #[derive(Clone, Debug)]
 pub(crate) struct StatusIndicatorWidget {
-    /// Animated header text (defaults to "Working").
+    /// Animated header text (defaults to "جارٍ العمل").
     header: String,
     header_started_at: Instant,
     details: Option<String>,
@@ -97,7 +98,7 @@ impl StatusIndicatorWidget {
         effects: codex_config::types::TuiEffects,
     ) -> Self {
         Self {
-            header: String::from("Working"),
+            header: String::from("جارٍ العمل"),
             header_started_at: Instant::now(),
             details: None,
             details_max_lines: STATUS_DETAILS_DEFAULT_MAX_LINES,
@@ -260,7 +261,7 @@ impl StatusIndicator<'_> {
         {
             spans.push(format!("({pretty_elapsed} • ").dim());
             spans.extend(interrupt_binding.spans());
-            spans.push(" to interrupt)".dim());
+            spans.push(" للإيقاف)".dim());
         } else {
             spans.push(format!("({pretty_elapsed})").dim());
         }

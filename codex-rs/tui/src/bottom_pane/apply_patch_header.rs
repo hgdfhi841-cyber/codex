@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Render file-change approval descriptions and cross-platform destinations.
 
 use super::approval_overlay::ApplyPatchApprovalRequest;
@@ -25,9 +26,9 @@ pub(super) fn build_header(request: &ApplyPatchApprovalRequest) -> Box<dyn Rende
         .reason
         .as_deref()
         .filter(|reason| !reason.is_empty())
-        .unwrap_or("Apply proposed file edits");
+        .unwrap_or("تطبيق تعديلات الملفات المقترحة");
     header.push(Line::from_iter([
-        "Description: ".into(),
+        "الوصف: ".into(),
         description.to_string().italic(),
     ]));
 
@@ -59,13 +60,13 @@ pub(super) fn build_header(request: &ApplyPatchApprovalRequest) -> Box<dyn Rende
     destinations.dedup();
     if destinations.is_empty() {
         header.push(Line::from(vec![
-            "Destination: ".into(),
+            "الوجهة: ".into(),
             "unavailable".bold(),
         ]));
     }
     for destination in destinations {
         header.push(Line::from_iter([
-            "Destination: ".into(),
+            "الوجهة: ".into(),
             destination.bold(),
         ]));
     }

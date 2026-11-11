@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Lay out question text, choices, inline editing, and key hints within the available rows.
 
 use ratatui::buffer::Buffer;
@@ -97,7 +98,7 @@ impl Renderable for AsyncQuestions {
                 &option_rows,
                 &options_state,
                 option_rows.len().max(1),
-                "No options",
+                "لا خيارات",
             );
         }
 
@@ -193,16 +194,16 @@ impl AsyncQuestions {
         tips.extend(option_tip.map(Line::from));
         if let Some(key) = chat_hint("prompt_stack_back") {
             let label = if self.state.current_idx > 0 {
-                "prev question"
+                "السؤال السابق"
             } else {
-                "main prompt"
+                "الطلب الرئيسي"
             };
             tips.push(crate::footer_hint::shortcut(&key.display_label(), label));
         }
         let next = if self.state.current_idx + 1 < self.state.pending.len() {
-            Some("next question")
+            Some("السؤال التالي")
         } else if self.has_queued_messages {
-            Some("queued messages")
+            Some("الرسائل المنتظرة")
         } else {
             None
         };

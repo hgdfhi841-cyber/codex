@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::path::Path;
@@ -127,7 +128,7 @@ impl SessionTarget {
     pub(crate) fn ensure_backend(&self, backend_id: crate::backend_id::BackendId) -> Result<()> {
         color_eyre::eyre::ensure!(
             self.backend_id == backend_id,
-            "This session belongs to a different backend. Open the session picker again."
+            "هذه الجلسة تتبع خادماً مختلفاً. افتح منتقي الجلسات مجدداً."
         );
         Ok(())
     }
@@ -166,8 +167,8 @@ pub enum SessionPickerLaunchContext {
 impl SessionPickerAction {
     fn title(self) -> &'static str {
         match self {
-            SessionPickerAction::Resume => "Resume a previous session",
-            SessionPickerAction::Fork => "Fork a previous session",
+            SessionPickerAction::Resume => "استئناف جلسة سابقة",
+            SessionPickerAction::Fork => "تفريع جلسة سابقة",
         }
     }
 
@@ -1096,9 +1097,9 @@ fn spawn_app_server_source(backend: AppServerPickerBackend) -> sources::Source {
 /// Returns the human-readable column header for the given sort key.
 fn sort_key_label(sort_key: ThreadSortKey) -> &'static str {
     match sort_key {
-        ThreadSortKey::CreatedAt => "Created",
+        ThreadSortKey::CreatedAt => "تاريخ الإنشاء",
         ThreadSortKey::UpdatedAt | ThreadSortKey::RecencyAt | ThreadSortKey::SectionPosition => {
-            "Updated"
+            "آخر تحديث"
         }
     }
 }
@@ -1530,7 +1531,7 @@ impl PickerState {
             return;
         };
         let Some(thread_id) = row.thread_id else {
-            self.inline_error = Some("No transcript available for this session".to_string());
+            self.inline_error = Some("لا يوجد سجل محادثة لهذه الجلسة".to_string());
             self.request_frame();
             return;
         };
@@ -1672,10 +1673,10 @@ impl PickerState {
                     }
                     self.inline_error = Some(match path {
                         Some(path) => {
-                            format!("Failed to read session metadata from {}", path.display())
+                            format!("تعذّرت قراءة بيانات الجلسة من {}", path.display())
                         }
                         None => {
-                            String::from("Failed to read session metadata from selected session")
+                            String::from("تعذّرت قراءة بيانات الجلسة المحددة")
                         }
                     });
                     self.request_frame();
@@ -1866,7 +1867,7 @@ impl PickerState {
                 self.pagination.next_cursor = next_cursor;
                 self.continue_search_if_needed();
                 self.inline_error =
-                    Some("Could not load one backend. Reopen the picker to retry.".into());
+                    Some("تعذّر تحميل أحد الخوادم. أعد فتح المنتقي للمحاولة مجدداً.".into());
                 self.request_frame();
             }
             BackgroundEvent::Page {
@@ -1914,7 +1915,7 @@ impl PickerState {
                         self.pending_page_down_target = None;
                         self.frozen_footer_percent = None;
                         self.search_state = SearchState::Idle;
-                        self.inline_error = Some("Could not load more sessions".to_string());
+                        self.inline_error = Some("تعذّر تحميل جلسات أخرى".to_string());
                         self.request_frame();
                         return Ok(None);
                     }
@@ -1982,7 +1983,7 @@ impl PickerState {
                         self.chord_matcher.cancel();
                         self.pending_transcript_open = None;
                         self.transcript_loading_frame_shown = false;
-                        self.inline_error = Some("Could not load transcript preview".to_string());
+                        self.inline_error = Some("تعذّر تحميل معاينة المحادثة".to_string());
                     }
                 }
                 self.request_frame();
@@ -2388,7 +2389,7 @@ impl PickerState {
         self.ensure_selected_visible();
         if let Err(err) = self.persist_density().await {
             warn!(error = %err, "failed to persist session picker view mode");
-            self.inline_error = Some(format!("Failed to save view mode: {err}"));
+            self.inline_error = Some(format!("تعذّر حفظ وضع العرض: {err}"));
         }
         self.request_frame();
     }
@@ -2534,7 +2535,7 @@ fn row_from_app_server_thread(thread: Thread) -> Option<Row> {
         history_mode: None,
         path: thread.path,
         preview: if preview.is_empty() {
-            String::from("(no message yet)")
+            String::from("(لا رسائل بعد)")
         } else {
             preview.to_string()
         },
@@ -2641,7 +2642,7 @@ fn search_line(state: &PickerState, width: u16) -> Line<'_> {
         return Line::from(truncate_text(error, usize::from(width)).red());
     }
     if state.query.is_empty() {
-        "Type to search".set_style(secondary_text_style()).into()
+        "اكتب للبحث".set_style(secondary_text_style()).into()
     } else {
         truncate_text(&format!("Search: {}", state.query), usize::from(width)).into()
     }
@@ -2661,11 +2662,11 @@ fn toolbar_for_width(state: &PickerState, width: u16) -> Line<'static> {
         ToolbarControl::Filter => filter_control_spans(state, /*compact*/ true),
         ToolbarControl::Sort => sort_control_spans(state, /*compact*/ true),
         ToolbarControl::Status => vec![
-            "Status:".set_style(secondary_text_style()),
+            "الحالة:".set_style(secondary_text_style()),
             toolbar_value(
                 match state.status {
-                    SessionStatus::Active => "Active",
-                    SessionStatus::Archived => "Archived",
+                    SessionStatus::Active => "نشطة",
+                    SessionStatus::Archived => "مؤرشفة",
                 },
                 /*active*/ true,
                 /*focused*/ true,
@@ -2688,8 +2689,8 @@ fn toolbar_line(state: &PickerState, compact: bool) -> Line<'static> {
         let status_focused = state.toolbar_focus == ToolbarControl::Status;
         if compact {
             let active_status = match state.status {
-                SessionStatus::Active => "Active",
-                SessionStatus::Archived => "Archived",
+                SessionStatus::Active => "نشطة",
+                SessionStatus::Archived => "مؤرشفة",
             };
             spans.push(toolbar_value(
                 active_status,
@@ -2697,14 +2698,14 @@ fn toolbar_line(state: &PickerState, compact: bool) -> Line<'static> {
                 status_focused,
             ));
         } else {
-            spans.push("Status: ".set_style(secondary_text_style()));
+            spans.push("الحالة: ".set_style(secondary_text_style()));
             spans.push(toolbar_value(
-                "Active",
+                "نشطة",
                 state.status == SessionStatus::Active,
                 status_focused,
             ));
             spans.push(toolbar_value(
-                "Archived",
+                "مؤرشفة",
                 state.status == SessionStatus::Archived,
                 status_focused,
             ));
@@ -2719,7 +2720,7 @@ fn sort_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>> 
     let sort_focused = state.toolbar_focus == ToolbarControl::Sort;
     if compact {
         return vec![
-            "Sort:".set_style(secondary_text_style()),
+            "الترتيب:".set_style(secondary_text_style()),
             toolbar_value(
                 sort_key_label(state.sort_key),
                 /*active*/ true,
@@ -2728,7 +2729,7 @@ fn sort_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>> 
         ];
     }
     vec![
-        "Sort: ".set_style(secondary_text_style()),
+        "الترتيب: ".set_style(secondary_text_style()),
         toolbar_value(
             sort_key_label(ThreadSortKey::UpdatedAt),
             state.sort_key == ThreadSortKey::UpdatedAt,
@@ -2746,7 +2747,7 @@ fn filter_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>
     let filter_focused = state.toolbar_focus == ToolbarControl::Filter;
     if compact || state.filter_cwd.is_none() {
         return vec![
-            "Filter:".set_style(secondary_text_style()),
+            "التصفية:".set_style(secondary_text_style()),
             toolbar_value(
                 filter_mode_label(state.filter_mode),
                 /*active*/ true,
@@ -2755,7 +2756,7 @@ fn filter_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>
         ];
     }
     let mut values = vec![
-        "Filter: ".set_style(secondary_text_style()),
+        "التصفية: ".set_style(secondary_text_style()),
         toolbar_value(
             filter_mode_label(SessionFilterMode::Cwd),
             state.filter_mode == SessionFilterMode::Cwd,
@@ -2793,9 +2794,9 @@ fn toolbar_value(label: &'static str, active: bool, focused: bool) -> Span<'stat
 
 fn filter_mode_label(filter_mode: SessionFilterMode) -> &'static str {
     match filter_mode {
-        SessionFilterMode::Cwd => "Cwd",
-        SessionFilterMode::Repo => "Repo",
-        SessionFilterMode::All => "All",
+        SessionFilterMode::Cwd => "المجلد",
+        SessionFilterMode::Repo => "المستودع",
+        SessionFilterMode::All => "الكل",
     }
 }
 
@@ -2953,19 +2954,19 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
     };
     let (esc_label, esc_compact_label) = if state.query.is_empty() {
         match state.launch_context {
-            SessionPickerLaunchContext::Startup => ("start new", "new"),
+            SessionPickerLaunchContext::Startup => ("بدء جديد", "new"),
             SessionPickerLaunchContext::ExistingSession { .. } => ("exit", "exit"),
         }
     } else {
-        ("clear search", "clear")
+        ("مسح البحث", "clear")
     };
     let ctrl_c_label = match state.launch_context {
         SessionPickerLaunchContext::Startup => "quit",
         SessionPickerLaunchContext::ExistingSession { .. } => "exit",
     };
     let density_label = match state.density {
-        SessionListDensity::Comfortable => "dense view",
-        SessionListDensity::Dense => "comfortable view",
+        SessionListDensity::Comfortable => "عرض مضغوط",
+        SessionListDensity::Dense => "عرض مريح",
     };
     let density_compact_label = match state.density {
         SessionListDensity::Comfortable => "dense",
@@ -3005,7 +3006,7 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
         },
         PickerFooterHint {
             key: "tab".to_string(),
-            wide_label: String::from("focus sort/filter"),
+            wide_label: String::from("الانتقال للترتيب/التصفية"),
             compact_label: String::from("focus"),
             priority: 7,
         },
@@ -3019,7 +3020,7 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
     if !option_keys.is_empty() {
         first_row_hints.push(PickerFooterHint {
             key: option_keys,
-            wide_label: String::from("change option"),
+            wide_label: String::from("تغيير الخيار"),
             compact_label: String::from("option"),
             priority: 8,
         });
@@ -3097,7 +3098,7 @@ fn render_transcript_loading_overlay(frame: &mut crate::custom_terminal::Frame, 
         return;
     }
 
-    let message = "Loading transcript…";
+    let message = "جارٍ تحميل المحادثة…";
     let message_width = UnicodeWidthStr::width(message) as u16;
     let overlay_width = if area.width >= message_width.saturating_add(10) {
         message_width + 10
@@ -3291,7 +3292,7 @@ fn render_list(frame: &mut crate::custom_terminal::Frame, area: Rect, state: &Pi
     if state.pagination.is_loading() && y < content_area.y.saturating_add(content_area.height) {
         let loading_line: Line = vec![
             "  ".into(),
-            "Loading older sessions…"
+            "جارٍ تحميل جلسات أقدم…"
                 .set_style(secondary_text_style())
                 .italic(),
         ]
@@ -3301,7 +3302,7 @@ fn render_list(frame: &mut crate::custom_terminal::Frame, area: Rect, state: &Pi
     }
     if show_more_below {
         let label = if state.pagination.is_loading() {
-            "↓ loading more"
+            "↓ جارٍ تحميل المزيد"
         } else {
             "↓ more"
         };
@@ -3642,8 +3643,8 @@ impl FooterPart {
         match self {
             FooterPart::Date(text) => text,
             FooterPart::Branch(Some(text)) | FooterPart::Cwd(Some(text)) => text,
-            FooterPart::Branch(None) => "no branch",
-            FooterPart::Cwd(None) => "no cwd",
+            FooterPart::Branch(None) => "بلا فرع",
+            FooterPart::Cwd(None) => "بلا مجلد",
         }
     }
 
@@ -3807,7 +3808,7 @@ fn render_transcript_preview_lines(
             vec![
                 vec![
                     "  │ ".set_style(secondary_text_style()),
-                    "Loading recent transcript..."
+                    "جارٍ تحميل آخر المحادثة..."
                         .set_style(secondary_text_style())
                         .italic(),
                 ]
@@ -3817,7 +3818,7 @@ fn render_transcript_preview_lines(
         Some(TranscriptPreviewState::Failed) => vec![
             vec![
                 "  │ ".set_style(secondary_text_style()),
-                "Could not load transcript preview"
+                "تعذّر تحميل معاينة المحادثة"
                     .set_style(crate::style::status_style(
                         crate::style::StatusTone::Failure,
                     ))
@@ -3853,31 +3854,31 @@ fn render_expanded_session_details(
         .unwrap_or_else(|| "-".to_string());
     let branch = format!(
         "{SESSION_META_BRANCH_ICON} {}",
-        row.git_branch.as_deref().unwrap_or("no branch")
+        row.git_branch.as_deref().unwrap_or("بلا فرع")
     );
 
     vec![
-        expanded_detail_line("Session:", &session, width),
+        expanded_detail_line("الجلسة:", &session, width),
         expanded_time_detail_line(
-            "Created:",
+            "أُنشئت:",
             reference,
             row.created_at,
             width,
             state.clock_format,
         ),
         expanded_time_detail_line(
-            "Updated:",
+            "حُدّثت:",
             reference,
             row.updated_at.or(row.created_at),
             width,
             state.clock_format,
         ),
-        expanded_detail_line("Directory:", &directory, width),
-        expanded_detail_line("Branch:", &branch, width),
+        expanded_detail_line("المجلد:", &directory, width),
+        expanded_detail_line("الفرع:", &branch, width),
         vec!["  │".set_style(secondary_text_style())].into(),
         vec![
             "  │ ".set_style(secondary_text_style()),
-            "Conversation:".set_style(secondary_text_style()),
+            "المحادثة:".set_style(secondary_text_style()),
         ]
         .into(),
     ]
@@ -3892,7 +3893,7 @@ fn render_conversation_preview_lines(
         return vec![
             vec![
                 "  └ ".set_style(secondary_text_style()),
-                "No transcript preview available"
+                "لا تتوفر معاينة للمحادثة"
                     .set_style(secondary_text_style())
                     .italic(),
             ]
@@ -4037,18 +4038,18 @@ pub(crate) fn format_relative_time(reference: DateTime<Utc>, ts: Option<DateTime
         return "now".to_string();
     }
     if seconds < 60 {
-        return format!("{seconds}s ago");
+        return format!("قبل {seconds}ث");
     }
     let minutes = seconds / 60;
     if minutes < 60 {
-        return format!("{minutes}m ago");
+        return format!("قبل {minutes}د");
     }
     let hours = minutes / 60;
     if hours < 24 {
-        return format!("{hours}h ago");
+        return format!("قبل {hours}س");
     }
     let days = hours / 24;
-    format!("{days}d ago")
+    format!("قبل {days}ي")
 }
 
 fn format_relative_time_long(reference: DateTime<Utc>, ts: DateTime<Utc>) -> String {
@@ -4091,17 +4092,17 @@ fn render_empty_state_line(state: &PickerState) -> Line<'static> {
         if state.search_state.is_active()
             || (state.pagination.is_loading() && state.pagination.next_cursor.is_some())
         {
-            return vec!["Searching…".set_style(secondary_text_style()).italic()].into();
+            return vec!["جارٍ البحث…".set_style(secondary_text_style()).italic()].into();
         }
         if state.pagination.reached_scan_cap {
             let msg = format!(
-                "Search scanned first {} sessions; more may exist",
+                "شمل البحث أول {} جلسة؛ قد توجد جلسات أخرى",
                 state.pagination.num_scanned_files
             );
             return vec![Span::from(msg).set_style(secondary_text_style()).italic()].into();
         }
         return vec![
-            "No results for your search"
+            "لا نتائج لبحثك"
                 .set_style(secondary_text_style())
                 .italic(),
         ]
@@ -4111,21 +4112,21 @@ fn render_empty_state_line(state: &PickerState) -> Line<'static> {
     if state.pagination.is_loading() {
         if state.all_rows.is_empty() && state.pagination.num_scanned_files == 0 {
             return vec![
-                "Loading sessions…"
+                "جارٍ تحميل الجلسات…"
                     .set_style(secondary_text_style())
                     .italic(),
             ]
             .into();
         }
         return vec![
-            "Loading older sessions…"
+            "جارٍ تحميل جلسات أقدم…"
                 .set_style(secondary_text_style())
                 .italic(),
         ]
         .into();
     }
 
-    vec!["No sessions yet".set_style(secondary_text_style()).italic()].into()
+    vec!["لا جلسات بعد".set_style(secondary_text_style()).italic()].into()
 }
 
 #[cfg(test)]

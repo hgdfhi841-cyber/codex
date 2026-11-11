@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! The chat composer is the bottom-pane text input state machine.
 //! Rich registers retain original payloads across draft clears and composer replacement;
 //! only the live register transfers, not undo or repeat history. Copies receive fresh IDs and labels
@@ -477,7 +478,7 @@ const LARGE_PASTE_CHAR_THRESHOLD: usize = 1000;
 
 fn user_input_too_large_message(actual_chars: usize) -> String {
     format!(
-        "Message exceeds the maximum length of {MAX_USER_INPUT_TEXT_CHARS} characters ({actual_chars} provided)."
+        "الرسالة تتجاوز الحد الأقصى {MAX_USER_INPUT_TEXT_CHARS} حرفاً (المُدخل {actual_chars})."
     )
 }
 
@@ -1764,7 +1765,7 @@ impl ChatComposer {
 
     pub(crate) fn set_parent_owned_thread(&mut self) {
         self.blocks_direct_input = true;
-        self.placeholder_text = "Viewing sub-agent — direct input is disabled".to_string();
+        self.placeholder_text = "تعرض وكيلاً فرعياً — الإدخال المباشر معطّل".to_string();
     }
 
     /// Move the cursor to the end of the current text buffer.
@@ -1999,7 +2000,7 @@ impl ChatComposer {
     }
 
     fn next_large_paste_placeholder(&self, char_count: usize) -> String {
-        let base = format!("[Pasted Content {char_count} chars]");
+        let base = format!("[محتوى ملصق {char_count} حرفاً]");
         let prefix = format!("{base} #");
         let mut max_suffix = 0usize;
 
@@ -3154,7 +3155,7 @@ impl ChatComposer {
                 .validate_submission(&text, input_starts_with_space)
         {
             let message = format!(
-                r#"Unrecognized command '/{name}'. Type "/" for a list of supported commands."#
+                r#"أمر غير معروف '/{name}'. اكتب "/" لعرض قائمة الأوامر المدعومة."#
             );
             self.app_event_tx.send(AppEvent::InsertHistoryCell(Box::new(
                 history_cell::new_info_event(message, /*hint*/ None),
@@ -3192,7 +3193,7 @@ impl ChatComposer {
             if self.footer.hint_override.is_some() {
                 self.show_footer_flash(
                     Line::from(
-                        format!("Message too long; limit {MAX_USER_INPUT_TEXT_CHARS} characters")
+                        format!("الرسالة طويلة جداً؛ الحد {MAX_USER_INPUT_TEXT_CHARS} حرفاً")
                             .red(),
                     ),
                     Duration::from_secs(5),
@@ -3515,7 +3516,7 @@ impl ChatComposer {
             return false;
         }
         let message = format!(
-            "'/{}' is disabled while a task is in progress.",
+            "الأمر '/{}' معطّل أثناء تنفيذ مهمة.",
             command.command()
         );
         self.app_event_tx.send(AppEvent::InsertHistoryCell(Box::new(
@@ -3710,7 +3711,7 @@ impl ChatComposer {
     fn shell_mode_footer_line(&self) -> Option<Line<'static>> {
         self.is_bang_shell_command()
             .then_some(())
-            .map(|_| Line::from(vec![Span::from("Shell mode").light_red()]))
+            .map(|_| Line::from(vec![Span::from("وضع الطرفية").light_red()]))
     }
 
     /// Handles keys that mutate the textarea, including paste-burst detection.
@@ -4354,9 +4355,9 @@ impl ChatComposer {
                 if !plugin.mcp_server_names.is_empty() {
                     let mcp_server_count = plugin.mcp_server_names.len();
                     capability_labels.push(if mcp_server_count == 1 {
-                        "1 MCP server".to_string()
+                        "خادم MCP واحد".to_string()
                     } else {
-                        format!("{mcp_server_count} MCP servers")
+                        format!("{mcp_server_count} خوادم MCP")
                     });
                 }
                 if !plugin.app_connector_ids.is_empty() {
@@ -4364,7 +4365,7 @@ impl ChatComposer {
                     capability_labels.push(if app_count == 1 {
                         "1 app".to_string()
                     } else {
-                        format!("{app_count} apps")
+                        format!("{app_count} تطبيقات")
                     });
                 }
                 let description = plugin.description.clone().or_else(|| {
@@ -4449,7 +4450,7 @@ impl ChatComposer {
     }
 
     pub(crate) fn show_shutdown_in_progress(&mut self) {
-        self.set_input_enabled(/*enabled*/ false, Some("Shutting down...".to_string()));
+        self.set_input_enabled(/*enabled*/ false, Some("جارٍ الإغلاق...".to_string()));
         self.footer.quit_shortcut_expires_at = None;
         self.footer.mode = FooterMode::ComposerEmpty;
         self.footer.hint_override = Some(Vec::new());
@@ -4950,7 +4951,7 @@ impl ChatComposer {
                 self.draft
                     .input_disabled_placeholder
                     .as_deref()
-                    .unwrap_or("Input disabled.")
+                    .unwrap_or("الإدخال معطّل.")
                     .to_string()
             };
             if !textarea_rect.is_empty() {

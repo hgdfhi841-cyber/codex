@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Agent turn lifecycle and runtime bookkeeping for `ChatWidget`.
 //!
 //! This module owns task start/completion state, runtime metrics, plan updates,
@@ -7,9 +8,9 @@
 use super::*;
 
 const LEGACY_SAFETY_ACCESS_BLOCK_PREFIX: &str =
-    "Invalid prompt: we've limited access to this content for safety reasons.";
+    "طلب غير صالح: قيّدنا الوصول إلى هذا المحتوى لأسباب تتعلق بالسلامة.";
 const BIO_POLICY_SAFETY_ACCESS_BLOCK_PREFIX: &str =
-    "This content was flagged for possible biological risk.";
+    "صُنّف هذا المحتوى على أنه قد ينطوي على خطر بيولوجي.";
 
 pub(super) fn is_bio_policy_error(message: &str) -> bool {
     is_safety_access_block_message(message)
@@ -24,7 +25,7 @@ pub(super) fn is_bio_policy_error(message: &str) -> bool {
 fn is_safety_access_block_message(message: &str) -> bool {
     message.starts_with(LEGACY_SAFETY_ACCESS_BLOCK_PREFIX)
         || message.starts_with(BIO_POLICY_SAFETY_ACCESS_BLOCK_PREFIX)
-        || message.starts_with("This request has been flagged for possible biological risk.")
+        || message.starts_with("صُنّف هذا الطلب على أنه قد ينطوي على خطر بيولوجي.")
 }
 
 impl ChatWidget {
@@ -33,7 +34,7 @@ impl ChatWidget {
         if self.status_state.current_status.is_guardian_review() {
             let header = self
                 .mcp_startup_status_header()
-                .unwrap_or_else(|| String::from("Working"));
+                .unwrap_or_else(|| String::from("جارٍ العمل"));
             self.set_status_header(header);
         }
     }
@@ -113,7 +114,7 @@ impl ChatWidget {
             .set_interrupt_hint_visible(/*visible*/ true);
         self.status_state.terminal_title_status_kind = TerminalTitleStatusKind::Working;
         if self.mcp_startup_status.is_none() || !self.status_header_is_mcp_startup_owned() {
-            self.set_status_header(String::from("Working"));
+            self.set_status_header(String::from("جارٍ العمل"));
         }
         self.reasoning_summary_parts.clear();
         self.reasoning_buffer.clear();
@@ -310,7 +311,7 @@ impl ChatWidget {
             if used_percent <= 0 {
                 return None;
             }
-            return Some(format!("{used_percent}% used"));
+            return Some(format!("مستخدم {used_percent}%"));
         }
 
         if let Some(tokens) = used_tokens
@@ -400,7 +401,7 @@ impl ChatWidget {
         self.finalize_turn();
 
         let message = if message.trim().is_empty() {
-            "Codex is currently experiencing high load.".to_string()
+            "يواجه Codex ضغطاً عالياً حالياً.".to_string()
         } else {
             message
         };
@@ -454,10 +455,10 @@ impl ChatWidget {
             && let Some(thread_id) = self.thread_id
         {
             self.bottom_pane.show_selection_view(SelectionViewParams {
-                title: Some("Turn on Daybreak for your next request?".into()),
+                title: Some("تفعيل Daybreak لطلبك القادم؟".into()),
                 items: vec![
                     SelectionItem {
-                        name: "Enable Daybreak".into(),
+                        name: "تفعيل Daybreak".into(),
                         actions: vec![Box::new(move |tx| {
                             tx.send(AppEvent::PersistDaybreakSelection {
                                 thread_id,
@@ -468,7 +469,7 @@ impl ChatWidget {
                         ..Default::default()
                     },
                     SelectionItem {
-                        name: "Not now".into(),
+                        name: "ليس الآن".into(),
                         dismiss_on_select: true,
                         ..Default::default()
                     },
@@ -510,12 +511,12 @@ impl ChatWidget {
         // Keep owner remediation in history even when the optional backend banner is unavailable.
         let (message, nudge) = match rate_limit_reached_type {
             Some(RateLimitReachedType::WorkspaceOwnerCreditsDepleted) => (
-                    "You're out of credits. Your workspace is out of credits. Add credits to continue using Codex."
+                    "نفد رصيدك. نفد رصيد مساحة العمل. أضف رصيداً لمتابعة استخدام Codex."
                         .to_string(),
                     None,
             ),
             Some(RateLimitReachedType::WorkspaceOwnerUsageLimitReached) => (
-                    "Usage limit reached. You've reached your usage limit. Increase your limits to continue using codex."
+                    "بلغت حد الاستخدام. ارفع حدودك لمتابعة استخدام codex."
                         .to_string(),
                     None,
             ),

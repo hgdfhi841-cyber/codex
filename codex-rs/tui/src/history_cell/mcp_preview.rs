@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Compact MCP and code-mode activity previews, independent of retained detail rendering.
 
 use super::McpToolCallCell;
@@ -32,8 +33,8 @@ impl McpToolCallCell {
     pub(super) fn compact_mcp_lines(&self, width: u16) -> Vec<HyperlinkLine> {
         let status = self.success();
         let (marker, verb) = match status {
-            Some(true) => ("•".green().bold(), "Called"),
-            Some(false) => ("•".red().bold(), "Failed"),
+            Some(true) => ("•".green().bold(), "استدعى"),
+            Some(false) => ("•".red().bold(), "فشل"),
             None => (
                 activity_indicator(
                     Some(self.start_time),
@@ -41,7 +42,7 @@ impl McpToolCallCell {
                     ReducedMotionIndicator::StaticBullet,
                 )
                 .unwrap_or_else(|| "•".dim()),
-                "Calling",
+                "جارٍ الاستدعاء",
             ),
         };
         let mut lines = vec![clipped_line(
@@ -112,9 +113,9 @@ impl McpToolCallCell {
                     if error.lines().take(DETAIL_PREVIEW_LINES + 1).count() <= DETAIL_PREVIEW_LINES
                     {
                         if let Some(first) = details.front_mut() {
-                            first.insert_str(0, "Error: ");
+                            first.insert_str(0, "خطأ: ");
                         } else {
-                            details.push_front("Error: ".to_owned());
+                            details.push_front("خطأ: ".to_owned());
                         }
                     }
                 }

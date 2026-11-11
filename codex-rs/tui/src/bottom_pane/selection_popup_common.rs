@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 // Note: Table-based layout previously used Constraint; the manual renderer
@@ -683,7 +684,7 @@ fn measure_rows_height_inner(
     column_width: ColumnWidthConfig,
 ) -> u16 {
     if rows_all.is_empty() {
-        return 1; // placeholder "no matches" line
+        return 1; // placeholder "لا نتائج" line
     }
 
     // Match the renderer's full row width so exact-fit descriptions do not reserve an extra line.

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use super::App;
 use crate::app_event::AppEvent;
 use crate::app_event::ThreadGoalSetMode;
@@ -310,7 +311,7 @@ impl App {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Cancel".to_string(),
+                name: "إلغاء".to_string(),
                 description: Some("Keep the current goal".to_string()),
                 dismiss_on_select: true,
                 ..Default::default()

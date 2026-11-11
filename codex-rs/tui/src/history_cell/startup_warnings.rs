@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Startup diagnostics retained in the transcript and counted in the warning footer.
 //! Affected sources are unique; sign-in servers are a subset of MCP servers.
 
@@ -63,11 +64,11 @@ impl HistoryCell for StartupWarningsCell {
                 source: format!("MCP · {server}"),
                 details: {
                     let mut details = self.mcp_details.get(server).map_or_else(
-                        || format!("MCP startup incomplete: {server}"),
+                        || format!("لم يكتمل بدء MCP: {server}"),
                         |messages| messages.join("\n\n"),
                     );
                     if self.sign_in_servers.contains(server) {
-                        details.push_str("\n\nSign-in required.");
+                        details.push_str("\n\nتسجيل الدخول مطلوب.");
                     }
                     details
                 },

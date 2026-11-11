@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Render the configuration catalog and its child choice picker.
 
 use super::ConfigPanel;
@@ -409,7 +410,7 @@ fn setting_item(
         &accept_label
             .map(|label| ("enter".to_string(), label.to_string()))
             .into_iter()
-            .chain([("esc".to_string(), "clear search".to_string())])
+            .chain([("esc".to_string(), "مسح البحث".to_string())])
             .collect::<Vec<_>>(),
     );
     let description = match context {

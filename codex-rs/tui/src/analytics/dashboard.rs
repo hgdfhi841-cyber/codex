@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Bordered, aligned overview cards. Detailed reports remain in maximized mode.
 //! Card heights depend on the viewport, never on the selected day or load state.
 
@@ -55,7 +56,7 @@ impl AnalyticsView {
                             if section == Section::Usage && self.business() {
                                 format!(
                                     " · {}",
-                                    self.token_model.as_deref().unwrap_or("All models")
+                                    self.token_model.as_deref().unwrap_or("كل النماذج")
                                 )
                             } else {
                                 String::new()

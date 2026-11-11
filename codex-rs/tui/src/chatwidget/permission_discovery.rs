@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Cache the last server catalog and discard discovery replies after changing scope.
 
 use super::slash_command_args;
@@ -149,7 +150,7 @@ impl ChatWidget {
         }
         self.bottom_pane.show_selection_view(SelectionViewParams {
             view_id: Some(VIEW_ID),
-            title: Some("Update Model Permissions".into()),
+            title: Some("تحديث صلاحيات النموذج".into()),
             items: vec![SelectionItem {
                 name: "Loading permission profiles…".to_string(),
                 is_disabled: true,
@@ -218,7 +219,7 @@ impl ChatWidget {
                 let retry_args = self.pending_permission_profile_args().map(str::to_owned);
                 self.bottom_pane.show_selection_view(SelectionViewParams {
                     view_id: Some(VIEW_ID),
-                    title: Some("Update Model Permissions".to_string()),
+                    title: Some("تحديث صلاحيات النموذج".to_string()),
                     subtitle: Some(message),
                     items: vec![SelectionItem {
                         name: "Retry".to_string(),

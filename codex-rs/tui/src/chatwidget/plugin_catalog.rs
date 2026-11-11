@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use std::collections::HashMap;
 use std::path::Path;
 use std::time::Duration;
@@ -577,7 +578,7 @@ impl ChatWidget {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Try again".to_string(),
+                name: "حاول مجدداً".to_string(),
                 description: Some("Enter a marketplace source".to_string()),
                 selected_description: Some("Enter a marketplace source".to_string()),
                 actions: vec![Box::new(|tx| {
@@ -628,7 +629,7 @@ impl ChatWidget {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Try again".to_string(),
+                name: "حاول مجدداً".to_string(),
                 description: Some("Review the confirmation prompt again".to_string()),
                 selected_description: Some("Review the confirmation prompt again".to_string()),
                 actions: vec![Box::new(move |tx| {
@@ -996,7 +997,7 @@ impl ChatWidget {
                     " and ".into(),
                     "privacy policy".bold(),
                     ". ".into(),
-                    "Learn more".cyan().underlined(),
+                    "اعرف المزيد".cyan().underlined(),
                     ".".into(),
                 ]),
             });

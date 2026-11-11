@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Model, collaboration, and reasoning popups for `ChatWidget`.
 //!
 //! These surfaces are tightly related because changing one often redirects
@@ -18,7 +19,7 @@ impl ChatWidget {
     pub(crate) fn open_model_popup(&mut self) {
         if !self.is_session_configured() {
             self.add_info_message(
-                "Model selection is disabled until startup completes.".to_string(),
+                "اختيار النموذج معطّل حتى يكتمل بدء التشغيل.".to_string(),
                 /*hint*/ None,
             );
             return;
@@ -33,7 +34,7 @@ impl ChatWidget {
             Ok(models) => models,
             Err(_) => {
                 self.add_info_message(
-                    "Models are being updated; please try /model again in a moment.".to_string(),
+                    "يجري تحديث النماذج؛ جرّب /model مجدداً بعد لحظات.".to_string(),
                     /*hint*/ None,
                 );
                 return;
@@ -44,7 +45,7 @@ impl ChatWidget {
         if presets.is_empty() {
             self.bottom_pane.show_selection_view(SelectionViewParams {
                 view_id: Some(MODEL_LOADING_VIEW_ID),
-                title: Some("Loading models…".into()),
+                title: Some("جارٍ تحميل النماذج…".into()),
                 ..SelectionViewParams::picker()
             });
         } else {
@@ -67,7 +68,7 @@ impl ChatWidget {
                 .as_ref()
                 .map_or_else(|| "server effort".to_string(), Self::reasoning_effort_label);
             header.push(
-                format!("Accepted for future turns: {} · {effort}", selection.model)
+                format!("مقبول للأدوار القادمة: {} · {effort}", selection.model)
                     .dim()
                     .into(),
             );
@@ -81,7 +82,7 @@ impl ChatWidget {
     fn model_menu_warning_line(&self) -> Option<Line<'static>> {
         let base_url = self.custom_openai_base_url()?;
         let warning = format!(
-            "Warning: OpenAI base URL is overridden to {base_url}. Selecting models may not be supported or work properly."
+            "تحذير: تم تغيير عنوان OpenAI الأساسي إلى {base_url}. قد لا يكون اختيار النماذج مدعوماً أو قد لا يعمل كما يجب."
         );
         Some(Line::from(warning.red()))
     }
@@ -189,7 +190,7 @@ impl ChatWidget {
             .collect();
 
         if !other_presets.is_empty() {
-            model_ids.push("All models".to_string());
+            model_ids.push("كل النماذج".to_string());
             let scoped = self.scope_model_picker_event();
             let actions: Vec<SelectionAction> = vec![Box::new(move |tx| {
                 tx.send(scoped(AppEvent::OpenAllModelsPopup));
@@ -197,11 +198,11 @@ impl ChatWidget {
 
             let is_current = !items.iter().any(|item| item.is_current);
             let description = Some(format!(
-                "Choose a specific model and reasoning level (current: {current_label})"
+                "اختر نموذجاً ومستوى تفكير محددين (الحالي: {current_label})"
             ));
 
             items.push(SelectionItem {
-                name: "All models".to_string(),
+                name: "كل النماذج".to_string(),
                 description,
                 is_current,
                 actions,
@@ -211,8 +212,8 @@ impl ChatWidget {
         }
 
         let header = self.model_menu_header(
-            "Select Model",
-            "Pick a quick auto mode or browse all models.",
+            "اختر النموذج",
+            "اختر وضعاً تلقائياً سريعاً أو تصفّح كل النماذج.",
         );
         self.show_model_selection_view(
             model_ids,
@@ -264,7 +265,7 @@ impl ChatWidget {
         if presets.is_empty() {
             self.bottom_pane.dismiss_view_by_id(view_id);
             self.add_info_message(
-                "No additional models are available right now.".to_string(),
+                "لا توجد نماذج إضافية متاحة الآن.".to_string(),
                 /*hint*/ None,
             );
             return;
@@ -305,7 +306,7 @@ impl ChatWidget {
             });
         }
 
-        let header = self.model_menu_header("Select Model and Effort", "");
+        let header = self.model_menu_header("اختر النموذج ومستوى التفكير", "");
         self.show_model_selection_view(
             model_ids,
             SelectionViewParams {
@@ -393,21 +394,21 @@ impl ChatWidget {
         effort: Option<ReasoningEffortConfig>,
     ) {
         let reasoning_phrase = match effort.as_ref() {
-            Some(ReasoningEffortConfig::None) => "no reasoning".to_string(),
+            Some(ReasoningEffortConfig::None) => "بلا تفكير".to_string(),
             Some(selected_effort) => {
                 format!(
                     "{} reasoning",
                     Self::reasoning_effort_sentence_label(selected_effort)
                 )
             }
-            None => "the selected reasoning".to_string(),
+            None => "التفكير المحدد".to_string(),
         };
-        let plan_only_description = format!("Always use {reasoning_phrase} in Plan mode");
+        let plan_only_description = format!("استخدم دائماً {reasoning_phrase} في وضع التخطيط");
         let plan_reasoning_source = if let Some(plan_override) =
             self.config.plan_mode_reasoning_effort.as_ref()
         {
             format!(
-                "user-chosen Plan override ({})",
+                "تخصيص وضع التخطيط الذي اخترته ({})",
                 Self::reasoning_effort_sentence_label(plan_override)
             )
         } else if let Some(plan_mask) = collaboration_modes::plan_mask(self.model_catalog.as_ref())
@@ -418,18 +419,18 @@ impl ChatWidget {
                 .and_then(|effort| effort.as_ref())
             {
                 Some(plan_effort) => format!(
-                    "built-in Plan default ({})",
+                    "الافتراضي المدمج لوضع التخطيط ({})",
                     Self::reasoning_effort_sentence_label(plan_effort)
                 ),
-                None => "built-in Plan default (no reasoning)".to_string(),
+                None => "الافتراضي المدمج لوضع التخطيط (بلا تفكير)".to_string(),
             }
         } else {
-            "built-in Plan default".to_string()
+            "الافتراضي المدمج لوضع التخطيط".to_string()
         };
         let all_modes_description = format!(
-            "Set the global default reasoning level and Plan mode override, replacing the current {plan_reasoning_source}"
+            "اضبط مستوى التفكير الافتراضي العام وتخصيص وضع التخطيط، بدلاً من {plan_reasoning_source}"
         );
-        let subtitle = format!("Choose where to apply {reasoning_phrase}.");
+        let subtitle = format!("اختر أين يُطبَّق {reasoning_phrase}.");
         let warning = effort
             .as_ref()
             .and_then(|effort| self.ultra_reasoning_concurrency_warning(effort));
@@ -534,7 +535,7 @@ impl ChatWidget {
         };
         let warning_text = warn_effort.as_ref().map(|effort| {
             let effort_label = Self::reasoning_effort_label(effort);
-            format!("⚠ {effort_label} reasoning effort can quickly consume Plus plan rate limits")
+            format!("⚠ مستوى التفكير {effort_label} قد يستهلك حدود اشتراك Plus بسرعة")
         });
         let warn_for_model = preset.model.starts_with("gpt-5.1-codex")
             || preset.model.starts_with("gpt-5.1-codex-max")
@@ -661,7 +662,7 @@ impl ChatWidget {
                 }));
             })];
             items.push(SelectionItem {
-                name: "More reasoning…".to_string(),
+                name: "تفكير أكثر…".to_string(),
                 description: Some(format!("{advanced_label} {verb} usage limits faster")),
                 is_current: is_current_model
                     && highlight_choice
@@ -674,7 +675,7 @@ impl ChatWidget {
         }
 
         let header = Paragraph::new(Line::from(
-            format!("Select Reasoning Level for {model_label}").bold(),
+            format!("اختر مستوى التفكير لـ {model_label}").bold(),
         ))
         .wrap(Wrap { trim: false });
 
@@ -714,10 +715,10 @@ impl ChatWidget {
         for effort in choices {
             let description = match &effort {
                 ReasoningEffortConfig::Max => {
-                    "For difficult problems when quality matters more than speed · higher usage"
+                    "للمسائل الصعبة حين تهم الجودة أكثر من السرعة · استهلاك أعلى"
                 }
                 ReasoningEffortConfig::Ultra => {
-                    "For demanding work using multiple agents · highest usage"
+                    "للأعمال المتطلّبة باستخدام عدة وكلاء · أعلى استهلاك"
                 }
                 _ => unreachable!("advanced choices are limited to Max and Ultra"),
             };
@@ -742,8 +743,8 @@ impl ChatWidget {
         }
 
         let header = Paragraph::new(vec![
-            Line::from("Advanced Reasoning".bold()),
-            Line::from("⚠ Consumes usage limits faster".cyan()),
+            Line::from("تفكير متقدم".bold()),
+            Line::from("⚠ يستهلك حدود الاستخدام أسرع".cyan()),
         ])
         .wrap(Wrap { trim: false });
         self.bottom_pane.show_selection_view(SelectionViewParams {

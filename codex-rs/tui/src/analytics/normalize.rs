@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Converts backend reports into display data while preserving missing values and full denominators.
 
 use super::models::AccountAnalyticsGrouping as Grouping;
@@ -351,7 +352,7 @@ pub(super) fn label(key: &str) -> &str {
         "start-automation_heartbeat_run_now" => "Follow-ups run now",
         "start-app_tool_create_thread" => "Agent-created tasks",
         "start-app_tool_send_message" => "Agent follow-ups",
-        "unknown" | "start-unknown" => "Unknown",
+        "unknown" | "start-unknown" => "غير معروف",
         "fast" => "Fast",
         "standard" => "Standard",
         "other" | "start-other" => "Other",

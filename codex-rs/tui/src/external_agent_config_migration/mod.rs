@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crate::diff_render::display_path_for;
 use crate::tui::FrameRequester;
 use crate::tui::Tui;
@@ -48,7 +49,7 @@ impl ActionMenuOption {
         match self {
             Self::Proceed => "Import selected",
             Self::Customize => "Customize selection",
-            Self::Skip => "Cancel",
+            Self::Skip => "إلغاء",
             Self::Back => "Review selection",
         }
     }

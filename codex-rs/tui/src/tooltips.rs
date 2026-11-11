@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crate::keymap::RuntimeKeymap;
 use crate::keymap::keymap_action_id;
 use crate::terminal_hyperlinks::HyperlinkLine;
@@ -19,7 +20,7 @@ const ANNOUNCEMENT_TIP_URL: &str =
 const IS_MACOS: bool = cfg!(target_os = "macos");
 const IS_WINDOWS: bool = cfg!(target_os = "windows");
 
-const WINDOWS_APP_TOOLTIP: &str = "Use the **desktop app**. Install it from https://chatgpt.com/codex?app-landing-page=true and run `codex app`.";
+const WINDOWS_APP_TOOLTIP: &str = "جرّب **تطبيق سطح المكتب**. ثبّته من https://chatgpt.com/codex?app-landing-page=true ثم شغّل `codex app`.";
 const MACOS_APP_TOOLTIP: &str =
     "Use the **desktop app**. Run `codex app` to open it. It installs automatically if needed.";
 const LINUX_APP_TOOLTIP: &str = "Use the **desktop app**. Install it from https://learn.chatgpt.com/docs/linux/linux-app and run `chatgpt`.";
@@ -119,7 +120,7 @@ fn pick_tooltip<R: Rng + ?Sized>(rng: &mut R, keymap: &TuiKeymap) -> Option<Stri
 /// Render shared tip styling and links, retaining visible URLs when the terminal needs them.
 pub(crate) fn render_tooltip_lines(tip: &str, width: usize, cwd: &Path) -> Vec<HyperlinkLine> {
     crate::markdown_render::render_streaming_markdown_lines_with_width_and_cwd(
-        &format!("**Tip:** {tip}"),
+        &format!("**تلميح:** {tip}"),
         Some(width),
         Some(cwd),
         &crate::markdown_render::hide_web_link_destination,

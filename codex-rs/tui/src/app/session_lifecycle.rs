@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Session, resume, fork, and subagent selection lifecycle for the TUI app.
 //!
 //! This module owns the high-level transitions between app-server threads: starting fresh sessions,
@@ -1676,7 +1677,7 @@ impl App {
         } = prepared;
         if backend_id != app_server.backend_id() {
             self.add_session_picker_error(
-                "This session belongs to a different backend. Open the session picker again."
+                "هذه الجلسة تتبع خادماً مختلفاً. افتح منتقي الجلسات مجدداً."
                     .to_string(),
             );
             return Ok(AppRunControl::Continue);

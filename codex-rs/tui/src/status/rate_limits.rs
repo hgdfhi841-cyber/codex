@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Rate-limit and credits display shaping for status surfaces.
 //!
 //! This module maps `RateLimitSnapshot` protocol payloads into display-oriented rows that the TUI
@@ -276,7 +277,7 @@ pub(crate) fn compose_rate_limit_data_many(
 
         if show_limit_prefix && !combine_non_codex_single_limit {
             rows.push(StatusRateLimitRow {
-                label: format!("{limit_bucket_label} limit"),
+                label: format!("حد {limit_bucket_label}"),
                 value: StatusRateLimitValue::Text(String::new()),
             });
         }
@@ -340,12 +341,12 @@ pub(crate) fn compose_rate_limit_data_many(
         }
         if let Some(individual_limit) = snapshot.individual_limit.as_ref() {
             rows.push(StatusRateLimitRow {
-                label: "Monthly credit limit".to_string(),
+                label: "حد الرصيد الشهري".to_string(),
                 value: StatusRateLimitValue::Window {
                     percent_used: 100.0 - individual_limit.percent_remaining,
                     resets_at: individual_limit.resets_at.clone(),
                     details: Some(format!(
-                        "{} of {} credits used",
+                        "استُخدم {} من {} رصيداً",
                         individual_limit.used, individual_limit.limit
                     )),
                 },
@@ -385,7 +386,7 @@ pub(crate) fn render_limit_progress_bar(percent_remaining: f64, segments: usize)
 
 /// Formats a compact textual summary from remaining percentage.
 pub(crate) fn format_status_limit_summary(percent_remaining: f64) -> String {
-    format!("{percent_remaining:.0}% left")
+    format!("متبقٍ {percent_remaining:.0}%")
 }
 
 /// Builds a single `StatusRateLimitRow` when workspace credits are available.
@@ -395,7 +396,7 @@ fn credit_status_row(credits: &CreditsSnapshotDisplay) -> Option<StatusRateLimit
     if credits.unlimited {
         return Some(StatusRateLimitRow {
             label: "Credits".to_string(),
-            value: StatusRateLimitValue::Text("Unlimited".to_string()),
+            value: StatusRateLimitValue::Text("غير محدود".to_string()),
         });
     }
     if !credits.has_credits {
@@ -407,7 +408,7 @@ fn credit_status_row(credits: &CreditsSnapshotDisplay) -> Option<StatusRateLimit
         .and_then(format_credit_balance)
         .map_or_else(
             || "Available".to_string(),
-            |display_balance| format!("{display_balance} credits"),
+            |display_balance| format!("{display_balance} رصيد"),
         );
     Some(StatusRateLimitRow {
         label: "Credits".to_string(),

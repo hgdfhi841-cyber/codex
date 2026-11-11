@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 // This is derived from `ratatui::Terminal`, which is licensed under the following terms:
 //
 // The MIT License (MIT)
@@ -1190,7 +1191,7 @@ mod tests {
                         Line::from(vec![
                             "›".bold(),
                             " ".into(),
-                            "Ask Codex to do anything".dim(),
+                            "اطلب من Codex أي شيء".dim(),
                         ]),
                     ])
                     .render(frame.area(), frame.buffer_mut());

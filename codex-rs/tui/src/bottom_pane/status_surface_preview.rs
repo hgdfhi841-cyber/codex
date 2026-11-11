@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use std::collections::BTreeMap;
 
 use super::footer_content::FooterContent;
@@ -53,7 +54,7 @@ impl StatusSurfacePreviewItem {
             StatusSurfacePreviewItem::ProjectRoot => "my-project",
             StatusSurfacePreviewItem::CurrentDir => "~/my-project/subdir",
             StatusSurfacePreviewItem::Hostname => "my-host",
-            StatusSurfacePreviewItem::Status => "Working",
+            StatusSurfacePreviewItem::Status => "جارٍ العمل",
             StatusSurfacePreviewItem::ThreadName => "thread name",
             StatusSurfacePreviewItem::ThreadTitle => "thread title",
             StatusSurfacePreviewItem::GitBranch => "feat/awesome-feature",

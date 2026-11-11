@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Named permission choices in the shared picker, using the server catalog and existing actions.
 
 use super::*;
@@ -7,12 +8,12 @@ use codex_protocol::models::BUILT_IN_PERMISSION_PROFILE_WORKSPACE;
 
 pub(super) fn permission_preset_description(preset: &ApprovalPreset) -> &'static str {
     match preset.id {
-        "read-only" => "Read workspace files, with approval required for edits or internet access",
+        "read-only" => "قراءة ملفات مساحة العمل، مع طلب الموافقة على التعديلات أو الوصول إلى الإنترنت",
         "auto" => {
-            "Read and edit workspace files and run commands, with approval required for internet access or edits outside the workspace"
+            "قراءة ملفات مساحة العمل وتعديلها وتشغيل الأوامر، مع طلب الموافقة على الوصول إلى الإنترنت أو التعديل خارج مساحة العمل"
         }
         "full-access" => {
-            "Use with caution: Codex can edit files outside this workspace and access the internet without approval"
+            "استخدمه بحذر: يستطيع Codex تعديل ملفات خارج مساحة العمل والوصول إلى الإنترنت دون موافقة"
         }
         _ => preset.description,
     }
@@ -60,7 +61,7 @@ impl ChatWidget {
         let reviewer = match profile_id {
             ":approve-for-me" if !self.config.features.enabled(Feature::GuardianApproval) => {
                 self.add_error_message(
-                    "Approve for me is unavailable. Run `/permissions` to see available profiles."
+                    "خيار وافق عني غير متاح. شغّل `/permissions` لعرض الملفات المتاحة."
                         .into(),
                 );
                 return false;
@@ -78,7 +79,7 @@ impl ChatWidget {
             .find(|profile| profile.id == profile_id)
         else {
             self.add_error_message(format!(
-                "Unknown permission profile `{profile_id}`. Run `/permissions` to see available profiles."
+                "ملف صلاحيات غير معروف `{profile_id}`. شغّل `/permissions` لعرض الملفات المتاحة."
             ));
             return false;
         };
@@ -95,7 +96,7 @@ impl ChatWidget {
             && !self.config.features.enabled(Feature::GuardianApproval)
         {
             self.add_error_message(
-                "Approve for me is unavailable. Run `/permissions` to see available profiles."
+                "خيار وافق عني غير متاح. شغّل `/permissions` لعرض الملفات المتاحة."
                     .into(),
             );
             return false;
@@ -106,7 +107,7 @@ impl ChatWidget {
             approvals_reviewer.map(Into::into),
         ) {
             self.add_error_message(format!(
-                "Permission profile `{profile_id}` is unavailable: {reason}."
+                "ملف الصلاحيات `{profile_id}` غير متاح: {reason}."
             ));
             return false;
         }
@@ -216,7 +217,7 @@ impl ChatWidget {
                         profile
                             .description
                             .as_deref()
-                            .unwrap_or("Configured permission profile"),
+                            .unwrap_or("ملف الصلاحيات المضبوط"),
                         active_profile_id.as_deref(),
                         discovery.disabled_reason(
                             &profile.id,
@@ -237,19 +238,19 @@ impl ChatWidget {
             items.push(Self::permission_profile_selection_item(
                 id,
                 id,
-                "Current permission profile",
+                "ملف الصلاحيات الحالي",
                 Some(id),
-                Some("Not available on this server".to_string()),
+                Some("غير متاح على هذا الخادم".to_string()),
             ));
         }
         self.bottom_pane.show_selection_view(SelectionViewParams {
             view_id: Some(super::permission_discovery::VIEW_ID),
             items,
-            title: Some("Update Model Permissions".to_string()),
+            title: Some("تحديث صلاحيات النموذج".to_string()),
             subtitle: discovery
                 .profiles
                 .is_empty()
-                .then(|| "No permission profiles returned by the server.".to_string()),
+                .then(|| "لم يُرجع الخادم أي ملفات صلاحيات.".to_string()),
             ..SelectionViewParams::picker()
         });
     }

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Session headers, onboarding guidance, and transcript cards.
 
 use super::*;
@@ -46,6 +47,8 @@ pub(crate) fn codex_title(version: &str) -> Vec<Span<'static>> {
         ">_ ".fg(accent_color()),
         "OpenAI Codex".bold(),
         format!(" (v{version})").dim(),
+        // codex-ar: make it obvious this build is not an official OpenAI release.
+        " · نسخة عربية غير رسمية".dim(),
     ]
 }
 
@@ -85,7 +88,7 @@ impl HistoryCell for TooltipHistoryCell {
     }
 
     fn raw_lines(&self) -> Vec<Line<'static>> {
-        vec![Line::from(format!("Tip: {}", self.tip))]
+        vec![Line::from(format!("تلميح: {}", self.tip))]
     }
 }
 
@@ -216,34 +219,34 @@ pub(crate) fn new_session_info(
     if is_first_event && local_settings.tui.show_tooltips {
         // Help lines below the header (new copy and list)
         let help_lines: Vec<Line<'static>> = vec![
-            "  To get started, describe a task or try one of these commands:"
+            "  للبدء، صف مهمة أو جرّب أحد هذه الأوامر:"
                 .dim()
                 .into(),
             Line::from(""),
             Line::from(vec![
                 "  ".into(),
                 "/init".into(),
-                " - create an AGENTS.md file with instructions for Codex".dim(),
+                " - إنشاء ملف AGENTS.md يحوي تعليمات لـ Codex".dim(),
             ]),
             Line::from(vec![
                 "  ".into(),
                 "/status".into(),
-                " - show current session configuration".dim(),
+                " - عرض إعدادات الجلسة الحالية".dim(),
             ]),
             Line::from(vec![
                 "  ".into(),
                 "/permissions".into(),
-                " - choose what Codex is allowed to do".dim(),
+                " - تحديد ما يُسمح لـ Codex بفعله".dim(),
             ]),
             Line::from(vec![
                 "  ".into(),
                 "/model".into(),
-                " - choose what model and reasoning effort to use".dim(),
+                " - اختيار النموذج ومستوى التفكير".dim(),
             ]),
             Line::from(vec![
                 "  ".into(),
                 "/review".into(),
-                " - review any changes and find issues".dim(),
+                " - مراجعة أي تغييرات والبحث عن المشاكل".dim(),
             ]),
         ];
 
@@ -258,8 +261,8 @@ pub(crate) fn new_session_info(
         }
         if requested_model != session.model.as_str() {
             let lines = vec![
-                "model changed:".magenta().bold().into(),
-                format!("requested: {requested_model}").into(),
+                "تغيّر النموذج:".magenta().bold().into(),
+                format!("المطلوب: {requested_model}").into(),
                 format!("used: {}", session.model).into(),
             ];
             parts.push(Box::new(PlainHistoryCell { lines }));
@@ -394,8 +397,8 @@ impl HistoryCell for SessionHeaderHistoryCell {
         ];
         if self.yolo_mode {
             lines.push(Line::from(vec![
-                "  permissions: ".dim(),
-                "YOLO mode".magenta().bold(),
+                "  الصلاحيات: ".dim(),
+                "وضع YOLO".magenta().bold(),
             ]));
         }
         lines
@@ -420,7 +423,7 @@ impl HistoryCell for SessionHeaderHistoryCell {
             )),
         ];
         if self.yolo_mode {
-            lines.push(Line::from("permissions: YOLO mode"));
+            lines.push(Line::from("الصلاحيات: وضع YOLO"));
         }
         lines
     }

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Command previews and full transcripts, retaining logical text through display wrapping.
 
 use std::time::Instant;
@@ -88,9 +89,9 @@ fn format_unified_exec_interaction(command: &[String], input: Option<&str>) -> S
     match input {
         Some(data) if !data.is_empty() => {
             let preview = summarize_interaction_input(data);
-            format!("Interacted with `{command_display}`, sent `{preview}`")
+            format!("تفاعل مع `{command_display}` وأرسل `{preview}`")
         }
-        _ => format!("Waited for `{command_display}`"),
+        _ => format!("انتظر `{command_display}`"),
     }
 }
 
@@ -255,9 +256,9 @@ impl HistoryCell for ExecCell {
                 && let Some(header) = lines.first_mut()
             {
                 let exit_label = if nonzero_exits == 1 {
-                    "nonzero exit"
+                    "خروج بخطأ"
                 } else {
-                    "nonzero exits"
+                    "خروج بخطأ"
                 };
                 header
                     .line
@@ -298,7 +299,7 @@ impl HistoryCell for ExecCell {
             .map(|call| {
                 let active = call.duration.is_none();
                 let (running, finished, target) = match call.parsed.as_slice() {
-                    [ParsedCommand::Read { name, .. }] => ("Reading", "Read", name.clone()),
+                    [ParsedCommand::Read { name, .. }] => ("جارٍ قراءة", "قراءة", name.clone()),
                     [
                         ParsedCommand::Search {
                             query: Some(query),
@@ -310,19 +311,19 @@ impl HistoryCell for ExecCell {
                             Some(path) => format!("{query} in {path}"),
                             None => query.clone(),
                         };
-                        ("Searching for", "Searched for", target)
+                        ("جارٍ البحث عن", "بحث عن", target)
                     }
                     [
                         ParsedCommand::Search {
                             path: Some(path), ..
                         },
-                    ] => ("Searching files in", "Searched files in", path.clone()),
+                    ] => ("جارٍ البحث في ملفات", "بحث في ملفات", path.clone()),
                     [ParsedCommand::ListFiles { path, .. }] => (
-                        "Listing files in",
-                        "Listed files in",
+                        "جارٍ عرض ملفات",
+                        "عرض ملفات",
                         path.as_deref().unwrap_or(".").to_owned(),
                     ),
-                    _ => ("Running", "Ran", strip_bash_lc_and_escape(&call.command)),
+                    _ => ("جارٍ التشغيل", "شغّل", strip_bash_lc_and_escape(&call.command)),
                 };
                 let verb = if active { running } else { finished };
                 let mut label = format!("{verb} {target}");
@@ -370,9 +371,9 @@ impl ExecCell {
                 },
                 " ".into(),
                 if self.is_active() {
-                    "Exploring".bold()
+                    "جارٍ الاستكشاف".bold()
                 } else {
-                    "Explored".bold()
+                    "استكشف".bold()
                 },
             ])
             .into(),
@@ -419,7 +420,7 @@ impl ExecCell {
                     })
                     .unique();
                 vec![(
-                    "Read",
+                    "قراءة",
                     Itertools::intersperse(names.into_iter().map(Into::into), ", ".dim()).collect(),
                 )]
             } else {
@@ -427,10 +428,10 @@ impl ExecCell {
                 for parsed in &call.parsed {
                     match parsed {
                         ParsedCommand::Read { name, .. } => {
-                            lines.push(("Read", vec![name.clone().into()]));
+                            lines.push(("قراءة", vec![name.clone().into()]));
                         }
                         ParsedCommand::ListFiles { cmd, path } => {
-                            lines.push(("List", vec![path.clone().unwrap_or(cmd.clone()).into()]));
+                            lines.push(("عرض", vec![path.clone().unwrap_or(cmd.clone()).into()]));
                         }
                         ParsedCommand::Search { cmd, query, path } => {
                             let spans = match (query, path) {
@@ -440,10 +441,10 @@ impl ExecCell {
                                 (Some(q), None) => vec![q.clone().into()],
                                 _ => vec![cmd.clone().into()],
                             };
-                            lines.push(("Search", spans));
+                            lines.push(("بحث", spans));
                         }
                         ParsedCommand::Unknown { cmd } => {
-                            lines.push(("Run", vec![cmd.clone().into()]));
+                            lines.push(("تشغيل", vec![cmd.clone().into()]));
                         }
                     }
                 }
@@ -457,9 +458,9 @@ impl ExecCell {
                 {
                     // A compound command has one exit code, not an outcome for each parsed action.
                     let status = if call.parsed.len() > 1 {
-                        format!(" (command exit {code})")
+                        format!(" (رمز خروج الأمر {code})")
                     } else {
-                        format!(" (exit {code})")
+                        format!(" (رمز الخروج {code})")
                     };
                     // Search exit 1 can mean no matches; report the code without calling it a failure.
                     line.push(
@@ -517,11 +518,11 @@ impl ExecCell {
         let title = if is_interaction {
             ""
         } else if self.is_active() {
-            "Running"
+            "جارٍ التشغيل"
         } else if call.is_user_shell_command() {
-            "You ran"
+            "شغّلتَ"
         } else {
-            "Ran"
+            "شغّل"
         };
 
         let header_line = if is_interaction {
@@ -605,7 +606,7 @@ impl ExecCell {
             if !call.is_user_shell_command() {
                 let preview = output_preview_lines(output, layout.output_block.wrap_width(width));
                 let preview = if preview.is_empty() && !call.is_unified_exec_interaction() {
-                    vec![Line::from("(no output)".dim()).into()]
+                    vec![Line::from("(لا مخرجات)".dim()).into()]
                 } else {
                     preview
                 };
@@ -635,7 +636,7 @@ impl ExecCell {
             if raw_output.lines.is_empty() {
                 if !call.is_unified_exec_interaction() {
                     lines.extend(prefix_hyperlink_lines(
-                        vec![Line::from("(no output)".dim()).into()],
+                        vec![Line::from("(لا مخرجات)".dim()).into()],
                         Span::from(layout.output_block.initial_prefix).dim(),
                         Span::from(layout.output_block.subsequent_prefix),
                     ));

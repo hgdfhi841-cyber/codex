@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Helpers for rendering and navigating multi-agent state in the TUI.
 //!
 //! This module owns the shared presentation contracts for multi-agent history rows, `/subagents`
@@ -639,7 +640,7 @@ fn status_summary_spans(status: &CollabAgentState) -> Vec<Span<'static>> {
         CollabAgentStatus::Running => vec![Span::from("Running").fg(accent_color()).bold()],
         // Allow `.yellow()`
         #[allow(clippy::disallowed_methods)]
-        CollabAgentStatus::Interrupted => vec![Span::from("Interrupted").yellow()],
+        CollabAgentStatus::Interrupted => vec![Span::from("أُوقف").yellow()],
         CollabAgentStatus::Completed => {
             let mut spans = vec![Span::from("Completed").green()];
             if let Some(message) = status.message.as_ref() {

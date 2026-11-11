@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Render import choices with shared picker focus while preserving import state.
 
 use super::*;
@@ -190,7 +191,7 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
                 key_hint::plain(KeyCode::Down).into(),
                 " to move, ".dim(),
                 "b".fg(crate::style::accent_color()),
-                " to go back".dim(),
+                " للرجوع".dim(),
             ]),
             MigrationView::Customize => Line::from(vec![
                 "Use ".dim(),
@@ -201,7 +202,7 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
                 key_hint::plain(KeyCode::Char(' ')).into(),
                 " to toggle, ".dim(),
                 "b".fg(crate::style::accent_color()),
-                " to go back".dim(),
+                " للرجوع".dim(),
             ]),
         };
         footer.render(footer_area, buf);

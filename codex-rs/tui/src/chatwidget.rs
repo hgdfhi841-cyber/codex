@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! The main Codex TUI chat surface.
 //!
 //! `ChatWidget` consumes protocol events, builds and updates history cells, and drives rendering
@@ -170,18 +171,18 @@ use tracing::debug;
 use tracing::warn;
 
 const DEFAULT_MODEL_DISPLAY_NAME: &str = "loading";
-const TRUSTED_ACCESS_FOR_CYBER_VERIFICATION_WARNING: &str = "Your conversations have multiple flags for possible cybersecurity risk. Responses may take longer because extra safety checks are on. To get authorized for security work, join the Trusted Access for Cyber program: https://chatgpt.com/cyber";
-const MEMORIES_ENABLE_NOTICE: &str = "Memories will be enabled in the next session.";
+const TRUSTED_ACCESS_FOR_CYBER_VERIFICATION_WARNING: &str = "رُصدت في محادثاتك عدة إشارات لمخاطر أمن سيبراني محتملة. قد تتأخر الردود لأن فحوص أمان إضافية مفعّلة. للحصول على تصريح بالعمل الأمني انضم إلى برنامج Trusted Access for Cyber: https://chatgpt.com/cyber";
+const MEMORIES_ENABLE_NOTICE: &str = "ستُفعَّل الذكريات في الجلسة القادمة.";
 const MEMORIES_DOC_URL: &str = "https://developers.openai.com/codex/memories";
-const PLAN_MODE_REASONING_SCOPE_TITLE: &str = "Apply reasoning change";
-const PLAN_MODE_REASONING_SCOPE_PLAN_ONLY: &str = "Apply to Plan mode override";
-const PLAN_MODE_REASONING_SCOPE_ALL_MODES: &str = "Apply to global default and Plan mode override";
+const PLAN_MODE_REASONING_SCOPE_TITLE: &str = "تطبيق تغيير مستوى التفكير";
+const PLAN_MODE_REASONING_SCOPE_PLAN_ONLY: &str = "التطبيق على تخصيص وضع التخطيط";
+const PLAN_MODE_REASONING_SCOPE_ALL_MODES: &str = "التطبيق على الافتراضي العام وتخصيص وضع التخطيط";
 const CONNECTORS_SELECTION_VIEW_ID: &str = "connectors-selection";
 const PET_SELECTION_LOADING_VIEW_ID: &str = "pet-selection-loading";
 const AMBIENT_PET_WRAP_GAP_COLUMNS: u16 = 2;
-const TUI_STUB_MESSAGE: &str = "Not available in TUI yet.";
+const TUI_STUB_MESSAGE: &str = "غير متاح في الواجهة الطرفية بعد.";
 const PARENT_OWNED_INPUT_MESSAGE: &str =
-    "This sub-agent is controlled by its parent. Direct input is disabled.";
+    "هذا الوكيل الفرعي يتحكم به الوكيل الأب. الإدخال المباشر معطّل.";
 
 fn normalize_thread_name(name: &str) -> Option<String> {
     let trimmed = name.trim();
@@ -467,11 +468,11 @@ use codex_utils_approval_presets::builtin_approval_presets;
 use strum::IntoEnumIterator;
 use unicode_segmentation::UnicodeSegmentation;
 
-const USER_SHELL_COMMAND_HELP_TITLE: &str = "Prefix a command with ! to run it locally";
-const USER_SHELL_COMMAND_HELP_HINT: &str = "Example: !ls";
-const ASK_FOR_APPROVAL_LABEL: &str = "Ask for approval";
-const APPROVE_FOR_ME_LABEL: &str = "Approve for me";
-const AUTO_REVIEW_DESCRIPTION: &str = "Only ask for actions detected as potentially unsafe";
+const USER_SHELL_COMMAND_HELP_TITLE: &str = "ابدأ الأمر بـ ! لتشغيله محلياً";
+const USER_SHELL_COMMAND_HELP_HINT: &str = "مثال: !ls";
+const ASK_FOR_APPROVAL_LABEL: &str = "اطلب موافقتي";
+const APPROVE_FOR_ME_LABEL: &str = "وافق عني";
+const AUTO_REVIEW_DESCRIPTION: &str = "اسألني فقط عن الإجراءات التي يُحتمل أنها غير آمنة";
 const DEFAULT_OPENAI_BASE_URL: &str = "https://api.openai.com/v1";
 const DEFAULT_STATUS_LINE_ITEMS: [&str; 3] = ["model-with-reasoning", "current-dir", "thread-name"];
 
@@ -998,9 +999,9 @@ impl ChatWidget {
     pub(crate) fn open_feedback(&mut self, mode: crate::ThreadParamsMode) {
         use crate::ThreadParamsMode;
         let unavailable = match mode {
-            ThreadParamsMode::Cloud => "Feedback is unavailable in Cloud threads.",
+            ThreadParamsMode::Cloud => "الملاحظات غير متاحة في محادثات السحابة.",
             ThreadParamsMode::Remote if !self.config.feedback_enabled => {
-                "Feedback uploads are disabled, and saving a ZIP requires a local app server."
+                "رفع الملاحظات معطّل، وحفظ ملف ZIP يتطلب خادم تطبيق محلياً."
             }
             _ => {
                 return self.show_selection_view(crate::bottom_pane::feedback_selection_params(
@@ -1101,20 +1102,20 @@ impl ChatWidget {
             _ => return,
         };
         self.bottom_pane.show_selection_view(SelectionViewParams {
-            title: Some(format!("Enable {name}?")),
-            subtitle: Some(format!("{label} are disabled in this TUI session.")),
+            title: Some(format!("تفعيل {name}؟")),
+            subtitle: Some(format!("{label}: معطّلة في جلسة الواجهة هذه.")),
             footer_note: (feature == Feature::MemoryTool).then(|| {
                 Line::from(vec![
-                    "Learn more: ".dim(),
+                    "اعرف المزيد: ".dim(),
                     MEMORIES_DOC_URL.cyan().underlined(),
                 ])
             }),
             footer_hint: Some(standard_popup_hint_line()),
             items: vec![
                 SelectionItem {
-                    name: "Yes, enable".to_string(),
+                    name: "نعم، فعّل".to_string(),
                     description: Some(
-                        "Save on the server for new threads without changing this thread"
+                        "احفظ على الخادم للمحادثات الجديدة دون تغيير هذه المحادثة"
                             .to_string(),
                     ),
                     actions: vec![Box::new(move |tx| {
@@ -1124,8 +1125,8 @@ impl ChatWidget {
                     ..Default::default()
                 },
                 SelectionItem {
-                    name: "Not now".to_string(),
-                    description: Some(format!("Keep {name} disabled")),
+                    name: "ليس الآن".to_string(),
+                    description: Some(format!("إبقاء {name} معطّلاً")),
                     dismiss_on_select: true,
                     ..Default::default()
                 },
@@ -1331,7 +1332,7 @@ impl ChatWidget {
         if !from_replay {
             self.bottom_pane.ensure_status_indicator();
         }
-        let banner = format!(">> Code review started: {hint} <<");
+        let banner = format!(">> بدأت مراجعة الكود: {hint} <<");
         self.add_to_history(history_cell::new_review_status_line(banner));
         self.request_redraw();
     }
@@ -1343,7 +1344,7 @@ impl ChatWidget {
         self.review.is_review_mode = false;
         self.restore_pre_review_token_info();
         self.add_to_history(history_cell::new_review_status_line(
-            "<< Code review finished >>".to_string(),
+            "<< انتهت مراجعة الكود >>".to_string(),
         ));
         self.request_redraw();
     }
@@ -1548,7 +1549,7 @@ impl ChatWidget {
         self.submit_op(AppCommand::clean_background_terminals());
         self.clear_background_terminals();
         self.add_info_message(
-            "Stopping all background terminals.".to_string(),
+            "جارٍ إيقاف كل طرفيات الخلفية.".to_string(),
             /*hint*/ None,
         );
     }
@@ -1728,9 +1729,9 @@ impl ChatWidget {
 
     pub(crate) fn raw_output_mode_notice(enabled: bool) -> &'static str {
         if enabled {
-            "Raw output mode on: transcript text is shown for clean terminal selection."
+            "وضع العرض الخام مفعّل: يظهر نص المحادثة خاماً لتسهيل التحديد."
         } else {
-            "Raw output mode off: rich transcript rendering restored."
+            "وضع العرض الخام متوقف: عاد العرض المنسّق للمحادثة."
         }
     }
 
@@ -1810,9 +1811,9 @@ impl ChatWidget {
     pub(crate) fn toggle_vim_mode_and_notify(&mut self) {
         let enabled = self.bottom_pane.toggle_vim_enabled();
         let message = if enabled {
-            "Vim mode enabled."
+            "تم تفعيل وضع Vim."
         } else {
-            "Vim mode disabled."
+            "تم تعطيل وضع Vim."
         };
         self.add_info_message(message.to_string(), /*hint*/ None);
     }
@@ -1910,7 +1911,7 @@ impl ChatWidget {
             )
         {
             self.add_error_message(if self.external_writer_view {
-                "This thread is open elsewhere. Close it there and retry resume to continue."
+                "هذه المحادثة مفتوحة في مكان آخر. أغلقها هناك ثم أعد الاستئناف للمتابعة."
                     .to_string()
             } else {
                 PARENT_OWNED_INPUT_MESSAGE.to_string()
@@ -2152,8 +2153,8 @@ impl Drop for ChatWidget {
     }
 }
 
-const PLACEHOLDER: &str = "Ask Codex to do anything";
-const SIDE_PLACEHOLDER: &str = "Ask a follow-up question";
+const PLACEHOLDER: &str = "اطلب من Codex أي شيء";
+const SIDE_PLACEHOLDER: &str = "اسأل سؤال متابعة";
 
 // Extract the first bold (Markdown) element in the form **...** from `s`.
 // Returns the inner text if found; otherwise `None`.

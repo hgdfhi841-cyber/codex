@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Command Center grouping, including restoration and client-local preference persistence.
 //! Directory is view-local so selecting it never writes a value that older clients reject.
 
@@ -44,7 +45,7 @@ pub(super) fn model_name(thread: &Thread) -> &str {
         .model
         .as_deref()
         .filter(|model| !model.is_empty())
-        .unwrap_or("Unknown")
+        .unwrap_or("غير معروف")
 }
 
 impl AgentsOverviewView {

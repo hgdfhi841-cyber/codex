@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Bounded permission catalog discovery with distinct IDs for concurrent requests.
 //! Discovery and availability come from the connected server; selection uses its settings API.
 
@@ -60,7 +61,7 @@ impl PermissionDiscovery {
         reviewer: Option<ApprovalsReviewer>,
     ) -> Option<String> {
         let Some(profile) = self.profiles.iter().find(|profile| profile.id == id) else {
-            return Some("Not available on this server".to_string());
+            return Some("غير متاح على هذا الخادم".to_string());
         };
         let requirements = self.requirements.as_ref();
         if !profile.allowed

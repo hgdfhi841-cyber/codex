@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Compact web activity summaries with complete details in the transcript and raw output.
 
 use super::*;
@@ -18,7 +19,7 @@ fn web_search_action_detail(action: &WebSearchAction) -> String {
             pattern.as_deref().filter(|pattern| !pattern.is_empty()),
             url.as_deref().filter(|url| !url.is_empty()),
         ) {
-            (Some(pattern), Some(url)) => format!("'{pattern}' in {url}"),
+            (Some(pattern), Some(url)) => format!("'{pattern}' في {url}"),
             (Some(pattern), None) => format!("'{pattern}'"),
             (None, Some(url)) => url.to_string(),
             (None, None) => String::new(),
@@ -85,10 +86,10 @@ impl WebSearchCell {
         let (header, separator) = match (&self.action, self.completed) {
             (Some(WebSearchAction::OpenPage { .. }), completed) => (
                 match (completed, detail.is_empty()) {
-                    (true, true) => "Opened page",
-                    (true, false) => "Opened",
-                    (false, true) => "Opening page",
-                    (false, false) => "Opening",
+                    (true, true) => "فتح الصفحة",
+                    (true, false) => "فتح",
+                    (false, true) => "جارٍ فتح الصفحة",
+                    (false, false) => "جارٍ الفتح",
                 },
                 " ",
             ),
@@ -96,24 +97,24 @@ impl WebSearchCell {
                 let has_pattern = pattern.as_ref().is_some_and(|pattern| !pattern.is_empty());
                 (
                     match (completed, has_pattern) {
-                        (true, true) => "Searched for",
-                        (true, false) => "Searched page",
-                        (false, true) => "Searching for",
-                        (false, false) => "Searching page",
+                        (true, true) => "بحث عن",
+                        (true, false) => "بحث في الصفحة",
+                        (false, true) => "جارٍ البحث عن",
+                        (false, false) => "جارٍ البحث في الصفحة",
                     },
                     " ",
                 )
             }
             (None | Some(WebSearchAction::Other), false) if detail.is_empty() => {
-                ("Browsing the web", " ")
+                ("يتصفح الويب", " ")
             }
             (Some(WebSearchAction::Search { .. } | WebSearchAction::Other) | None, completed) => (
                 if completed {
-                    "Searched the web"
+                    "بحث في الويب"
                 } else {
-                    "Searching the web"
+                    "جارٍ البحث في الويب"
                 },
-                " for ",
+                " عن ",
             ),
         };
         let mut line = Line::from(header.bold());

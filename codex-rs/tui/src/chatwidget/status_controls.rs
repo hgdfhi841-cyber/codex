@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Status output and setup controls for `ChatWidget`.
 //!
 //! Rendering details live in `status_surfaces`; this module owns the mutable
@@ -285,7 +286,7 @@ impl ChatWidget {
             ),
         ];
         if let Some(name) = self.thread_name.as_deref().filter(|name| !name.is_empty()) {
-            copy_targets.push(("Thread name".to_string(), Arc::from(name)));
+            copy_targets.push(("اسم المحادثة".to_string(), Arc::from(name)));
         }
         if let Some(thread_id) = self.thread_id {
             copy_targets.push(("Session ID".to_string(), Arc::from(thread_id.to_string())));

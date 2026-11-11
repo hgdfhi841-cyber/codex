@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! MCP tool-call, inventory, and output history cells.
 //! Tool output previews share a three-row budget across all result blocks;
 //! the expanded transcript retains the full text.
@@ -40,9 +41,9 @@ mod tests;
 
 fn mcp_auth_status_label(status: McpAuthStatus) -> &'static str {
     match status {
-        McpAuthStatus::Unknown => "Unknown",
-        McpAuthStatus::Unsupported => "Unsupported",
-        McpAuthStatus::NotLoggedIn => "Not logged in",
+        McpAuthStatus::Unknown => "غير معروف",
+        McpAuthStatus::Unsupported => "غير مدعوم",
+        McpAuthStatus::NotLoggedIn => "غير مسجّل الدخول",
         McpAuthStatus::BearerToken => "Bearer token",
         McpAuthStatus::OAuth => "OAuth",
     }
@@ -162,9 +163,9 @@ impl McpToolCallCell {
             .unwrap_or_else(|| "•".dim()),
         };
         let header_text = if status.is_some() {
-            "Called"
+            "استدعى"
         } else {
-            "Calling"
+            "جارٍ الاستدعاء"
         };
 
         let title = self
@@ -283,7 +284,7 @@ impl McpToolCallCell {
                 }
             }
             Some(Err(error)) => {
-                let text = format!("Error: {error}");
+                let text = format!("خطأ: {error}");
                 for segment in text.lines() {
                     if mode == McpToolCallRenderMode::Display {
                         preview.push_line(Line::from(segment.dim()));
@@ -358,9 +359,9 @@ impl McpToolCallCell {
 impl HistoryCell for McpToolCallCell {
     fn tool_call_labels(&self) -> Vec<String> {
         let verb = match self.success() {
-            Some(true) => "Called",
-            Some(false) => "Failed",
-            None => "Calling",
+            Some(true) => "استدعى",
+            Some(false) => "فشل",
+            None => "جارٍ الاستدعاء",
         };
         vec![format!("{verb} {}", self.compact_tool_name())]
     }
@@ -391,9 +392,9 @@ impl HistoryCell for McpToolCallCell {
 
     fn raw_lines(&self) -> Vec<Line<'static>> {
         let header_text = if self.success().is_some() {
-            "Called"
+            "استدعى"
         } else {
-            "Calling"
+            "جارٍ الاستدعاء"
         };
         let mut lines = vec![Line::from(format!(
             "{header_text} {}",
@@ -408,7 +409,7 @@ impl HistoryCell for McpToolCallCell {
                         lines.extend(raw_lines_from_source(text));
                     }
                 }
-                Err(err) => lines.push(Line::from(format!("Error: {err}"))),
+                Err(err) => lines.push(Line::from(format!("خطأ: {err}"))),
             }
         }
 
@@ -448,19 +449,19 @@ pub(crate) fn new_active_mcp_tool_call(
 }
 /// Render a summary of configured MCP servers from the current `Config`.
 pub(crate) fn empty_mcp_output() -> WebHyperlinkHistoryCell {
-    let mut docs_line = HyperlinkLine::new(Line::from("    See the "));
+    let mut docs_line = HyperlinkLine::new(Line::from("    راجع "));
     docs_line.push_span(
-        "MCP docs".underlined(),
+        "توثيق MCP".underlined(),
         Some("https://developers.openai.com/codex/mcp"),
     );
-    docs_line.push_span(" to configure them.".into(), /*destination*/ None);
+    docs_line.push_span(" لإعدادها.".into(), /*destination*/ None);
 
     let lines = vec![
         HyperlinkLine::new("/mcp".magenta().into()),
         HyperlinkLine::from(""),
-        HyperlinkLine::new(vec!["🔌  ".into(), "MCP Tools".bold()].into()),
+        HyperlinkLine::new(vec!["🔌  ".into(), "أدوات MCP".bold()].into()),
         HyperlinkLine::from(""),
-        HyperlinkLine::new("  • No MCP servers configured.".italic().into()),
+        HyperlinkLine::new("  • لا توجد خوادم MCP معدّة.".italic().into()),
         docs_line.style(Style::default().add_modifier(Modifier::DIM)),
     ];
 
@@ -479,12 +480,12 @@ pub(crate) fn new_mcp_tools_output(
     let mut lines: Vec<Line<'static>> = vec![
         "/mcp".magenta().into(),
         "".into(),
-        vec!["🔌  ".into(), "MCP Tools".bold()].into(),
+        vec!["🔌  ".into(), "أدوات MCP".bold()].into(),
         "".into(),
     ];
 
     if tools.is_empty() {
-        lines.push("  • No MCP tools available.".italic().into());
+        lines.push("  • لا توجد أدوات MCP متاحة.".italic().into());
         lines.push("".into());
     }
 
@@ -586,7 +587,7 @@ pub(crate) fn new_mcp_tools_output(
         }
 
         if names.is_empty() {
-            lines.push("    • Tools: (none)".into());
+            lines.push("    • الأدوات: (لا شيء)".into());
         } else {
             lines.push(vec!["    • Tools: ".into(), names.join(", ").into()].into());
         }
@@ -594,7 +595,7 @@ pub(crate) fn new_mcp_tools_output(
         let server_resources: Vec<Resource> =
             resources.get(server.as_str()).cloned().unwrap_or_default();
         if server_resources.is_empty() {
-            lines.push("    • Resources: (none)".into());
+            lines.push("    • الموارد: (لا شيء)".into());
         } else {
             let mut spans: Vec<Span<'static>> = vec!["    • Resources: ".into()];
 
@@ -617,9 +618,9 @@ pub(crate) fn new_mcp_tools_output(
             .cloned()
             .unwrap_or_default();
         if server_templates.is_empty() {
-            lines.push("    • Resource templates: (none)".into());
+            lines.push("    • قوالب الموارد: (لا شيء)".into());
         } else {
-            let mut spans: Vec<Span<'static>> = vec!["    • Resource templates: ".into()];
+            let mut spans: Vec<Span<'static>> = vec!["    • قوالب الموارد: ".into()];
 
             for (idx, template) in server_templates.iter().enumerate() {
                 if idx > 0 {
@@ -656,7 +657,7 @@ pub(crate) fn new_mcp_tools_output_from_statuses(
     let mut lines: Vec<Line<'static>> = vec![
         "/mcp".magenta().into(),
         "".into(),
-        vec!["🔌  ".into(), "MCP Tools".bold()].into(),
+        vec!["🔌  ".into(), "أدوات MCP".bold()].into(),
         "".into(),
     ];
 
@@ -665,7 +666,7 @@ pub(crate) fn new_mcp_tools_output_from_statuses(
 
     let has_any_tools = statuses.iter().any(|status| !status.tools.is_empty());
     if !has_any_tools && matches!(detail, McpServerStatusDetail::Full) {
-        lines.push("  • No MCP tools available.".italic().into());
+        lines.push("  • لا توجد أدوات MCP متاحة.".italic().into());
         lines.push("".into());
     }
 
@@ -730,7 +731,7 @@ pub(crate) fn new_mcp_tools_output_from_statuses(
         let mut names = status.tools.keys().cloned().collect::<Vec<_>>();
         names.sort();
         if names.is_empty() {
-            lines.push("    • Tools: (none)".into());
+            lines.push("    • الأدوات: (لا شيء)".into());
         } else {
             lines.push(vec!["    • Tools: ".into(), names.join(", ").into()].into());
         }
@@ -738,7 +739,7 @@ pub(crate) fn new_mcp_tools_output_from_statuses(
         if matches!(detail, McpServerStatusDetail::Full) {
             let server_resources = status.resources.clone();
             if server_resources.is_empty() {
-                lines.push("    • Resources: (none)".into());
+                lines.push("    • الموارد: (لا شيء)".into());
             } else {
                 let mut spans: Vec<Span<'static>> = vec!["    • Resources: ".into()];
 
@@ -758,9 +759,9 @@ pub(crate) fn new_mcp_tools_output_from_statuses(
 
             let server_templates = status.resource_templates.clone();
             if server_templates.is_empty() {
-                lines.push("    • Resource templates: (none)".into());
+                lines.push("    • قوالب الموارد: (لا شيء)".into());
             } else {
-                let mut spans: Vec<Span<'static>> = vec!["    • Resource templates: ".into()];
+                let mut spans: Vec<Span<'static>> = vec!["    • قوالب الموارد: ".into()];
 
                 for (idx, template) in server_templates.iter().enumerate() {
                     if idx > 0 {
@@ -782,7 +783,7 @@ pub(crate) fn new_mcp_tools_output_from_statuses(
 
     if matches!(detail, McpServerStatusDetail::ToolsAndAuthOnly) {
         lines.push("".into());
-        lines.push("  Use /mcp verbose for tools and resources.".dim().into());
+        lines.push("  استخدم /mcp verbose لعرض الأدوات والموارد.".dim().into());
     }
 
     PlainHistoryCell { lines }
@@ -820,7 +821,7 @@ impl HistoryCell for McpInventoryLoadingCell {
                 )
                 .unwrap_or_else(|| "•".dim()),
                 " ".into(),
-                "Loading MCP inventory".bold(),
+                "جارٍ تحميل قائمة MCP".bold(),
                 "…".dim(),
             ]
             .into(),
@@ -828,7 +829,7 @@ impl HistoryCell for McpInventoryLoadingCell {
     }
 
     fn raw_lines(&self) -> Vec<Line<'static>> {
-        vec![Line::from("Loading MCP inventory...")]
+        vec![Line::from("جارٍ تحميل قائمة MCP...")]
     }
 
     fn transcript_animation_tick(&self) -> Option<u64> {

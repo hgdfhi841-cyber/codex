@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Status-line and terminal-title rendering helpers for `ChatWidget`.
 //!
 //! Keeping this logic in a focused submodule makes the additive title/status
@@ -41,8 +42,8 @@ pub(super) const TERMINAL_TITLE_SPINNER_INTERVAL: Duration = Duration::from_mill
 const TERMINAL_TITLE_ACTION_REQUIRED_INTERVAL: Duration = Duration::from_secs(1);
 
 /// Prefix shown in the terminal title when the agent is blocked on user input.
-const TERMINAL_TITLE_ACTION_REQUIRED_PREFIX: &str = "[ ! ] Action Required";
-const TERMINAL_TITLE_ACTION_REQUIRED_PREFIX_HIDDEN: &str = "[ . ] Action Required";
+const TERMINAL_TITLE_ACTION_REQUIRED_PREFIX: &str = "[ ! ] مطلوب إجراء منك";
+const TERMINAL_TITLE_ACTION_REQUIRED_PREFIX_HIDDEN: &str = "[ . ] مطلوب إجراء منك";
 
 #[derive(Debug)]
 /// Parsed status-surface configuration for one refresh pass.
@@ -132,7 +133,7 @@ impl ChatWidget {
                 "items"
             };
             let message = format!(
-                "Ignored invalid status line {label}: {}.",
+                "تم تجاهل {label} غير صالح في شريط الحالة: {}.",
                 proper_join(invalid_items)
             );
             self.on_warning(message);
@@ -153,7 +154,7 @@ impl ChatWidget {
                 "items"
             };
             let message = format!(
-                "Ignored invalid terminal title {label}: {}.",
+                "تم تجاهل {label} غير صالح في عنوان الطرفية: {}.",
                 proper_join(invalid_items)
             );
             self.on_warning(message);
@@ -350,7 +351,7 @@ impl ChatWidget {
     pub(super) fn iterm_session_detail(&self, status: ProgramStatus) -> Option<&str> {
         (status == ProgramStatus::Working && self.bottom_pane.is_task_running())
             .then_some(self.status_state.current_status.header.as_str())
-            .filter(|detail| *detail != "Working")
+            .filter(|detail| *detail != "جارٍ العمل")
     }
 
     pub(super) fn terminal_title_shows_action_required(&self) -> bool {
@@ -755,7 +756,7 @@ impl ChatWidget {
                 .and_then(|summary| summary.branch_change_stats.as_ref())
                 .map(|stats| {
                     if stats.additions == 0 && stats.deletions == 0 {
-                        "No changes".to_string()
+                        "لا تغييرات".to_string()
                     } else {
                         format!("+{} -{}", stats.additions, stats.deletions)
                     }
@@ -774,10 +775,10 @@ impl ChatWidget {
             }
             StatusLineItem::ContextRemaining => self
                 .status_line_context_remaining_percent()
-                .map(|remaining| format!("Context {remaining}% left")),
+                .map(|remaining| format!("السياق: متبقٍ {remaining}%")),
             StatusLineItem::ContextUsed => self
                 .status_line_context_used_percent()
-                .map(|used| format!("Context {used}% used")),
+                .map(|used| format!("السياق: مستخدم {used}%")),
             StatusLineItem::FiveHourLimit => {
                 let (window, is_secondary) = self
                     .rate_limit_snapshots_by_limit_id
@@ -1035,7 +1036,7 @@ impl ChatWidget {
             TerminalTitleStatusKind::Thinking if !self.bottom_pane.is_task_running() => {
                 "Ready".to_string()
             }
-            TerminalTitleStatusKind::Working => "Working".to_string(),
+            TerminalTitleStatusKind::Working => "جارٍ العمل".to_string(),
             TerminalTitleStatusKind::WaitingForBackgroundTerminal => "Waiting".to_string(),
             TerminalTitleStatusKind::Thinking => "Thinking".to_string(),
         }
@@ -1114,7 +1115,7 @@ impl ChatWidget {
         if total == 0 {
             return None;
         }
-        Some(format!("Tasks {completed}/{total}"))
+        Some(format!("المهام {completed}/{total}"))
     }
 
     /// Truncates a title segment by grapheme cluster and appends `...` when needed.
@@ -1246,28 +1247,28 @@ fn permissions_display(config: &Config) -> String {
         &config.effective_workspace_roots(),
     );
     if let Some(details) = summary.strip_prefix("read-only")
-        && !details.contains("(network access enabled)")
+        && !details.contains("(الوصول إلى الشبكة مفعّل)")
     {
-        return "Read Only".to_string();
+        return "قراءة فقط".to_string();
     }
     if let Some(details) = summary.strip_prefix("workspace-write")
-        && !details.contains("(network access enabled)")
+        && !details.contains("(الوصول إلى الشبكة مفعّل)")
     {
         return "Workspace".to_string();
     }
     if permission_profile == PermissionProfile::Disabled {
-        return "Full Access".to_string();
+        return "وصول كامل".to_string();
     }
 
-    "Custom permissions".to_string()
+    "صلاحيات مخصصة".to_string()
 }
 
 fn approval_mode_display(config: &Config) -> String {
     let approval_policy = AskForApproval::from(config.permissions.approval_policy.value());
     if approval_policy == AskForApproval::OnRequest {
         return match config.approvals_reviewer {
-            ApprovalsReviewer::AutoReview => "Approve for me".to_string(),
-            ApprovalsReviewer::User => "Ask for approval".to_string(),
+            ApprovalsReviewer::AutoReview => "وافق عني".to_string(),
+            ApprovalsReviewer::User => "اطلب موافقتي".to_string(),
         };
     }
 

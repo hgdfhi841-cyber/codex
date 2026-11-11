@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use std::path::PathBuf;
 
 use super::ChatWidget;
@@ -890,9 +891,9 @@ impl ChatWidget {
 
         if let Some(install_url) = app.install_url.clone() {
             let install_label = if is_installed {
-                "Manage on ChatGPT"
+                "الإدارة من ChatGPT"
             } else {
-                "Install on ChatGPT"
+                "التثبيت من ChatGPT"
             };
             items.push(SelectionItem {
                 name: install_label.to_string(),

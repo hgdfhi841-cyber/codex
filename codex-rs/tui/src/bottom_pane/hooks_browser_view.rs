@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use codex_app_server_protocol::HookEventName;
 use codex_app_server_protocol::HookHandlerMetadata;
 use codex_app_server_protocol::HookMetadata;
@@ -262,7 +263,7 @@ impl HooksBrowserView {
     fn event_header_lines() -> Vec<Line<'static>> {
         vec![
             "Hooks".bold().into(),
-            "Lifecycle hooks from config and enabled plugins."
+            "خطافات دورة العمل من الإعدادات والإضافات المفعّلة."
                 .dim()
                 .into(),
         ]
@@ -284,7 +285,7 @@ impl HooksBrowserView {
         let mut lines = vec![format!("{} hooks", event_label(event_name)).bold().into()];
         match review_needed_message(review_needed_count) {
             None => lines.push(
-                "Turn hooks on or off. Your changes are saved automatically."
+                "شغّل الخطافات أو أوقفها. تُحفظ تغييراتك تلقائياً."
                     .dim()
                     .into(),
             ),
@@ -459,7 +460,7 @@ impl HooksBrowserView {
     ) -> Vec<crate::terminal_hyperlinks::HyperlinkLine> {
         let Some(hook) = self.selected_hook(event_name) else {
             return crate::terminal_hyperlinks::plain_hyperlink_lines(vec![
-                "No hooks installed for this event.".dim().into(),
+                "لا توجد خطافات مثبتة لهذا الحدث.".dim().into(),
             ]);
         };
 
@@ -648,8 +649,8 @@ fn hook_is_active(hook: &HookMetadata) -> bool {
 fn review_needed_message(count: usize) -> Option<String> {
     match count {
         0 => None,
-        1 => Some("1 hook needs review before it can run.".to_string()),
-        count => Some(format!("{count} hooks need review before they can run.")),
+        1 => Some("خطاف واحد يحتاج مراجعة قبل أن يعمل.".to_string()),
+        count => Some(format!("{count} خطافات تحتاج مراجعة قبل أن تعمل.")),
     }
 }
 
@@ -664,8 +665,8 @@ fn hook_trust_label(status: HookTrustStatus) -> &'static str {
     match status {
         HookTrustStatus::Managed => "Managed",
         HookTrustStatus::Trusted => "Trusted",
-        HookTrustStatus::Untrusted => "New hook - review required",
-        HookTrustStatus::Modified => "Modified since last trusted - review required",
+        HookTrustStatus::Untrusted => "خطاف جديد - المراجعة مطلوبة",
+        HookTrustStatus::Modified => "تغيّر منذ آخر وثوق - المراجعة مطلوبة",
     }
 }
 
@@ -690,20 +691,20 @@ fn event_label(event_name: HookEventName) -> &'static str {
 
 fn event_description(event_name: HookEventName) -> &'static str {
     match event_name {
-        HookEventName::PreToolUse => "Before a tool executes",
-        HookEventName::PermissionRequest => "When permission is requested",
-        HookEventName::PostToolUse => "After a tool executes",
-        HookEventName::PreCompact => "Before context compaction",
-        HookEventName::PostCompact => "After context compaction",
-        HookEventName::PreModelRequest => "Before a model request",
-        HookEventName::PostModelRequest => "After a model request, including failures",
-        HookEventName::SessionStart => "When a new session starts",
-        HookEventName::SessionEnd => "Right before a session ends",
-        HookEventName::UserPromptSubmit => "When the user submits a prompt",
-        HookEventName::SubagentStart => "When a subagent is created",
-        HookEventName::SubagentStop => "Right before a subagent ends its turn",
-        HookEventName::Stop => "Right before Codex ends its turn",
-        HookEventName::Interrupt => "Right before an interrupted turn is aborted",
+        HookEventName::PreToolUse => "قبل تنفيذ أداة",
+        HookEventName::PermissionRequest => "عند طلب صلاحية",
+        HookEventName::PostToolUse => "بعد تنفيذ أداة",
+        HookEventName::PreCompact => "قبل ضغط السياق",
+        HookEventName::PostCompact => "بعد ضغط السياق",
+        HookEventName::PreModelRequest => "قبل طلب إلى النموذج",
+        HookEventName::PostModelRequest => "بعد طلب إلى النموذج، حتى عند الفشل",
+        HookEventName::SessionStart => "عند بدء جلسة جديدة",
+        HookEventName::SessionEnd => "قبيل انتهاء الجلسة",
+        HookEventName::UserPromptSubmit => "عند إرسال المستخدم طلباً",
+        HookEventName::SubagentStart => "عند إنشاء وكيل فرعي",
+        HookEventName::SubagentStop => "قبيل إنهاء وكيل فرعي دوره",
+        HookEventName::Stop => "قبيل إنهاء Codex دوره",
+        HookEventName::Interrupt => "قبيل إلغاء دور تم إيقافه",
     }
 }
 

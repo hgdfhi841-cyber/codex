@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use crossterm::event::KeyCode;
 use crossterm::event::KeyEvent;
 use crossterm::event::KeyModifiers;
@@ -34,7 +35,7 @@ use super::popup_consts::MAX_POPUP_ROWS;
 use super::scroll_state::ScrollState;
 use super::selection_popup_common::GenericDisplayRow;
 
-const SEARCH_PLACEHOLDER: &str = "Type to search skills";
+const SEARCH_PLACEHOLDER: &str = "اكتب للبحث في المهارات";
 
 pub(crate) struct SkillsToggleItem {
     pub name: String,
@@ -64,11 +65,11 @@ impl SkillsToggleView {
     ) -> Self {
         let mut header = ColumnRenderable::new();
         header.push(
-            Paragraph::new(Line::from("Enable/Disable Skills".bold())).wrap(Wrap { trim: false }),
+            Paragraph::new(Line::from("تفعيل/تعطيل المهارات".bold())).wrap(Wrap { trim: false }),
         );
         header.push(
             Paragraph::new(Line::from(
-                "Turn skills on or off. Your changes are saved automatically.".dim(),
+                "شغّل المهارات أو أوقفها. تُحفظ تغييراتك تلقائياً.".dim(),
             ))
             .wrap(Wrap { trim: false }),
         );
@@ -325,7 +326,7 @@ impl Renderable for SkillsToggleView {
                 &rows,
                 &self.state,
                 render_area.height as usize,
-                "no matches",
+                "لا نتائج",
             );
         }
 

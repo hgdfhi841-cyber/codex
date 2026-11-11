@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Guided keymap remapping UI for `/keymap`.
 //!
 //! This module owns the interactive editing flow that starts from a resolved
@@ -437,7 +438,7 @@ pub(crate) fn build_keymap_conflict_params(
                 ..Default::default()
             },
             SelectionItem {
-                name: "Cancel".to_string(),
+                name: "إلغاء".to_string(),
                 description: Some("Leave keymap unchanged".to_string()),
                 dismiss_on_select: true,
                 ..Default::default()

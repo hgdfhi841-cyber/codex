@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Own question-editor creation, restoration, and the collapsed entry point.
 
 use super::*;
@@ -85,7 +86,7 @@ impl BottomPane {
         if let Some(binding) = self.pending_input_preview.edit_binding {
             let mut hint = Line::from("    ");
             hint.spans.extend(binding.spans());
-            hint.spans.push(" to answer".dim());
+            hint.spans.push(" للإجابة".dim());
             lines.push(hint);
         }
         Some(lines)

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Bounded, context-aware two-stroke shortcuts for TUI actions.
 //!
 //! Single-event bindings remain in the ordinary runtime keymaps. A completed
@@ -594,7 +595,7 @@ impl PendingChord {
         Some(ShortcutHud::new(
             self.prefix.display_label(),
             rows,
-            vec!["Esc cancel".dim().into()],
+            vec!["Esc إلغاء".dim().into()],
         ))
     }
 

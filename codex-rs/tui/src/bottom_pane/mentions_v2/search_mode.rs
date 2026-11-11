@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use super::candidate::MentionType;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -36,8 +37,8 @@ impl SearchMode {
 
     pub(super) fn label(self) -> &'static str {
         match self {
-            Self::Results => "All Results",
-            Self::FilesystemOnly => "Filesystem Only",
+            Self::Results => "كل النتائج",
+            Self::FilesystemOnly => "الملفات فقط",
             Self::Tools => "Plugins",
         }
     }

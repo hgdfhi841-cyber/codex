@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Own live mention candidates and asynchronous file search while reserving a stable picker viewport.
 
 use codex_file_search::FileMatch;
@@ -166,7 +167,7 @@ impl FileSearch {
         if self.waiting {
             "loading..."
         } else {
-            "no matches"
+            "لا نتائج"
         }
     }
 }

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Keep the first composer editable and bottom-anchored while startup work continues.
 //! Submit keys confirm one draft locally; session dispatch waits for the protected handoff.
 //! Presentation accepts client preferences and cwd; effective permissions remain unknown here.
@@ -532,7 +533,7 @@ fn startup_draft_bottom_pane(
             frame_requester,
             has_input_focus: true,
             enhanced_keys_supported,
-            placeholder_text: "Ask Codex to do anything".to_string(),
+            placeholder_text: "اطلب من Codex أي شيء".to_string(),
             disable_paste_burst: false,
             animations_enabled: crate::system_motion::mode() == crate::motion::MotionMode::Animated,
             effects: Default::default(),

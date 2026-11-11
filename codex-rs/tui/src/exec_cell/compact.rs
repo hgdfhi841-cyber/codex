@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Owned-transcript command previews with full command/output retained for local disclosure.
 
 use super::model::ExecCell;
@@ -93,11 +94,11 @@ impl ExecCell {
         let title = if let Some(output) = nonzero_exit {
             format!("Exited (status {})", output.exit_code)
         } else if self.is_active() {
-            "Running".to_owned()
+            "جارٍ التشغيل".to_owned()
         } else if call.is_unified_exec_interaction() {
-            "Background output".to_owned()
+            "مخرجات الخلفية".to_owned()
         } else {
-            "Ran".to_owned()
+            "شغّل".to_owned()
         };
         let script = strip_bash_lc_and_escape(&call.command);
         // Highlight before clipping so the compact row keeps the same shell token colors.
@@ -124,7 +125,7 @@ impl ExecCell {
                 lines.push(clipped_line(line, width));
             }
             if lines.len() == 1 && !call.is_unified_exec_interaction() {
-                lines.push(clipped_line(Line::from("  └ (no output)".dim()), width));
+                lines.push(clipped_line(Line::from("  └ (لا مخرجات)".dim()), width));
             }
         }
         lines

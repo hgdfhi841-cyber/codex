@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 use std::collections::HashSet;
 
 use codex_app_server_protocol::SkillMetadata;
@@ -221,9 +222,9 @@ fn plugin_capability_labels(plugin: &PluginCapabilitySummary) -> Vec<String> {
     if !plugin.mcp_server_names.is_empty() {
         let mcp_server_count = plugin.mcp_server_names.len();
         labels.push(if mcp_server_count == 1 {
-            "1 MCP server".to_string()
+            "خادم MCP واحد".to_string()
         } else {
-            format!("{mcp_server_count} MCP servers")
+            format!("{mcp_server_count} خوادم MCP")
         });
     }
     if !plugin.app_connector_ids.is_empty() {
@@ -231,7 +232,7 @@ fn plugin_capability_labels(plugin: &PluginCapabilitySummary) -> Vec<String> {
         labels.push(if app_count == 1 {
             "1 app".to_string()
         } else {
-            format!("{app_count} apps")
+            format!("{app_count} تطبيقات")
         });
     }
     labels

@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Completed request-user-input transcript rendering.
 
 use super::*;
@@ -30,8 +31,8 @@ impl HistoryCell for RequestUserInputResultCell {
             .count();
         let unanswered = total.saturating_sub(answered);
 
-        let mut header = vec!["•".dim(), " ".into(), "Questions".bold()];
-        header.push(format!(" {answered}/{total} answered").dim());
+        let mut header = vec!["•".dim(), " ".into(), "الأسئلة".bold()];
+        header.push(format!(" أُجيب عن {answered}/{total}").dim());
         if self.interrupted {
             header.push(" (interrupted)".fg(accent_color()));
         }
@@ -117,7 +118,7 @@ impl HistoryCell for RequestUserInputResultCell {
         }
 
         if self.interrupted && unanswered > 0 {
-            let summary = format!("interrupted with {unanswered} unanswered");
+            let summary = format!("أُوقف وبقي {unanswered} بلا إجابة");
             lines.extend(wrap_with_prefix(
                 &summary,
                 width,
@@ -145,7 +146,7 @@ impl HistoryCell for RequestUserInputResultCell {
                     .is_some_and(|answer| !answer.answers.is_empty())
             })
             .count();
-        let mut lines = vec![Line::from(format!("Questions {answered}/{total} answered"))];
+        let mut lines = vec![Line::from(format!("الأسئلة: أُجيب عن {answered}/{total}"))];
         if self.interrupted {
             lines.push(Line::from("(interrupted)"));
         }
@@ -163,10 +164,10 @@ impl HistoryCell for RequestUserInputResultCell {
                     lines.extend(
                         options
                             .into_iter()
-                            .map(|option| Line::from(format!("answer: {option}"))),
+                            .map(|option| Line::from(format!("الإجابة: {option}"))),
                     );
                     if let Some(note) = note {
-                        lines.push(Line::from(format!("note: {note}")));
+                        lines.push(Line::from(format!("ملاحظة: {note}")));
                     }
                 }
             } else {

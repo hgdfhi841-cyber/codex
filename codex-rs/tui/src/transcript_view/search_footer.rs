@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Render Find query input and navigation hints without owning search transitions.
 
 use super::*;
@@ -60,7 +61,7 @@ impl Search {
             }
             Progress::Idle if !self.editor.is_empty() => (next_hint.as_str(), "enter accept"),
             Progress::Idle => ("Type to find", "Type to find"),
-            Progress::Restart | Progress::Scanning(_) => ("Searching…", "Searching…"),
+            Progress::Restart | Progress::Scanning(_) => ("جارٍ البحث…", "جارٍ البحث…"),
             Progress::AwaitingHistory if history == TranscriptHistoryState::Failed => {
                 (unavailable_hint.as_str(), retry_hint.as_str())
             }

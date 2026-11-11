@@ -1,3 +1,4 @@
+// Modified by the unofficial codex-ar fork (2026): Arabic localization. See CODEX-AR.md.
 //! Dashboard for inspecting and managing the TUI's retained daemon tasks.
 //! Search, rename, status filters and selection survive metadata refreshes.
 //! The caller supplies rows in status, descending update time, and thread ID order.
@@ -95,7 +96,7 @@ impl AgentsOverviewGroup {
     fn label(self) -> &'static str {
         match self {
             Self::NeedsYou => "Needs input",
-            Self::Working => "Working",
+            Self::Working => "جارٍ العمل",
             Self::Ready => "Ready",
             Self::Finished => "Inactive",
         }
@@ -482,7 +483,7 @@ impl AgentsOverviewView {
                 ("Error", "!".red())
             }
             AgentsOverviewGroup::NeedsYou => ("Needs input", "●".red()),
-            AgentsOverviewGroup::Working => ("Working", "●".green()),
+            AgentsOverviewGroup::Working => ("جارٍ العمل", "●".green()),
             AgentsOverviewGroup::Ready => ("Ready", "○".cyan()),
             AgentsOverviewGroup::Finished => ("Inactive", "○".dim()),
         }
@@ -507,7 +508,7 @@ impl AgentsOverviewView {
                 row.thread
                     .reasoning_effort
                     .as_ref()
-                    .map_or("Unknown", ReasoningEffort::as_str)
+                    .map_or("غير معروف", ReasoningEffort::as_str)
                     .to_string()
                     .into(),
             ]),
